@@ -1,2 +1,2 @@
 # editDocs
-Edit fileads of database &amp; tv from module of Modx Evolution
+Edit fields of database &amp; tv from module of Modx Evolution
