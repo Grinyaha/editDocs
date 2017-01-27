@@ -1,0 +1,11 @@
+/**
+ * EditDocs
+ *  
+ * @category	   module
+ * @version 	   0.1
+ * @author	   Alexander Grishin	 
+
+ */
+
+include_once($modx->config['base_path'].'assets/modules/editdocs/editdocs.module.php');
+

@@ -1,0 +1,103 @@
+.sumosize {
+    width:250px;
+    float: left;
+    margin: 0 20px 0 0;
+}
+
+.tab-row .tab a {
+    text-decoration: none;
+    color: #333;
+}
+
+.clear {
+    clear: both;
+}
+
+.subbat {
+    float: left;
+    padding: 18px 0 0 0;
+}
+
+.btn {
+    background: #32ab9a none repeat scroll 0 0;
+    border-color: #32ab9a;
+    color: #fff;
+    border-radius: 3px !important;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: none;
+    text-shadow: none;
+    transition: none 0s ease 0s;
+    padding: 4px 8px;
+}
+
+.mess {
+    float: right;
+    min-width: 200px;
+}
+
+.parf {
+    float: left;
+    margin: 0 20px 0 0;
+}
+
+.tabres {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.tabres tr td {
+    padding: 3px;
+    border: 1px solid #eee;
+}
+
+.tabres tr td input {
+    width: 100%;
+}
+
+.tabres tr:nth-child(1) td {
+   font-weight: bold;
+    background: #ddd;
+    font-size: 15px;
+}
+
+.alert-ok {
+    padding: 10px;
+    background: #E3FCF6;
+}
+
+.alert-er {
+    padding: 10px;
+    background: #FFE9E6;
+}
+
+.loading {
+    padding: 10px;
+    font-size: 15px;
+    color: #888;
+    text-align: center;
+    background: #E3FCF6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
