@@ -1,16 +1,33 @@
 <?php
 
 define('MODX_API_MODE', true);
-include_once("../../../index.php");
+define('IN_MANAGER_MODE', true);
+
+include_once(__DIR__."/../../../index.php");
 $modx->db->connect();
 if (empty ($modx->config)) {
     $modx->getSettings();
 }
 $modx->invokeEvent("OnWebPageInit");
 
-if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')){
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')) {
     $modx->sendRedirect($modx->config['site_url']);
 }
+//////
+if (IN_MANAGER_MODE != "true" || empty($modx) || !($modx instanceof DocumentParser)) {
+    die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the MODX Content Manager instead of accessing this file directly.");
+}
+if (!$modx->hasPermission('exec_module')) {
+    header("location: " . $modx->getManagerPath() . "?a=106");
+}
+if (!is_array($modx->event->params)) {
+    $modx->event->params = array();
+}
+if (!isset($_SESSION['mgrValidated'])) {
+    die();
+}
+/////
+
 
 include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
 
@@ -21,10 +38,8 @@ if ($_POST['clear']) {
 }
 
 
-if ($_POST['bigparent'] != '' && !$_POST['tree']) {
+if ($_POST['bigparent']) {
     echo getAllList();
-} elseif ($_POST['bigparent'] != '' && $_POST['tree']) {
-    echo getAllListTree();
 }
 
 
@@ -62,165 +77,59 @@ function editDoc()
 function getAllList()
 {
     global $modx;
+    $doc = new modResource($modx);
 
     $parent = $modx->db->escape($_POST['bigparent']);
 
     if ($_POST['fields']) {
 
         $fields = $modx->db->escape($_POST['fields']);
-        $fields[99] = 'id';
+        $depth = $modx->db->escape($_POST['tree']);
+        $r = '';
+        $tvlist = '';
+        $rowth = '';
 
-        $result = $modx->getDocumentChildrenTVars($parent, $fields);
-
-        //print_r($result);
-        //формируем заголовки столбцов
-        $th = '';
-
-        foreach ($result[0] as $key => $val) {
-            if ($result[0][$key]['name'] != '' && $result[0][$key]['name'] != 'id') {
-                $th .= "<td>" . $result[0][$key]['name'] . "</td>";
-            }
-
-
-        }
-        $th = "<td>id</td>" . $th;
-        //echo $th;
-
-        $out = '';
-        $out .= allRow($parent,$fields);
-
-        return htmlTH($th) . $out . htmlFooter();
-
-
-    }
-
-
-}
-
-
-function getAllListTree()
-{
-    global $modx;
-
-    $out = '';
-    $parent = $modx->db->escape($_POST['bigparent']);
-    $fields = $modx->db->escape($_POST['fields']);
-    $fields[99] = 'id';
-
-
-    $result = $modx->getDocumentChildrenTVars($parent, $fields);
-    //формируем заголовки столбцов
-    $th = '';
-
-    foreach ($result[0] as $key => $val) {
-        if ($result[0][$key]['name'] != '' && $result[0][$key]['name'] != 'id') {
-            $th .= "<td>" . $result[0][$key]['name'] . "</td>";
+        foreach ($fields as $val) {
+            $r .= '[+' . $val . '+] - ';
+            $tvlist .= $val . ',';
+            $rowth .= '<td>'.$val.'</td>';
+            $rowtd .= '<td><input type="text" name="' . $val . '" value="[+'.$val.'+]"  /></td>';
         }
 
+        $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
+        $tab = '
+        <form id="dataf">
+            <table class="tabres">
+            <tr>
+                <td>id</td>' . $rowth . '
+        </tr>   
+         ';
+        $endtab = '</table></form><br/>';
+
+        $out = $modx->runSnippet('DocLister', array(
+            'idType' => 'parents',
+            'depth' => $depth,
+            'parents' => $parent,
+            'showParent' => -1,
+            'tvPrefix' => '',
+            'tvList' => $tvlist,
+            'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>'.$rowtd.'</tr>'
+
+
+        ));
+        //$zz = $doc->edit($parent)->toArray();
+
+        //print_r($zz);
+        echo $tab.$out.$endtab;
+
 
     }
-    $th = "<td>id</td>" . $th;
-    $out .= allRow($parent, $fields);
-
-
-    $tree = $modx->getChildIds($parent);
-    foreach ($tree as $vv) {
-
-        $out .= allRow($vv, $fields);
-
-    }
-
-    return htmlTH($th) . $out . htmlFooter();
 
 
 }
 
-function allRow($vv, $fields) {
-
-    global $modx;
-    $out = '';
-    $result = $modx->getDocumentChildrenTVars($vv, $fields);
-
-//    print_r($result);
 
 
-
-    if (is_array($result)) {
-
-        foreach ($result as $key => $val) {
-            $inp = '';
-
-            foreach ($result[$key] as $k => $v) {
-
-                if ($result[$key][$k]['name'] != 'id') {
-                    $inp .= htmlInp($result[$key][$k]['name'], $result[$key][$k]['value']);
-                } else $idd = $result[$key][$k]['value'];
-
-            }
-
-            $out .= '<tr class="row"><td class="idd">' . $idd . '</td>' . $inp . '</tr>';
-
-
-        }
-
-
-    }
-    return $out;
-}
-
-
-function htmlTH($th)
-{
-    $header = '
-<form id="dataf">
-    <table class="tabres">
-     <tr>
-        ' . $th . '
-    </tr>   
-    ';
-
-    return $header;
-
-}
-
-
-function htmlInp($name, $value)
-{
-
-    if ($name == 'id') {
-        $type = 'hidden';
-        $val = $value;
-
-    } else {
-        $type = 'text';
-        $val = '';
-    }
-    //если данные от MultiTV то textarea
-    if (strstr($value, '{')) $a = true; else $a = false;
-
-    if ($a == true) {
-        $input = '<td><textarea name="' . $name . '" style="width:99%;">' . $value . '</textarea></td>';
-    } else {
-        $input = '<td>' . $val . '<input type="' . $type . '" name="' . $name . '" value="' . $value . '"  ' . $dis . '/></td>';
-    }
-
-
-    return $input;
-
-}
-
-
-function htmlFooter()
-{
-    $footer = '
-        </table></form>
-        <br/>
-        <!--<button id="save" type="button"> <b>SAVE</b></button>-->
-    ';
-
-    return $footer;
-
-}
 
 function clearCache($path)
 {
