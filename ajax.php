@@ -1,15 +1,19 @@
 <?php
 
 define('MODX_API_MODE', true);
-include_once '../../../manager/includes/config.inc.php';
-include_once '../../../manager/includes/document.parser.class.inc.php';
-$modx = new DocumentParser;
+include_once("../../../index.php");
 $modx->db->connect();
-$modx->getSettings();
-startCMSSession();
-$modx->minParserPasses = 2;
+if (empty ($modx->config)) {
+    $modx->getSettings();
+}
+$modx->invokeEvent("OnWebPageInit");
+
+if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')){
+    $modx->sendRedirect($modx->config['site_url']);
+}
 
 include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
+
 
 if ($_POST['clear']) {
     clearCache(MODX_BASE_PATH);
@@ -44,9 +48,9 @@ function editDoc()
 
     $doc->edit($id);
     $doc->set($pole, $data);
-    $doc->save(false, false);
+    $end = $doc->save(false, false);
 
-    if ($doc->save(false, false)) {
+    if ($end) {
         return '<div class="alert-ok">Ресурс ' . $id . ' - отредактирован!';
     } else {
         return '<div class="alert-err">ERROR!</div>';
