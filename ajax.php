@@ -28,120 +28,139 @@ if (!isset($_SESSION['mgrValidated'])) {
 }
 /////
 
-
-include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-
+$obj = new editDocs();
 
 if ($_POST['clear']) {
-    clearCache(MODX_BASE_PATH);
+    $obj -> clearCache($modx);
     echo 'Кэш очищен';
 }
 
 
 if ($_POST['bigparent']) {
-    echo getAllList();
+    echo $obj -> getAllList($modx);
 }
 
 
 if ($_POST['id']) {
 
-    echo editDoc();
+    echo $obj -> editDoc($modx);
 
 }
 
-/////////////// FUNCTIONS ////////////
+/////////////// CLASS ////////////
 
-function editDoc()
+class editDocs
 {
-    global $modx;
-    $doc = new modResource($modx);
 
 
-    $id = $_POST['id'];
-    $data = $_POST['dat'];
-    $pole = $_POST['pole'];
+public function editDoc($modx)
+    {
+        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
+        $this->modx = $modx;
+        $this->doc = new modResource($this->modx);
 
-    $doc->edit($id);
-    $doc->set($pole, $data);
-    $end = $doc->save(false, false);
 
-    if ($end) {
-        return '<div class="alert-ok">Ресурс ' . $id . ' - отредактирован!';
-    } else {
-        return '<div class="alert-err">ERROR!</div>';
+        $this->id = $_POST['id'];
+        $this->data = $_POST['dat'];
+        $this->pole = $_POST['pole'];
+
+        $this->doc->edit($this->id);
+        $this->doc->set($this->pole, $this->data);
+        $this->end = $this->doc->save(false, false);
+
+        if ($this->end) {
+            return '<div class="alert-ok">Ресурс ' . $this->id . ' - отредактирован!';
+        } else {
+            return '<div class="alert-err">ERROR!</div>';
+        }
+
     }
-    //print_r($_POST);
-}
 
 
-function getAllList()
+public function getAllList($modx)
 {
-    global $modx;
-    $doc = new modResource($modx);
+    include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
+    $this->modx = $modx;
+    $this->doc = new modResource($this->modx);
 
-    $parent = $modx->db->escape($_POST['bigparent']);
+    $this->parent = $this->modx->db->escape($_POST['bigparent']);
+
+    //return $this->parent;
 
     if ($_POST['fields']) {
 
-        $fields = $modx->db->escape($_POST['fields']);
-        $depth = $modx->db->escape($_POST['tree']);
-        $r = '';
-        $tvlist = '';
-        $rowth = '';
+        $this->fields = $this->modx->db->escape($_POST['fields']);
+        $this->depth = $this->modx->db->escape($_POST['tree']);
 
-        foreach ($fields as $val) {
-            $r .= '[+' . $val . '+] - ';
-            $tvlist .= $val . ',';
-            $rowth .= '<td>'.$val.'</td>';
-            $rowtd .= '<td><input type="text" name="' . $val . '" value="[+'.$val.'+]"  /></td>';
+        if($_POST['paginat']) $this->disp = 20; else $this->disp = 0;
+
+
+        foreach ($this->fields as $val) {
+            $this->r .= '[+' . $val . '+] - ';
+            $this->tvlist .= $val . ',';
+            $this->rowth .= '<td>' . $val . '</td>';
+            $this->rowtd .= '<td><input type="text" name="' . $val . '" value="[+' . $val . '+]"  /></td>';
         }
 
-        $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
-        $tab = '
-        <form id="dataf">
-            <table class="tabres">
-            <tr>
-                <td>id</td>' . $rowth . '
-        </tr>   
-         ';
-        $endtab = '</table></form><br/>';
+        $this->tvlist = substr($this->tvlist, 0, strlen($this->tvlist) - 1);
+        $this->tab = '
+<form id="dataf">
+    <table class="tabres">
+        <tr>
+            <td>id</td>' . $this->rowth . '
+        </tr>
+        ';
+        $this->endtab = '</table></form><br/>';
 
-        $out = $modx->runSnippet('DocLister', array(
+        $this->out = $this->modx->runSnippet('DocLister', array(
             'idType' => 'parents',
-            'depth' => $depth,
-            'parents' => $parent,
+            'depth' => $this->depth,
+            'parents' => $this->parent,
             'showParent' => -1,
+            'id' => 'list',
+            'paginate' => 'pages',
+            'pageLimit' => '1',
+            'pageAdjacents' => '5',
+            'TplPage' => '@CODE:<span class="page">[+num+]</span>',
+            'TplCurrentPage' => '@CODE:<b class="current">[+num+]</b>',
+            'TplNextP' => '',
+            'TplPrevP' => '',
+            'TplDotsPage' => '@CODE:&nbsp;...&nbsp;',
+            'display' => $this->disp,
             'tvPrefix' => '',
-            'tvList' => $tvlist,
-            'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>'.$rowtd.'</tr>'
+            'ownerTPL' => '@CHUNK: paginateEditDocs',
+            'tvList' => $this->tvlist,
+            'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>'
 
 
         ));
-        //$zz = $doc->edit($parent)->toArray();
 
-        //print_r($zz);
-        echo $tab.$out.$endtab;
+        //$this->paginate = $this->modx->getPlacholder('list.pages');
 
+        return $this->tab . $this->out . $this->endtab ;
 
     }
-
-
+    else return 'Выберите поля/TV для редактирования!';
 }
 
 
 
 
-function clearCache($path)
-{
 
-    global $modx;
-    $modx->clearCache();
-    include_once $path . 'manager/processors/cache_sync.class.processor.php';
-    $sync = new synccache();
-    $sync->setCachepath($path . "assets/cache/");
-    $sync->setReport(false);
-    $sync->emptyCache();
+
+
+public function clearCache($modx)
+    {
+        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
+        $this->modx = $modx;
+        $this->modx->clearCache();
+        include_once MODX_BASE_PATH . 'manager/processors/cache_sync.class.processor.php';
+        $this->sync = new synccache();
+        $this->sync->setCachepath(MODX_BASE_PATH . "assets/cache/");
+        $this->sync->setReport(false);
+        $this->sync->emptyCache();
+    }
+
 }
-
 
 ?>

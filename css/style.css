@@ -80,9 +80,20 @@
     background: #E3FCF6;
 }
 
+.pagination {
+    text-align: center;
+}
 
-
-
+.page {
+    padding: 4px 6px;
+    background: #999;
+    color: #fff;
+    margin: 0 1px 0 1px;
+    cursor: pointer;
+}
+b.current {
+    padding: 3px 5px;
+}
 
 
 

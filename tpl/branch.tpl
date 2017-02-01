@@ -6,7 +6,7 @@
             <div class="parf">
                 <div class="parf">
                     ID родителя<br/>
-                    <input type="text" name="bigparent" id="parent" class="inp"/>
+                    <input type="text" name="bigparent" id="parent" class="inp" style="width: 70px"/>
 
                     <br/><br/>
                 </div>
@@ -24,6 +24,9 @@
                         <option value="7">8</option>
                         <option value="100">100</option>
                     </select>
+                </div>
+                <div class="parf">
+                    Пагинация  <br/><input type="checkbox" name="paginat" value="1"/>
                 </div>
                 <div class="clear"></div>
 
@@ -111,15 +114,16 @@
             $('#tree').SumoSelect();
 
 
-            $('body').on('click', '#brsub', function () {
+            $('body').on('click', '#brsub, .page', function () {
 
                 var data = $('form#branch').serialize();
+                var page = $(this).html();
                 loading();
                 console.log(data);
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "/assets/modules/editdocs/ajax.php?list_page="+page,
                     data: data,
                     success: function (result) {
 
@@ -198,7 +202,6 @@
                 }
             });
         });
-
 
 
         function loading() {
