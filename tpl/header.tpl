@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="../manager/media/style/[+manager_theme+]/style.css" />
-		<link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="[+manager_path+]/media/style/[+manager_theme+]/style.css" />
+		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css" />
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 
-		<script type="text/javascript" src="../assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
-		<link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/sumoselect/sumoselect.css" />
+		<script type="text/javascript" src="[+base_url+]assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/libs/sumoselect/sumoselect.css" />
 
 		<script>
             $.ajaxSetup({ cache: false });
