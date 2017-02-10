@@ -154,7 +154,7 @@ public function clearCache($modx)
         include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
         $this->modx = $modx;
         $this->modx->clearCache();
-        include_once MODX_BASE_PATH . 'manager/processors/cache_sync.class.processor.php';
+        include_once MODX_BASE_PATH . MGR_DIR .'/processors/cache_sync.class.processor.php';
         $this->sync = new synccache();
         $this->sync->setCachepath(MODX_BASE_PATH . "assets/cache/");
         $this->sync->setReport(false);

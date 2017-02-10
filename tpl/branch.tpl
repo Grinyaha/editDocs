@@ -85,7 +85,7 @@
             <div class="mess">
                 <div id="warning"></div>
                 <br/>
-                <button id="clear" type="button" class="btn"> Сбросить кэш</button>
+                <button id="clear" type="button" style="min-width: 170px" class="btn"> Сбросить кэш</button>
             </div>
             <div class="clear"></div>
 
@@ -99,7 +99,7 @@
 
 
 
-    <script type="text/javascript" src="/tpl/js/sumoselect/jquery.sumoselect.min.js"></script>
+    <script type="text/javascript" src="[+base_url+]assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
     <script>
         $(document).ready(function () {
 

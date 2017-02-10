@@ -25,7 +25,7 @@ while( $row = $modx->db->getRow($query) ) {
 }
 
 
-$data = array ('tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
+$data = array ('tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'manager_path'=>$modx->getManagerPath(), 'base_url'=>$modx->config['base_url'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
 
 if($action=='branch') {
     $branch = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/branch.tpl');
