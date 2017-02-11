@@ -24,12 +24,32 @@ while( $row = $modx->db->getRow($query) ) {
     $tvs .= '<option value="'.$row['name'].'">'.$row['name'].'</option>';
 }
 
+//templates list
+$query2 = $modx->db->query("SELECT id,templatename FROM ".$modx->getFullTableName('site_templates'));
+$tpl = '';
+while( $rou = $modx->db->getRow($query2) ) {
+    $tpl .= '<option value="'.$rou['id'].'">'.$rou['templatename'].'</option>';
+}
 
-$data = array ('tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
+$data = array ('tpl'=>$tpl,'tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'manager_path'=>$modx->getManagerPath(), 'base_url'=>$modx->config['base_url'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
 
 if($action=='branch') {
     $branch = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/branch.tpl');
     $outTpl = $dlt->parseChunk($branch,$data);
+
+
+}
+
+if($action=='excel') {
+    $excel = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/excel.tpl');
+    $outTpl = $dlt->parseChunk($excel,$data);
+
+
+}
+
+if($action=='import') {
+    $import = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/import.tpl');
+    $outTpl = $dlt->parseChunk($import,$data);
 
 
 }

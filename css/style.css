@@ -65,6 +65,7 @@
 .alert-ok {
     padding: 10px;
     background: #E3FCF6;
+    margin: 10px 0 10px 0;
 }
 
 .alert-er {
@@ -94,10 +95,14 @@
 b.current {
     padding: 3px 5px;
 }
+h2.tab a {
+    padding: 11px 15px !important;
+    /*border: 1px solid red;*/
+}
 
-
-
-
+.sending {
+    display: none;
+}
 
 
 
