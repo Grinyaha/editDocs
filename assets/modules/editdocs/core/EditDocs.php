@@ -230,7 +230,7 @@ class editDocs
 	    $this->param = array();
 	    $this->res = $this->modx->db->query("SELECT name FROM ".$this->modx->getFullTableName('site_tmplvars'));
 	    $this->temp = 0;
-	    while( $this->row = $modx->db->getRow($this->res) ) {
+	    while( $this->row = $this->modx->db->getRow($this->res) ) {
 	        if($this->row['name'] == $this->field) { $this->temp=1; $this->param[0]='tv'; $this->param[1]=$this->field;}
 	    }
 	    if($this->temp==0) {
