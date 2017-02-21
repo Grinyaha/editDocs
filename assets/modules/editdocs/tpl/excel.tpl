@@ -1,6 +1,7 @@
 <div id="tab-page1" class="tab-page" style="display:block;">
 
     <script>
+        Dropzone.autoDiscover = false;
         $(document).ready(function()
         {
 

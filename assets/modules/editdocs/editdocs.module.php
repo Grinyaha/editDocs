@@ -33,28 +33,12 @@ while( $rou = $modx->db->getRow($query2) ) {
 
 $data = array ('tpl'=>$tpl,'tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'manager_path'=>$modx->getManagerPath(), 'base_url'=>$modx->config['base_url'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
 
-if($action=='branch') {
-    $branch = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/branch.tpl');
-    $outTpl = $dlt->parseChunk($branch,$data);
+$action_list = ['branch', 'excel', 'import'];
 
-
+if (in_array($action, $action_list)){
+    $action = '@CODE:' . file_get_contents(dirname(__FILE__) . '/tpl/' .$action . '.tpl');
+    $outTpl = $dlt->parseChunk($action,$data);
 }
-
-if($action=='excel') {
-    $excel = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/excel.tpl');
-    $outTpl = $dlt->parseChunk($excel,$data);
-
-
-}
-
-if($action=='import') {
-    $import = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/import.tpl');
-    $outTpl = $dlt->parseChunk($import,$data);
-
-
-}
-
-
 
 $header = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/header.tpl');
 $footer = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/footer.tpl');

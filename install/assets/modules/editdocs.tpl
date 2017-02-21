@@ -1,3 +1,4 @@
+// <?php 
 /**
  * EditDocs
  *  
@@ -7,5 +8,4 @@
 
  */
 
-include_once($modx->config['base_path'].'assets/modules/editdocs/editdocs.module.php');
-
+include_once(MODX_BASE_PATH.'assets/modules/editdocs/editdocs.module.php');
