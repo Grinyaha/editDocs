@@ -144,7 +144,8 @@ public function getAllList($modx)
             'TplDotsPage' => '@CODE:&nbsp;...&nbsp;',
             'display' => $this->disp,
             'tvPrefix' => '',
-            'ownerTPL' => '@CHUNK: paginateEditDocs',
+            //'ownerTPL' => '@CHUNK: paginateEditDocs',
+            'ownerTPL' => '@CODE: [+dl.wrap+][+phx:if=`[+list.pages+]`:ne=``:then=`<tr><td colspan="100" align="center"><br/>[+list.pages+]<br/></td></tr>`+]',
             'tvList' => $this->tvlist,
             'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>'
 
