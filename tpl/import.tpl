@@ -5,6 +5,7 @@
         {
             $('#tpl').SumoSelect();
 
+            Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
                 url: "/assets/modules/editdocs/ajax.php",
                 paramName: "myfile",
