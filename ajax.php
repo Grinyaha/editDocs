@@ -36,7 +36,7 @@ if ($_POST['clear']) {
 }
 
 
-if ($_POST['bigparent']) {
+if ($_POST['bigparent'] || $_POST['bigparent']==0) {
     echo $obj -> getAllList($modx);
 }
 
@@ -132,7 +132,7 @@ public function getAllList($modx)
             'idType' => 'parents',
             'depth' => $this->depth,
             'parents' => $this->parent,
-            'showParent' => -1,
+            'showParent' => 1,
             'id' => 'list',
             'paginate' => 'pages',
             'pageLimit' => '1',
