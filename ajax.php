@@ -36,7 +36,7 @@ if ($_POST['clear']) {
 }
 
 
-if ($_POST['bigparent'] || $_POST['bigparent']==0) {
+if ($_POST['bigparent'] || $_POST['bigparent']=='0') {
     echo $obj -> getAllList($modx);
 }
 
@@ -235,6 +235,7 @@ public function getAllList($modx)
         $this->log = '';
 
         foreach ($this->data as $k => $val) {
+            $this->i=0;
             foreach ($val as $key => $value) {
 
                 if($key == $this->field) {
@@ -254,9 +255,9 @@ public function getAllList($modx)
                     }
                     else $this->log .= 'id-' . $this->id . ';' . $key . '=>' . $value . ' - Тестовый режим! <br/>';
                 }
-                else $this->log .= 'Не найдено совпадений по параметру - '.$this->field.'! <br/>';
+                elseif ($this->i < 1) $this->log .= 'Не найдено совпадений по значению - <b>'.$value.'</b>! <br/>';
 
-
+                $this->i++;
             }
             $this->log .= '<hr/>';
 
