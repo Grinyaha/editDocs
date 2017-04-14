@@ -54,6 +54,13 @@ if($action=='import') {
 
 }
 
+if($action=='export') {
+    $export = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/export.tpl');
+    $outTpl = $dlt->parseChunk($export,$data);
+
+
+}
+
 
 
 $header = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/header.tpl');
