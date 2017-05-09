@@ -6,14 +6,14 @@
             <div class="parf">
                 <div class="parf">
                     ID родителя<br/>
-                    <input type="text" name="bigparent" id="parent" class="inp" style="width: 70px"/>
+                    <input type="text" name="bigparent" id="ed-parent" class="inp" style="width: 70px"/>
 
                     <br/><br/>
                 </div>
                 <div class="parf">
                     Уровень вложенности<br/>
 
-                    <select id="tree" name="tree">
+                    <select id="ed-tree" name="tree">
                         <option value="0" selected="selected">1</option>
                         <option value="1">2</option>
                         <option value="2">3</option>
@@ -26,8 +26,11 @@
                     </select>
                 </div>
                 <div class="parf">
-                    Пагинация  <br/><input type="checkbox" name="paginat" value="1"/>
+                    <br/>
+                    <input type="checkbox" name="paginat" value="1"/> Пагинация <br/>
+                    <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
                 </div>
+
                 <div class="clear"></div>
 
                 <div class="sumosize">
@@ -111,7 +114,7 @@
                 search: true,
                 searchText: 'Имя поля или TV'
             });
-            $('#tree').SumoSelect();
+            $('#ed-tree').SumoSelect();
 
 
             $('body').on('click', '#brsub, .page', function () {
@@ -186,7 +189,7 @@
 
         //разрешаем только ввод цифр
         $(document).ready(function() {
-            $("input#parent").keydown(function(event) {
+            $("input#ed-parent").keydown(function(event) {
                 // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
                 if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
                     // Разрешаем выделение: Ctrl+A

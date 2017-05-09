@@ -28,46 +28,46 @@ if (!isset($_SESSION['mgrValidated'])) {
 }
 /////
 
-$obj = new editDocs();
+$obj = new editDocs($modx);
 
 if ($_POST['clear']) {
-    $obj->clearCache($modx);
+    $obj->clearCache();
     echo 'Кэш очищен';
 }
 
 
 if ($_POST['bigparent'] || $_POST['bigparent'] == '0') {
-    echo $obj->getAllList($modx);
+    echo $obj->getAllList();
 }
 
 
 if ($_POST['id']) {
 
-    echo $obj->editDoc($modx);
+    echo $obj->editDoc();
 
 }
 
 if ($_FILES['myfile']) {
     //print_r($_FILES);
-    echo $obj->uploadFile($modx);
+    echo $obj->uploadFile();
 
 }
 if ($_POST['upd']) {
     //print_r($_FILES);
-    echo $obj->updateExcel($modx);
+    echo $obj->updateExcel();
 
 }
 
 if ($_POST['imp']) {
     //print_r($_FILES);
-    echo $obj->importExcel($modx);
+    echo $obj->importExcel();
 
 }
 
 
 if ($_POST['export']) {
     //print_r($_FILES);
-    echo $obj -> export($modx);
+    echo $obj -> export();
 
 
 }
@@ -76,13 +76,15 @@ if ($_POST['export']) {
 
 class editDocs
 {
-
-    public function editDoc($modx)
+    public function __construct($modx)
     {
         include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
         $this->modx = $modx;
         $this->doc = new modResource($this->modx);
+    }
 
+    public function editDoc()
+    {
 
         $this->id = $_POST['id'];
         $this->data = $_POST['dat'];
@@ -101,11 +103,8 @@ class editDocs
     }
 
 
-    public function getAllList($modx)
+    public function getAllList()
     {
-        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-        $this->modx = $modx;
-        $this->doc = new modResource($this->modx);
 
         $this->parent = $this->modx->db->escape($_POST['bigparent']);
 
@@ -117,6 +116,8 @@ class editDocs
             $this->depth = $this->modx->db->escape($_POST['tree']);
 
             if ($_POST['paginat']) $this->disp = 20; else $this->disp = 0;
+            if ($_POST['neopub']) $this->addw = 1; else $this->addw = '';
+
 
 
             foreach ($this->fields as $val) {
@@ -155,7 +156,8 @@ class editDocs
                 //'ownerTPL' => '@CHUNK: paginateEditDocs',
                 'ownerTPL' => '@CODE: [+dl.wrap+][+phx:if=`[+list.pages+]`:ne=``:then=`<tr><td colspan="100" align="center"><br/>[+list.pages+]<br/></td></tr>`+]',
                 'tvList' => $this->tvlist,
-                'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>'
+                'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
+                'showNoPublish' => $this->addw
 
 
             ));
@@ -168,9 +170,9 @@ class editDocs
     }
 
 
-    public function uploadFile($modx)
+    public function uploadFile()
     {
-        $this->modx = $modx;
+
         $this->output_dir = MODX_BASE_PATH . "assets/modules/editdocs/uploads/";
 
         $this->ret = array();
@@ -222,21 +224,19 @@ class editDocs
 
     }
 
-    public function updateExcel($modx)
+    public function updateExcel()
     {
-        $this->modx = $modx;
+
         if ($_SESSION['data']) {
-            return $this->updateReady($this->newMassif($_SESSION['data']), $this->modx) . $this->table($_SESSION['data']);
+            return $this->updateReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
         } else return 'Сессия устарела, загрузите файл заново!';
     }
 
 
-    public function updateReady($data, $modx)
+    public function updateReady($data)
     {
-        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-        $this->modx = $modx;
+
         $this->data = $data;
-        $this->doc = new modResource($this->modx);
         $this->field = $this->modx->db->escape($_POST['field']);
         $this->log = '';
 
@@ -245,9 +245,9 @@ class editDocs
             foreach ($val as $key => $value) {
 
                 if ($key == $this->field) {
-                    $this->check = $this->checkField($this->field, $this->modx);
+                    $this->check = $this->checkField($this->field);
                     array_push($this->check, $value);
-                    $this->id = $this->getID($this->check, $modx);
+                    $this->id = $this->getID($this->check);
                     //print_r($this->check);
                     //echo $this->id;
                 }
@@ -272,28 +272,26 @@ class editDocs
 
     }
 
-    public function importExcel($modx)
+    public function importExcel()
     {
-        $this->modx = $modx;
+
         if (!$_POST['parimp']) {
             return '<div class="alert-ok ">Введите ID родителя!</div>' . $this->table($_SESSION['data']);
         }
         if ($_SESSION['data']) {
-            return $this->importReady($this->newMassif($_SESSION['data']), $this->modx) . $this->table($_SESSION['data']);
+            return $this->importReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
         } else return 'Сессия устарела, загрузите файл заново!';
     }
 
 
-    protected function importReady($data, $modx)
+    protected function importReady($data)
     {
-        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-        $this->modx = $modx;
+
         $this->data = $data;
-        $this->doc = new modResource($this->modx);
+
         $this->log = '';
 
         foreach ($this->data as $k => $val) {
-            $this->inbase = 0;
             foreach ($val as $key => $value) {
 
                 $this->create['parent'] = $this->modx->db->escape($_POST['parimp']);
@@ -301,13 +299,10 @@ class editDocs
                 if ($_POST['tpl']) $this->tpl = $this->modx->db->escape($_POST['tpl']);
                 if ($this->tpl != 'file') $this->create['template'] = $this->tpl;
 
-                if($key==$_POST['checktv']) { //проверяем если артикул в базе
-                    $this->inbase = $this->checkArt($this->modx, $value);
-                }
 
             }
 
-            if (!isset($_POST['test']) && $this->inbase==0) {
+            if (!isset($_POST['test'])) {
 
 
                 $this->doc->create($this->create);
@@ -316,14 +311,7 @@ class editDocs
                 foreach ($this->create as $key => $val) {
                     $this->log .= $key . ' - ' . $val . ' -> [ok!]<br/>';
                 }
-            }elseif($this->inbase>0) {
-                foreach ($this->create as $key => $val) {
-                    if($key==$_POST['checktv']) {
-                        $this->log .= $key . ' - ' . $val . ' - Уже есть в базе! НЕ ДОБАВЛЕНО! <br/>';
-                    }
-                }
-            }
-            else {
+            } else {
                 foreach ($this->create as $key => $val) {
                     $this->log .= $key . ' - ' . $val . ' - Тестовый режим! <br/>';;
                 }
@@ -383,10 +371,10 @@ class editDocs
         return $this->header . $this->out . $this->footer;
     }
 
-    protected function checkField($field, $modx)
+    protected function checkField($field)
     {
         $this->field = $field;
-        $this->modx = $modx;
+
         $this->param = array();
         $this->res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
         $this->temp = 0;
@@ -411,9 +399,9 @@ class editDocs
 
     }
 
-    public function getID($mode, $modx)
+    public function getID($mode)
     {
-        $this->modx = $modx;
+
         $this->mode = $mode;
         if ($this->mode[0] == 'tv') {
             $this->res = $this->modx->db->query("SELECT contentid FROM " . $this->modx->getFullTableName('site_tmplvar_contentvalues') . " WHERE value='" . $this->mode[2] . "'");
@@ -431,9 +419,9 @@ class editDocs
 
     }
 
-    public function export($modx)
+    public function export()
     {
-        $this->modx = $modx;
+
         $this->depth = $this->modx->db->escape($_POST['depth']);
         $this->parent = $this->modx->db->escape($_POST['stparent']);
 
@@ -451,7 +439,7 @@ class editDocs
             $this->head = substr($this->head, 0, strlen($this->head) - 1)."\r\n";
             $this->last = array_pop($this->fields);
             //to win1251
-
+            if ($_POST['neopub']) $this->addw = 1; else $this->addw = '';
         }
 
         $this->out = $this->modx->runSnippet('DocLister', array(
@@ -468,7 +456,8 @@ class editDocs
             'prepare' =>  function($data, $modx){
                 $data[$this->last]=$data[$this->last]."\r\n";
                 return $data;
-            }
+            },
+            'showNoPublish' => $this->addw
         ));
         if($_POST['win']==1) {
             $this->out = iconv('UTF-8','WINDOWS-1251',$this->out);
@@ -480,10 +469,9 @@ class editDocs
 
     }
 
-    public function clearCache($modx)
+    public function clearCache()
     {
-        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-        $this->modx = $modx;
+
         $this->modx->clearCache();
         include_once MODX_BASE_PATH . MGR_DIR . '/processors/cache_sync.class.processor.php';
         $this->sync = new synccache();
@@ -494,17 +482,6 @@ class editDocs
         foreach (glob(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/*') as $file) {
             unlink($file);
         }
-
-    }
-
-    protected function checkArt($modx,$art){
-        $this->modx = $modx;
-        $this->art = $art;
-        $this->res = $this->modx->db->query("SELECT contentid,value FROM " .$this->modx->getFullTableName('site_tmplvar_contentvalues')." WHERE  value = '".$this->art."'");
-        $this->data = $this->modx->db->getRecordCount($this->res);
-
-
-        return $this->data;
 
     }
 

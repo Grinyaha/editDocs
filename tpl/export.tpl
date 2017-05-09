@@ -13,7 +13,7 @@
                 <div class="parf">
                     Уровень вложенности<br/>
 
-                    <select id="tree" name="depth">
+                    <select id="ed-tree" name="depth">
                         <option value="0" selected="selected">1</option>
                         <option value="1">2</option>
                         <option value="2">3</option>
@@ -28,7 +28,8 @@
 
                 <div class="parf">
                     <br/>
-                    <input type="checkbox" name="win" value="1"/> WINDOWS-1251
+                    <input type="checkbox" name="win" value="1"/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
+                    <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
                 </div>
 
                 <div class="clear"></div>
@@ -111,7 +112,7 @@
                 search: true,
                 searchText: 'Имя поля или TV'
             });
-            $('#tree').SumoSelect();
+            $('#ed-tree').SumoSelect();
 
 
             $('body').on('click', '#brsub, .page', function () {

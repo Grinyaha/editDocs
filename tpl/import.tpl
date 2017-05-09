@@ -3,7 +3,7 @@
     <script>
         $(document).ready(function()
         {
-            $('#tpl,#checktv').SumoSelect();
+            $('#tpl').SumoSelect();
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
@@ -89,16 +89,6 @@
                     <option selected="selected" value="file">Из файла</option>
                     [+tpl+]
                     <option value="0">(blank)</option>
-                </select>
-            </div>
-            <div class="parf">
-                TV для проверки наличия в базе<br/>
-                <select id="checktv" name="checktv">
-                    <option value="0" selected="selected">без проверки</option>
-                    <optgroup label="TV - параметры">
-                        [+tvs+]
-                    </optgroup>
-
                 </select>
             </div>
             <div class="subbat">
