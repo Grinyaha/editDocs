@@ -292,6 +292,7 @@ class editDocs
         $this->log = '';
 
         foreach ($this->data as $k => $val) {
+            $this->inbase = 0;
             foreach ($val as $key => $value) {
 
                 $this->create['parent'] = $this->modx->db->escape($_POST['parimp']);
@@ -299,10 +300,13 @@ class editDocs
                 if ($_POST['tpl']) $this->tpl = $this->modx->db->escape($_POST['tpl']);
                 if ($this->tpl != 'file') $this->create['template'] = $this->tpl;
 
+                if($key==$_POST['checktv']) { //проверяем если артикул в базе
+                    $this->inbase = $this->checkArt($value);
+                }
 
             }
 
-            if (!isset($_POST['test'])) {
+            if (!isset($_POST['test']) && $this->inbase==0) {
 
 
                 $this->doc->create($this->create);
@@ -311,7 +315,14 @@ class editDocs
                 foreach ($this->create as $key => $val) {
                     $this->log .= $key . ' - ' . $val . ' -> [ok!]<br/>';
                 }
-            } else {
+            }elseif($this->inbase>0) {
+                foreach ($this->create as $key => $val) {
+                    if($key==$_POST['checktv']) {
+                        $this->log .= $key . ' - ' . $val . ' - Уже есть в базе! НЕ ДОБАВЛЕНО! <br/>';
+                    }
+                }
+            }
+            else {
                 foreach ($this->create as $key => $val) {
                     $this->log .= $key . ' - ' . $val . ' - Тестовый режим! <br/>';;
                 }
@@ -482,6 +493,15 @@ class editDocs
         foreach (glob(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/*') as $file) {
             unlink($file);
         }
+
+    }
+
+    protected function checkArt($art){
+
+        $this->art = $art;
+        $this->res = $this->modx->db->query("SELECT contentid,value FROM " .$this->modx->getFullTableName('site_tmplvar_contentvalues')." WHERE  value = '".$this->art."'");
+        $this->data = $this->modx->db->getRecordCount($this->res);
+        return $this->data;
 
     }
 

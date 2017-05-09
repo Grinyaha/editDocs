@@ -3,7 +3,7 @@
     <script>
         $(document).ready(function()
         {
-            $('#tpl').SumoSelect();
+            $('#tpl,#checktv').SumoSelect();
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
@@ -79,7 +79,7 @@
     <div class="sending">
         <form id="pro">
             <div class="parf">
-            ID родителя<br/>
+                ID родителя<br/>
                 <input type="text" name="parimp" id="parent" class="inp" style="width: 70px"/>
             </div>
             <div class="parf" style="width: 300px">
@@ -91,8 +91,18 @@
                     <option value="0">(blank)</option>
                 </select>
             </div>
+            <div class="parf">
+                TV для проверки наличия в базе<br/>
+                <select id="checktv" name="checktv">
+                    <option value="0" selected="selected">без проверки</option>
+                    <optgroup label="TV - параметры">
+                        [+tvs+]
+                    </optgroup>
+
+                </select>
+            </div>
             <div class="subbat">
-            <button class="btn" id="process" type="button">ПОЕХАЛИ!</button> <input type="checkbox" id="test" name="test" value="1" /> Тестовый режим (без обновления)
+                <button class="btn" id="process" type="button">ПОЕХАЛИ!</button> <input type="checkbox" id="test" name="test" value="1" /> Тестовый режим (без обновления)
             </div>
             <div class="mess">
                 <div id="warning"></div>
