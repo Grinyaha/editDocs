@@ -1,5 +1,5 @@
 # editDocs 
-Модуль для Modx Evolution. Для работы необходим DocLister.
+Модуль для Modx Evolution. Для работы необходим DocLister. В работе модуля используется библиотека PHPExcel https://github.com/PHPOffice/PHPExcel
 <br/><br/>
 Модуль умеет:<br/>
 
