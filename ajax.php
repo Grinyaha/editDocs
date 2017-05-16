@@ -53,7 +53,7 @@ if ($_FILES['myfile']) {
 
 }
 if ($_POST['upd']) {
-    //print_r($_FILES);
+    //print_r($_FILES);    e
     echo $obj->updateExcel();
 
 }
@@ -226,7 +226,7 @@ class editDocs
 
     public function updateExcel()
     {
-
+        //if($_SESSION['data']) print_r($_SESSION['data']); else return 0;
         if ($_SESSION['data']) {
             return $this->updateReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
         } else return 'Сессия устарела, загрузите файл заново!';
@@ -235,7 +235,7 @@ class editDocs
 
     public function updateReady($data)
     {
-
+        //return 1;
         $this->data = $data;
         $this->field = $this->modx->db->escape($_POST['field']);
         $this->log = '';
@@ -389,7 +389,7 @@ class editDocs
         $this->param = array();
         $this->res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
         $this->temp = 0;
-        while ($this->row = $modx->db->getRow($this->res)) {
+        while ($this->row = $this->modx->db->getRow($this->res)) {
             if ($this->row['name'] == $this->field) {
                 $this->temp = 1;
                 $this->param[0] = 'tv';
