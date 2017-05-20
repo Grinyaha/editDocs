@@ -1,10 +1,10 @@
 /**
  * EditDocs
  *  
- * @category	   module
- * @version 	   0.3
+ * @category	 module
+ * @version 	 0.3
  * @author	   Alexander Grishin	 
- * @git https://github.com/Grinyaha/editDocs
+ * @git        https://github.com/Grinyaha/editDocs
 
  */
 
