@@ -104,7 +104,11 @@ h2.tab a {
     display: none;
 }
 
-
+.tarea {
+    height: 35px;
+    width: 99%;
+    overflow-y: scroll;
+}
 
 
 

@@ -124,7 +124,8 @@ class editDocs
                 $this->r .= '[+' . $val . '+] - ';
                 $this->tvlist .= $val . ',';
                 $this->rowth .= '<td>' . $val . '</td>';
-                $this->rowtd .= '<td><input type="text" name="' . $val . '" value="[+' . $val . '+]"  /></td>';
+                //$this->rowtd .= '<td><input type="text" name="' . $val . '" value="[+' . $val . '+]"  /></td>';
+                $this->rowtd .= '<td><textarea name="' . $val . '" class="tarea">[+' . $val . '+]</textarea></td>';
             }
 
             $this->tvlist = substr($this->tvlist, 0, strlen($this->tvlist) - 1);
@@ -158,7 +159,6 @@ class editDocs
                 'tvList' => $this->tvlist,
                 'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
                 'showNoPublish' => $this->addw
-
 
             ));
 
