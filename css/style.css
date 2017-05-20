@@ -106,8 +106,8 @@ h2.tab a {
 
 .tarea {
     height: 35px;
+    resize: vertical;
     width: 99%;
-    overflow-y: scroll;
 }
 
 
