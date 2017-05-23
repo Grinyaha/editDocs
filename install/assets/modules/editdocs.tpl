@@ -1,6 +1,9 @@
 /**
  * EditDocs
- *  
+ * Ajax powered modules for edit fields DB & TV, update, import, export.
+ *
+ * necessary install DocLister & MODx API
+ *
  * @category	 module
  * @version 	 0.3
  * @author	   Alexander Grishin	 
