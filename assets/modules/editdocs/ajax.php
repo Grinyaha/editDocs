@@ -229,23 +229,26 @@ class editDocs
         //if($_SESSION['data']) print_r($_SESSION['data']); else return 0;
         if ($_SESSION['data']) {
             return $this->updateReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
+            //print_r($this->newMassif($_SESSION['data']));
         } else return 'Сессия устарела, загрузите файл заново!';
     }
 
 
     public function updateReady($data)
     {
-        //return 1;
+
         $this->data = $data;
+        //print_r($data);
         $this->field = $this->modx->db->escape($_POST['field']);
         $this->log = '';
-
+        //return $this->field;
         foreach ($this->data as $k => $val) {
             $this->i = 0;
             foreach ($val as $key => $value) {
 
                 if ($key == $this->field) {
                     $this->check = $this->checkField($this->field);
+
                     array_push($this->check, $value);
                     $this->id = $this->getID($this->check);
                     //print_r($this->check);
@@ -421,12 +424,13 @@ class editDocs
                 return $this->row['contentid'];
             }
         } elseif ($this->mode[0] == 'nonetv') {
+
             $this->res = $this->modx->db->query("SELECT id FROM " . $this->modx->getFullTableName('site_content') . " WHERE " . $this->mode[1] . "='" . $this->mode[2] . "'");
             if ($this->modx->db->getRecordCount($this->res) > 0) {
-                $this->row = $modx->db->getRow($this->res);
+                $this->row = $this->modx->db->getRow($this->res);
                 return $this->row['id'];
             }
-        } else return 'NO';
+        } else return 'Error, check your file!';
 
     }
 
