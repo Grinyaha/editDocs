@@ -12,6 +12,9 @@ body {
     text-decoration: none;
     color: #333;
 }
+.tab-page {
+    min-height: 500px;
+}
 
 .clear {
     clear: both;
