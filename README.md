@@ -10,7 +10,7 @@
 4) Экспортировать в CSV с выбранным уровнем вложенности.<br/>
 
 Видео-урок по использованию модуля
-<iframe width="560" height="315" src="https://www.youtube.com/embed/6c_Tg9eGc2g" frameborder="0" allowfullscreen></iframe>
+https://youtu.be/6c_Tg9eGc2g
 
 <b>ВАЖНО!</b>
 - При импорте обязательно должен быть столбец со стандартным полем <b>pagetitle</b>!
