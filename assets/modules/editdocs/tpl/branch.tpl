@@ -77,6 +77,14 @@
                         </optgroup>
 
                     </select>
+
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
                 </div>
                 <div class="subbat">
                     <button id="brsub" type="button" class="btn"> ПОЕХАЛИ</button>
@@ -143,7 +151,7 @@
             }); //end click
 
 
-            $('body').on('blur', '.row td input, .row td textarea', function () {
+            $('body').on('blur', '.ed-row td input, .ed-row td textarea', function () {
 
                 //var data2 = $('form#dataf').serialize();
                 var id = $(this).parent().parent().find('td.idd').html();

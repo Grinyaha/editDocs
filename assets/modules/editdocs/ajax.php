@@ -157,7 +157,7 @@ class editDocs
                 //'ownerTPL' => '@CHUNK: paginateEditDocs',
                 'ownerTPL' => '@CODE: [+dl.wrap+][+phx:if=`[+list.pages+]`:ne=``:then=`<tr><td colspan="100" align="center"><br/>[+list.pages+]<br/></td></tr>`+]',
                 'tvList' => $this->tvlist,
-                'tpl' => '@CODE:  <tr class="row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
+                'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
                 'showNoPublish' => $this->addw
 
             ));
