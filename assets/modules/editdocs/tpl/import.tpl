@@ -72,7 +72,10 @@
 
     </script>
 
-
+    <div class="alert-ok">
+        ВНИМАНИЕ!<br/>
+        Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b>
+    </div>
 
     <div id="fileuploader"  class="dropzone"></div>
     <br/><br/>
