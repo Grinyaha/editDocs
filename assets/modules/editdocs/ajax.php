@@ -468,13 +468,18 @@ class editDocs
             'orderBy' => 'id ASC',
             'tvList' => $this->tvlist,
             'tpl' => '@CODE:'.$this->ph,
-            'prepare' =>  function($data, $modx){
+            'prepare' =>  function($data){
+                foreach($data as $kk=>$vv) {
+                    $data[$kk]=str_replace("\n","",$data[$kk]);
+                    $data[$kk]=str_replace("\r","",$data[$kk]);
+                }
                 $data[$this->last]=$data[$this->last]."\r\n";
                 return $data;
             },
             'showNoPublish' => $this->addw
         ));
         if($_POST['win']==1) {
+
             $this->out = iconv('UTF-8','WINDOWS-1251',$this->out);
         }
         $this->file = MODX_BASE_PATH .'assets/modules/editdocs/uploads/export.csv';
