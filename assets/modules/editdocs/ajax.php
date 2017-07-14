@@ -296,9 +296,11 @@ class editDocs
 
         foreach ($this->data as $k => $val) {
             $this->inbase = 0;
-            foreach ($val as $key => $value) {
+            $this->p_check = array_key_exists('parent',$val); //parent check in array
+            
+            if(!$this->p_check) $this->create['parent'] = $this->modx->db->escape($_POST['parimp']);
 
-                $this->create['parent'] = $this->modx->db->escape($_POST['parimp']);
+            foreach ($val as $key => $value) {
                 $this->create[$key] = $value;
                 if ($_POST['tpl']) $this->tpl = $this->modx->db->escape($_POST['tpl']);
                 if ($this->tpl != 'file') $this->create['template'] = $this->tpl;
@@ -306,8 +308,8 @@ class editDocs
                 if($key==$_POST['checktv']) { //проверяем если артикул в базе
                     $this->inbase = $this->checkArt($value);
                 }
-
             }
+            //print_r($val);
 
             if (!isset($_POST['test']) && $this->inbase==0) {
 
