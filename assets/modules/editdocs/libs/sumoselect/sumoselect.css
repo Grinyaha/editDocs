@@ -9,7 +9,7 @@
 .SumoSelect .hidden { display:none; }
 .SumoSelect .search-txt{display:none !important;outline:none;}
 .SumoSelect .no-match{display:none;padding: 6px;}
-.SumoSelect.open .search-txt{display: inline-block;position: absolute;top: 0;left: 0;width: 100%;margin: 0;padding: 5px 8px;border: none;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-radius: 3px;}
+.SumoSelect.open .search-txt{display: inline-block !important;position: absolute;top: 0;left: 0;width: 100%;margin: 0;padding: 5px 8px;border: none;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-radius: 3px;}
 .SumoSelect.open>.search>span, .SumoSelect.open>.search>label{visibility:hidden;}
 
 /*this is applied on that hidden select. DO NOT USE display:none; or visiblity:hidden; and Do not override any of these properties. */
