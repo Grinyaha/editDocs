@@ -91,7 +91,7 @@
                 <select id="tpl" name="tpl">
                     <option selected="selected" value="file">Из файла</option>
                     [+tpl+]
-                    <option value="0">(blank)</option>
+                    <option value="blank">(blank)</option>
                 </select>
             </div>
             <div class="parf">

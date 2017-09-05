@@ -304,6 +304,7 @@ class editDocs
                 $this->create[$key] = $value;
                 if ($_POST['tpl']) $this->tpl = $this->modx->db->escape($_POST['tpl']);
                 if ($this->tpl != 'file') $this->create['template'] = $this->tpl;
+                if ($this->tpl == 'blank') $this->create['template'] = 0;
 
                 if($key==$_POST['checktv']) { //проверяем если артикул в базе
                     $this->inbase = $this->checkArt($value);
