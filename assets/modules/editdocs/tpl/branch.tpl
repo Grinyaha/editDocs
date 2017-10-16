@@ -87,7 +87,7 @@
                     <br/>
                 </div>
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn"> ПОЕХАЛИ</button>
+                    <button id="brsub" type="button" class="btn">ПОЕХАЛИ</button>
                 </div>
 
                 <div class="clear"></div>
@@ -129,12 +129,13 @@
 
                 var data = $('form#branch').serialize();
                 var page = $(this).html();
+                if(page=='ПОЕХАЛИ' || page==1) var lpage = ''; else  var lpage = '?list_page='+page;
                 loading();
-                console.log(data);
+                console.log(lpage);
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php?list_page="+page,
+                    url: "/assets/modules/editdocs/ajax.php"+lpage,
                     data: data,
                     success: function (result) {
 
