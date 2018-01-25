@@ -162,7 +162,9 @@
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         //alert('1'+thrownError + '\r\n' + '2'+xhr.statusText + '\r\n' + '3'+xhr.responseText);
-                        $('#warning').html('<span class="error">ОШИБКА!</span>');
+                        $('#warning').html('<div class="alert alert-danger">ОШИБКА! Проверьте фильтрацию!</div>');
+                        $('#result').html('');
+
                     }
 
                 }); //end ajax
@@ -185,12 +187,15 @@
                     data: "pole="+pole+"&id="+id+"&dat="+dat,
                     success: function (result) {
 
-                        $('#warning').html(result);
+                        $('#warning').html('<div class="alert alert-success">'+result+'</div>');
+
 
 
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
-                        $('#warning').html('<span class="error">ОШИБКА!</span>');
+
+                        $('#warning').html('<div class="alert alert-danger">ОШИБКА!</div>');
+
                     }
 
                 }); //end ajax

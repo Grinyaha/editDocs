@@ -39,9 +39,9 @@ body {
     top: 10px;
     right: 100px;
     z-index: 200;
-    padding: 10px;
+    /*padding: 10px;
     background: #E3FCF6;
-    box-shadow: 0 0 10px 1px #999;
+    box-shadow: 0 0 10px 1px #999;*/
 }
 
 .error {
