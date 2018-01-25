@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 
+		<script type="text/javascript" src="[+manager_path+]/media/script/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
 		<link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/sumoselect/sumoselect.css" />
 
@@ -15,8 +16,12 @@
 
 
 		<script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
             $.ajaxSetup({ cache: false });
 		</script>
+
 	</head>
 	<body>
       <h1>[+session.itemname+]</h1>

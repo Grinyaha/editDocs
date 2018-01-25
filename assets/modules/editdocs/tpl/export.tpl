@@ -2,6 +2,7 @@
     <form id="export-form">
 
         <input type="hidden" name="export" value="1" />
+
         <div>
             <div class="parf">
                 <div class="parf">
@@ -81,7 +82,7 @@
                     </select>
                 </div>
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn"> ПОЕХАЛИ</button>
+                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-edit"></i>  ПОЕХАЛИ</button>
 
                 </div>
 
@@ -125,7 +126,7 @@
                 var data = $('form#export-form').serialize();
 
                 loading();
-                console.log(data);
+                //console.log(data);
 
                 $.ajax({
                     type: "POST",
@@ -137,7 +138,7 @@
 
                         //var result = JSON.parse (result);
                         //console.log(result);
-                        if(result=='Success!') {
+                        if(result=='<div class="alert alert-success">Экспорт успешно совершен!</div>') {
                             $('#result').html(result);
                             document.location.href="/assets/modules/editdocs/uploads/export.csv";
                         }

@@ -39,6 +39,7 @@ if ($_POST['clear']) {
 if ($_POST['bigparent'] || $_POST['bigparent'] == '0') {
     echo $obj->getAllList();
 }
+if ($_POST['bigparent']=='' && $_POST['edit']==1) echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
 
 if ($_POST['id']) {
@@ -65,12 +66,11 @@ if ($_POST['imp']) {
 }
 
 
-if ($_POST['export']) {
+if ($_POST['export'] && $_POST['stparent']!='') {
     //print_r($_FILES);
     echo $obj -> export();
-
-
 }
+if ($_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
 /////////////// CLASS ////////////
 
@@ -95,9 +95,9 @@ class editDocs
         $this->end = $this->doc->save(false, false);
 
         if ($this->end) {
-            return '<div class="alert-ok">Ресурс ' . $this->id . ' - отредактирован!';
+            return 'Ресурс ' . $this->id . ' - отредактирован!';
         } else {
-            return '<div class="alert-err">ERROR!</div>';
+            return '<div class="alert alert-danger">ERROR!</div>';
         }
 
     }
@@ -138,6 +138,9 @@ class editDocs
         ';
             $this->endtab = '</table></form><br/>';
 
+            if($_POST['filters']!='') $this->filters = $_POST['filters']; else $this->filters ='';
+            if($_POST['addwhere']!='') $this->addwhere = $_POST['addwhere']; else $this->addwhere ='';
+
             $this->out = $this->modx->runSnippet('DocLister', array(
                 'idType' => 'parents',
                 'depth' => $this->depth,
@@ -147,8 +150,8 @@ class editDocs
                 'paginate' => 'pages',
                 'pageLimit' => '1',
                 'pageAdjacents' => '5',
-                'TplPage' => '@CODE:<span class="page">[+num+]</span>',
-                'TplCurrentPage' => '@CODE:<b class="current">[+num+]</b>',
+                'TplPage' => '@CODE:<span class="page" work="[+num+]">[+num+]</span>',
+                'TplCurrentPage' => '@CODE:<b class="current" work="[+num+]">[+num+]</b>',
                 'TplNextP' => '',
                 'TplPrevP' => '',
                 'TplDotsPage' => '@CODE:&nbsp;...&nbsp;',
@@ -157,7 +160,9 @@ class editDocs
                 //'ownerTPL' => '@CHUNK: paginateEditDocs',
                 'ownerTPL' => '@CODE: [+dl.wrap+][+phx:if=`[+list.pages+]`:ne=``:then=`<tr><td colspan="100" align="center"><br/>[+list.pages+]<br/></td></tr>`+]',
                 'tvList' => $this->tvlist,
+                'filters' => $this->filters,
                 'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
+                'addWhereList' => $this->addwhere,
                 'showNoPublish' => $this->addw
 
             ));
@@ -166,7 +171,7 @@ class editDocs
 
             return $this->tab . $this->out . $this->endtab;
 
-        } else return 'Выберите поля/TV для редактирования!';
+        } else return '<div class="alert alert-danger">Выберите поля/TV для редактирования!</div>';
     }
 
 
@@ -230,7 +235,7 @@ class editDocs
         if ($_SESSION['data']) {
             return $this->updateReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
             //print_r($this->newMassif($_SESSION['data']));
-        } else return 'Сессия устарела, загрузите файл заново!';
+        } else return '<div class="alert alert-danger">Сессия устарела, загрузите файл заново!</div>';
     }
 
 
@@ -279,11 +284,11 @@ class editDocs
     {
 
         if (!$_POST['parimp']) {
-            return '<div class="alert-ok ">Введите ID родителя!</div>' . $this->table($_SESSION['data']);
+            return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data']);
         }
         if ($_SESSION['data']) {
             return $this->importReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data']);
-        } else return 'Сессия устарела, загрузите файл заново!';
+        } else return '<div class="alert alert-danger">Сессия устарела, загрузите файл заново! </div>';
     }
 
 
@@ -458,7 +463,7 @@ class editDocs
             $this->last = array_pop($this->fields);
             //to win1251
             if ($_POST['neopub']) $this->addw = 1; else $this->addw = '';
-        }
+
 
         $this->out = $this->modx->runSnippet('DocLister', array(
             'idType' => 'parents',
@@ -487,8 +492,11 @@ class editDocs
         }
         $this->file = MODX_BASE_PATH .'assets/modules/editdocs/uploads/export.csv';
         file_put_contents($this->file,$this->head.$this->out);
-        if(file_exists($this->file)) return 'Success!';
-        else return 'Файла не существует!';
+        if (file_exists($this->file)) return '<div class="alert alert-success">Экспорт успешно совершен!</div>';
+        else return '<div class="alert alert-danger">Файла не существует!</div>';
+
+        }
+        else return '<div class="alert alert-danger">Выберите поля/TV для экспорта!</div>';
 
     }
 

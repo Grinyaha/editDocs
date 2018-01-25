@@ -76,7 +76,10 @@
     <div class="sending">
         <form id="pro">
          <div class="subbat">
-         <button class="btn" id="process" type="button">ПОЕХАЛИ!</button> <input type="checkbox" id="test" name="test" value="1" /> Тестовый режим (без обновления)
+         <button class="btn btn-success" id="process" type="button"><i class="fa fa-edit"></i> ПОЕХАЛИ!</button>
+             <label class="form-check-label">
+                <input type="checkbox" id="test" name="test" value="1" class="form-check-input"/> Тестовый режим (без обновления)
+             </label>
             <input type="hidden" name="field" value="" id="hidf" />
             <input type="hidden" name="upd" value="1" />
              <br/>
@@ -85,7 +88,7 @@
             <div class="mess">
                 <div id="warning"></div>
                 <br/>
-                <button id="clear" type="button" class="btn"  style="min-width: 170px" > Сбросить кэш</button>
+                <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i>  Сбросить кэш</button>
             </div>
         </form>
         <div class="clear"></div>

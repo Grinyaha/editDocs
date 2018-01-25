@@ -2,6 +2,10 @@ body {
     min-height: 500px;
 }
 
+#selfil {
+    visibility: hidden;
+}
+
 .sumosize {
     width:250px;
     float: left;
@@ -25,22 +29,25 @@ body {
     padding: 18px 0 0 0;
 }
 
-.btn {
-    background: #32ab9a none repeat scroll 0 0;
-    border-color: #32ab9a;
-    color: #fff;
-    border-radius: 3px !important;
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: none;
-    text-shadow: none;
-    transition: none 0s ease 0s;
-    padding: 4px 8px;
-}
 
 .mess {
     float: right;
     min-width: 200px;
+}
+.warning {
+    position: fixed;
+    top: 10px;
+    right: 100px;
+    z-index: 200;
+    padding: 10px;
+    background: #E3FCF6;
+    box-shadow: 0 0 10px 1px #999;
+}
+
+.error {
+    color: #c00;
+    font-weight: bold;
+    background: #E3FCF6;
 }
 
 .parf {
@@ -72,7 +79,7 @@ body {
 .alert-ok {
     padding: 10px;
     background: #E3FCF6;
-    margin: 10px 0 10px 0;
+    margin: 10px 0;
 }
 
 .alert-er {

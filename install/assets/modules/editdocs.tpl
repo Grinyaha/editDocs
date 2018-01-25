@@ -5,7 +5,7 @@
  * necessary install DocLister & MODx API
  *
  * @category	 module
- * @version 	 0.3.5
+ * @version 	 0.3.6
  * @author	   Alexander Grishin	 
  * @git        https://github.com/Grinyaha/editDocs
 

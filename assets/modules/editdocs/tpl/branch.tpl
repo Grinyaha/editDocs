@@ -7,6 +7,7 @@
                 <div class="parf">
                     ID родителя<br/>
                     <input type="text" name="bigparent" id="ed-parent" class="inp" style="width: 70px"/>
+                    <input type="hidden" name="edit" value="1" />
 
                     <br/><br/>
                 </div>
@@ -27,12 +28,18 @@
                 </div>
                 <div class="parf">
                     <br/>
-                    <input type="checkbox" name="paginat" value="1"/> Пагинация <br/>
-                    <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
+                    <label class="form-check-label">
+                     <input class="form-check-input" type="checkbox" name="paginat" value="1"/> Пагинация <br/>
+                    </label>
+                    <div class="clear"></div>
+                    <label class="form-check-label">
+                     <input class="form-check-input" type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
+                    </label>
                 </div>
 
                 <div class="clear"></div>
 
+                <div class="parf">
                 <div class="sumosize">
                     Поля или TV <br/>
                      <select id="selfil" name="fields[]" multiple="multiple">
@@ -77,27 +84,36 @@
                         </optgroup>
 
                     </select>
-
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
                 </div>
+                </div>
+                <div class="parf">
+                    Фильтрация по ТВ (DocLister)</br>
+                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например tv:ves:>:1"></i>
+                </div>
+
+                <div class="parf">
+                    Фильтрация по основным полям</br>
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
+                </div>
+                <div class="parf">
+                    <a href="http://docs.evo.im/03_extras/doclister/filtry.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
+                </div>
+
+                <div class="clear"></div>
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn">ПОЕХАЛИ</button>
+                    <button id="brsub" type="button" class="btn btn-success" work="edit"><i class="fa fa-edit"></i> ПОЕХАЛИ</button>
                 </div>
 
                 <div class="clear"></div>
 
             </div>
             <div class="mess">
-                <div id="warning"></div>
                 <br/>
-                <button id="clear" type="button" class="btn"  style="min-width: 170px" > Сбросить кэш</button>
+                <button id="clear" type="button" class="btn btn-info"  style="min-width: 170px" ><i class="fa fa-gavel"></i> Сбросить кэш</button>
             </div>
+            <div id="warning" class="warning"></div>
             <div class="clear"></div>
 
         </div>
@@ -128,10 +144,10 @@
             $('body').on('click', '#brsub, .page', function () {
 
                 var data = $('form#branch').serialize();
-                var page = $(this).html();
-                if(page=='ПОЕХАЛИ' || page==1) var lpage = ''; else  var lpage = '?list_page='+page;
+                var page = $(this).attr('work');
+                if(page=='edit' || page==1) var lpage = ''; else  var lpage = '?list_page='+page;
                 loading();
-                console.log(lpage);
+                //console.log(lpage);
 
                 $.ajax({
                     type: "POST",
@@ -139,13 +155,14 @@
                     data: data,
                     success: function (result) {
 
-                        //alert(result);
-
-                        //var result = JSON.parse (result);
                         //console.log(result);
                         $('#result').html(result);
 
 
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        //alert('1'+thrownError + '\r\n' + '2'+xhr.statusText + '\r\n' + '3'+xhr.responseText);
+                        $('#warning').html('<span class="error">ОШИБКА!</span>');
                     }
 
                 }); //end ajax
@@ -163,6 +180,7 @@
 
                 $.ajax({
                     type: "POST",
+                    async: false,
                     url: "/assets/modules/editdocs/ajax.php",
                     data: "pole="+pole+"&id="+id+"&dat="+dat,
                     success: function (result) {
@@ -170,6 +188,9 @@
                         $('#warning').html(result);
 
 
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        $('#warning').html('<span class="error">ОШИБКА!</span>');
                     }
 
                 }); //end ajax
