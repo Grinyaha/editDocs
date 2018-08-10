@@ -176,7 +176,7 @@
 
         //разрешаем только ввод цифр
         $(document).ready(function() {
-            $("input#parent").keydown(function(event) {
+            $("input#stparent").keydown(function(event) {
                 // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
                 if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
                     // Разрешаем выделение: Ctrl+A

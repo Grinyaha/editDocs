@@ -34,4 +34,5 @@
 					<h2 class="tab [+selected.excel+]"><a href="[+moduleurl+]action=excel"><span>Апдейт из Excel(Calc)</span></a></h2>
 					<h2 class="tab [+selected.import+]"><a href="[+moduleurl+]action=import"><span>Импорт из Excel(Calc)</span></a></h2>
 					<h2 class="tab [+selected.export+]"><a href="[+moduleurl+]action=export"><span>Экспорт</span></a></h2>
+					<h2 class="tab [+selected.mass+]"><a href="[+moduleurl+]action=mass"><span>Массовый перенос</span></a></h2>
 				</div>

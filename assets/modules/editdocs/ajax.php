@@ -72,6 +72,11 @@ if ($_POST['export'] && $_POST['stparent']!='') {
 }
 if ($_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
+if (isset($_POST['parent1']) && isset($_POST['parent2']) && $_POST['parent1']!='' && $_POST['parent2']!='') {
+    echo $obj -> massMove();
+}
+else if(isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">Не все поля заполнены!</div>';
+
 /////////////// CLASS ////////////
 
 class editDocs
@@ -523,6 +528,21 @@ class editDocs
         $this->data = $this->modx->db->getRecordCount($this->res);
         return $this->data;
 
+    }
+    public function massMove()
+    {
+        $this->res = $this->modx->db->query("UPDATE " .$this->modx->getFullTableName('site_content')." SET parent = ".$_POST['parent2']." WHERE  parent = ".$_POST['parent1']."");
+
+        if($this->res) {
+            $this->modx->db->query("UPDATE " .$this->modx->getFullTableName('site_content')." SET isfolder = 1 WHERE  id = ".$_POST['parent2']."");
+            $this->modx->db->query("UPDATE " .$this->modx->getFullTableName('site_content')." SET isfolder = 0 WHERE  id = ".$_POST['parent1']."");
+            $this->out = '<div class="alert alert-success">Перенос успешно завершен! <b>(Не забывайте обновить кэш сайта для отображения изменений в дереве)</b></div>';
+        }
+        else $this->out = '<div class="alert alert-danger">Ошибка, проверьте ID родительских веток</div>';
+
+
+        $this->clearCache();
+        return $this->out;
     }
 
 

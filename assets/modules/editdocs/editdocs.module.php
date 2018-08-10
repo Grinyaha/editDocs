@@ -60,6 +60,12 @@ if($action=='export') {
 
 
 }
+if($action=='mass') {
+    $mass = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/mass.tpl');
+    $outTpl = $dlt->parseChunk($mass,$data);
+
+
+}
 
 
 
