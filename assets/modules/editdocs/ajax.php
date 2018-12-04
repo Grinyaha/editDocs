@@ -120,7 +120,7 @@ class editDocs
             $this->fields = $this->modx->db->escape($_POST['fields']);
             $this->depth = $this->modx->db->escape($_POST['tree']);
 
-            if ($_POST['paginat']) $this->disp = 20; else $this->disp = 0;
+            if ($_POST['paginat']) $this->disp = 40; else $this->disp = 0;
             if ($_POST['neopub']) $this->addw = 1; else $this->addw = '';
 
 
@@ -163,7 +163,8 @@ class editDocs
                 'display' => $this->disp,
                 'tvPrefix' => '',
                 //'ownerTPL' => '@CHUNK: paginateEditDocs',
-                'ownerTPL' => '@CODE: [+dl.wrap+][+phx:if=`[+list.pages+]`:ne=``:then=`<tr><td colspan="100" align="center"><br/>[+list.pages+]<br/></td></tr>`+]',
+                'ownerTPL' => '@CODE: [+dl.wrap+][+list.pages+]',
+                'TplWrapPaginate' => '@CODE: <tr><td colspan="100" align="center"><br/>[+wrap+]<br/></td></tr>'
                 'tvList' => $this->tvlist,
                 'filters' => $this->filters,
                 'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
