@@ -162,9 +162,8 @@ class editDocs
                 'TplDotsPage' => '@CODE:&nbsp;...&nbsp;',
                 'display' => $this->disp,
                 'tvPrefix' => '',
-                //'ownerTPL' => '@CHUNK: paginateEditDocs',
                 'ownerTPL' => '@CODE: [+dl.wrap+][+list.pages+]',
-                'TplWrapPaginate' => '@CODE: <tr><td colspan="100" align="center"><br/>[+wrap+]<br/></td></tr>'
+                'TplWrapPaginate' => '@CODE: <tr><td colspan="100" align="center"><br/>[+wrap+]<br/></td></tr>',
                 'tvList' => $this->tvlist,
                 'filters' => $this->filters,
                 'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
@@ -188,8 +187,8 @@ class editDocs
 
         $this->ret = array();
 
-        //	This is for custom errors;
-        /*	$custom_error= array();
+        //  This is for custom errors;
+        /*  $custom_error= array();
             $custom_error['jquery-upload-file-error']="File already exists";
             echo json_encode($custom_error);
             die();
