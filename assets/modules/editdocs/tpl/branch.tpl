@@ -26,24 +26,15 @@
                         <option value="100">100</option>
                     </select>
                 </div>
-                <div class="parf">
-                    <br/>
-                    <label class="form-check-label">
-                     <input class="form-check-input" type="checkbox" name="paginat" value="1"/> Пагинация <br/>
-                    </label>
-                    <div class="clear"></div>
-                    <label class="form-check-label">
-                     <input class="form-check-input" type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
-                    </label>
-                </div>
-
-                <div class="clear"></div>
+                 <div class="clear"></div>
 
                 <div class="parf">
                 <div class="sumosize">
                     Поля или TV <br/>
                      <select id="selfil" name="fields[]" multiple="multiple">
                         <optgroup label="Стандартные поля">
+                            [+fields+]
+                            <!-- 
                             <option value="pagetitle">pagetitle</option>
                             <option value="longtitle">longtitle</option>
                             <option value="description">description</option>
@@ -77,6 +68,7 @@
                             <option value="privatemgr">privatemgr</option>
                             <option value="content_dispo">content_dispo</option>
                             <option value="hidemenu">hidemenu</option>
+                            -->
                         </optgroup>
 
                         <optgroup label="TV - параметры">
@@ -102,6 +94,25 @@
                 </div>
 
                 <div class="clear"></div>
+
+                <div class="parf">
+                    <br/>
+                    <label class="form-check-label">
+                     <input class="form-check-input" type="checkbox" name="paginat" value="1"/> Пагинация <br/>
+                    </label>
+                        <div class="clear"></div>
+                    <label class="form-check-label">
+                     <input class="form-check-input" type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
+                    </label>
+                        <div class="clear"></div>
+                    <label class="form-check-label">
+                        <input type="checkbox" name="multed" value="1" class="form-check-input" /> <b>category</b> для MultiCategories
+                    </label>
+                </div>
+                <div class="clear"></div>
+                <br>
+
+
                 <div class="subbat">
                     <button id="brsub" type="button" class="btn btn-success" work="edit"><i class="fa fa-edit"></i> ПОЕХАЛИ</button>
                 </div>
@@ -130,7 +141,7 @@
     <script>
         $(document).ready(function () {
 
-            <!--sumo select-->
+            //<!--sumo select-->
             $('#selfil').SumoSelect({
                 placeholder: 'Выберите поля...',
                 captionFormat: '{0} Выбрано',

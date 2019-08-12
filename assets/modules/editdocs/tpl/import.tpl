@@ -1,21 +1,26 @@
 <div id="tab-page1" class="tab-page" style="display:block;">
 
     <script>
-        $(document).ready(function()
-        {
+        $(document).ready(function () {
             $('#tpl,#checktv').SumoSelect();
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
                 url: "/assets/modules/editdocs/ajax.php",
                 paramName: "myfile",
-                acceptedFiles: ".xls,.xlsx, .ods",
-                dictDefaultMessage: "Перетащите сюда нужный EXCEL-файл или выберите по клику",
-                init: function() {
-                    this.on("success", function(file, responseText) {
-                        console.log(responseText);
+                acceptedFiles: ".xls, .xlsx, .ods, .csv",
+                dictDefaultMessage: "Перетащите сюда нужный EXCEL/CSV-файл или выберите по клику",
+                //maxFiles: 1,
+                //dictMaxFilesExceeded: "Можно загрузить только один файл",
+                addRemoveLinks: true,
+                dictRemoveFile: "Удалить файл",
+                init: function () {
+                    this.on("success", function (file, responseText) {
+                        //console.log(responseText);
                         //excelTable(responseText);
-                        $('#result').html(responseText);
+                        responseText = responseText.split("|");
+                        $('#result_progress').html('<b>' + responseText[1] + '</b>');
+                        $('#result').html(responseText[2]);
                         $('.sending').show(0);
                     });
                 }
@@ -24,26 +29,36 @@
 
 
             $('body').on('click', '#process', function () {
-
-
                 $("#hidf").val($('.tabres tr:nth-child(1) td:nth-child(1)').html());
                 var dada = $('form#pro').serialize();
+                makeProgress(dada)
+            }); //end click
 
+            function makeProgress(dada) {
                 loading();
-                //console.log(dada);
+                console.log(dada);
                 $.ajax({
                     type: "POST",
                     url: "/assets/modules/editdocs/ajax.php",
                     data: dada,
                     success: function (result) {
-
-                        $('#result').html(result);
-
-
+                        if(result.indexOf('|') !== -1) { //если ответ не содержит |, а сообщение
+                        resp = result.split("|");
+                        $('#result').html(resp[2]);
+                        //console.log(result);
+                        if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
+                            $("#result_progress").html("<b>Импорт: " + resp[0] + " из " + resp[1] + "</b>");
+                            makeProgress(dada);
+                        } else {
+                            $("#result_progress").html("<b>Импорт: " + resp[0] + " из " + resp[1] + ". Готово!</b>");
+                        }
                     }
-
+                    else {
+                        $('#result').html(result);
+                    }
+                    }
                 }); //end ajax
-            }); //end click
+            }
 
 
             $('body').on('click', '#clear', function () {
@@ -73,31 +88,37 @@
     </script>
 
     <div class="alert-ok">
-        ВНИМАНИЕ!<br/>
-        Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b>
+        ВНИМАНИЕ!<br />       
+            Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b><br>
+            Для добавления/редактирования данных связанных с плагином <b>MultiCategories</b> в файле-таблице необходим столбец с названием <b></b>category. Также не забудьте включить нужный чекбокс!<br>
+            При импорте CSV, файл должен быть в кодировке UTF-8.
+        
     </div>
 
-    <div id="fileuploader"  class="dropzone"></div>
-    <br/><br/>
+    <div id="fileuploader" class="dropzone"></div>
+    <br /><br />
     <div class="sending">
         <form id="pro">
             <div class="parf">
-                ID родителя<br/>
-                <input type="text" name="parimp" id="parent" class="inp" style="width: 70px"/>
+                ID родителя<br />
+                <input type="text" name="parimp" id="parent" class="inp" style="width: 70px" />
             </div>
             <div class="parf" style="width: 300px">
-                Шаблон<br/>
+                Шаблон<br />
 
                 <select id="tpl" name="tpl">
                     <option selected="selected" value="file">Из файла</option>
                     [+tpl+]
-                    <option value="blank">(blank)</option>
+                    <option value="blank">(blank) без шаблона</option>
                 </select>
             </div>
             <div class="parf">
-                TV для проверки наличия в базе<br/>
+                Поле по которому сверяемся<br />
                 <select id="checktv" name="checktv">
                     <option value="0" selected="selected">без проверки</option>
+                    <optgroup label="Основные поля">
+                        [+fields+]
+                    </optgroup>
                     <optgroup label="TV - параметры">
                         [+tvs+]
                     </optgroup>
@@ -105,23 +126,34 @@
                 </select>
             </div>
             <div class="subbat">
-                <button class="btn btn-success" id="process" type="button"><i class="fa fa-edit"></i> ПОЕХАЛИ!</button>
-                <label class="form-check-label">
-                    <input type="checkbox" id="test" name="test" value="1" class="form-check-input"/> Тестовый режим (без обновления)
-                </label>
+                <button class="btn btn-success" id="process" type="button"><i class="fa fa-edit"></i> ПОЕХАЛИ!</button>   
+                
             </div>
+            <div class="clear"></div>
+            <br>
+            <label class="form-check-label">
+                <input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
+                (без обновления)
+            </label>
+            <br>
+            <label class="form-check-label">
+                <input type="checkbox" name="multi" value="1" class="form-check-input" /> Импорт для MultiCategories
+            </label>
+            <br>
+
             <div class="mess">
                 <div id="warning"></div>
-                <br/>
-                <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i>  Сбросить кэш</button>
+                <br />
+                <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i> Сбросить кэш</button>
             </div>
             <input type="hidden" name="imp" value="1" />
-            <br/>
+            <br />
         </form>
         <div class="clear"></div>
     </div>
 
-    <br/><br/>
+    <br /><br />
+    <div id="result_progress"></div>
     <div id="result"></div>
 
 </div>

@@ -9,70 +9,75 @@ if (!$modx->hasPermission('exec_module')) {
 if(!is_array($modx->event->params)){
     $modx->event->params = array();
 }
+function str_in($str) {
+    $tmp = explode(',', $str);
+    foreach ($tmp as $k => $v) {
+        $tmp[$k] = "'" . trim($v) . "'";
+    }
+    return implode(',', $tmp);
+}
+global $_lang;
 
 //Подключаем обработку шаблонов через DocLister
-include_once(MODX_BASE_PATH.'assets/snippets/DocLister/lib/DLTemplate.class.php');
+include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLTemplate.class.php');
 $dlt = DLTemplate::getInstance($modx);
+$dlt->setTemplatePath('assets/modules/editdocs/tpl/');
+$dlt->setTemplateExtension('tpl');
 
-$moduleurl = 'index.php?a=112&id='.$_GET['id'].'&';
+$moduleurl = 'index.php?a=112&id=' . $_GET['id'] . '&';
 $action = isset($_GET['action']) ? $_GET['action'] : 'branch';
 
+//site_content fields
+$fields = '';
+if (isset($modx->event->params['include_fields']) && $modx->event->params['include_fields'] != '') {
+    $tmp = array_map('trim', explode(',', $modx->event->params['include_fields']));
+    $field_names = array('longtitle' => 'long_title', 'content' => 'resource_content', 'published' => 'page_data_published', 'introtext' => 'resource_summary', 'alias' => 'resource_alias', 'template' => 'page_data_template', 'menutitle' => 'resource_opt_menu_title', 'menuindex' => 'resource_opt_menu_index');
+    foreach ($tmp as $field) {
+        if ($field != 'id') {
+            $field_name = isset($field_names[$field]) ? $field_names[$field] : $field;            
+            $fields .= '<option value="' . $field . '">' . (isset($_lang[$field_name]) ? $field_name.' ('.$_lang[$field_name].')' : $field_name) . '</option>';
+        }
+    }
+}
 //tv-name list
-$query = $modx->db->query("SELECT name FROM ".$modx->getFullTableName('site_tmplvars'));
+$where_tv = '';
+if (isset($modx->event->params['include_tvs']) && $modx->event->params['include_tvs'] != '') {
+    $where_tv .= ' WHERE name IN (' . str_in($modx->event->params['include_tvs']) . ') ';
+}
+$query = $modx->db->query("SELECT name,caption FROM " . $modx->getFullTableName('site_tmplvars') . " " . $where_tv . " ORDER BY caption ASC");
 $tvs = '';
-while( $row = $modx->db->getRow($query) ) {
-    $tvs .= '<option value="'.$row['name'].'">'.$row['name'].'</option>';
+while ($row = $modx->db->getRow($query)) {
+    $tvs .= '<option value="' . $row['name'] . '">' . $row['name'].' ('.$row['caption'] . ')</option>';
 }
 
 //templates list
-$query2 = $modx->db->query("SELECT id,templatename FROM ".$modx->getFullTableName('site_templates'));
+$where_tmpl = '';
+if (isset($modx->event->params['include_tmpls']) && $modx->event->params['include_tmpls'] != '') {
+    $where_tmpl .= ' WHERE id IN (' . str_in($modx->event->params['include_tmpls']) . ') ';
+}
+$query2 = $modx->db->query("SELECT id,templatename FROM " . $modx->getFullTableName('site_templates') . $where_tmpl);
 $tpl = '';
-while( $rou = $modx->db->getRow($query2) ) {
-    $tpl .= '<option value="'.$rou['id'].'">'.$rou['templatename'].'</option>';
-}
-
-$data = array ('tpl'=>$tpl,'tvs'=>$tvs,'moduleurl'=>$moduleurl, 'manager_theme'=>$modx->config['manager_theme'], 'manager_path'=>$modx->getManagerPath(), 'base_url'=>$modx->config['base_url'], 'session'=>$_SESSION,'get'=>$_GET, 'action'=>$action , 'selected'=>array($action=>'selected'));
-
-if($action=='branch') {
-    $branch = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/branch.tpl');
-    $outTpl = $dlt->parseChunk($branch,$data);
-
-
-}
-
-if($action=='excel') {
-    $excel = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/excel.tpl');
-    $outTpl = $dlt->parseChunk($excel,$data);
-
-
-}
-
-if($action=='import') {
-    $import = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/import.tpl');
-    $outTpl = $dlt->parseChunk($import,$data);
-
-
-}
-
-if($action=='export') {
-    $export = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/export.tpl');
-    $outTpl = $dlt->parseChunk($export,$data);
-
-
-}
-if($action=='mass') {
-    $mass = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/mass.tpl');
-    $outTpl = $dlt->parseChunk($mass,$data);
-
-
+while ($row = $modx->db->getRow($query2)) {
+    $tpl .= '<option value="' . $row['id'] . '">' . $row['templatename'] . '</option>';
 }
 
 
+$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'));
 
-$header = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/header.tpl');
-$footer = '@CODE:'.file_get_contents(dirname(__FILE__).'/tpl/footer.tpl');
+if ($action == 'branch') {
+    $outTpl = $dlt->parseChunk('@FILE:branch', $data);
+}
+if ($action == 'import') {
+    $outTpl = $dlt->parseChunk('@FILE:import', $data);
+}
+if ($action == 'export') {
+    $outTpl = $dlt->parseChunk('@FILE:export', $data);
+}
+if ($action == 'mass') {
+    $outTpl = $dlt->parseChunk('@FILE:mass', $data);
+}
 
-$output = $dlt->parseChunk($header,$data).$outTpl.$dlt->parseChunk($footer,$data);
+$output = $dlt->parseChunk('@FILE:header', $data) . $outTpl . $dlt->parseChunk('@FILE:footer', $data);
 echo $output;
 
 ?>

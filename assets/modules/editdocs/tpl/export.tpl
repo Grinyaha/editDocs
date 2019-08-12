@@ -28,6 +28,11 @@
                 </div>
 
                 <div class="parf">
+                    Разделитель:<br>
+                    <input type="text" name="dm" class="inp" style="width: 40px" maxlength="1" value=";"/>
+                </div>
+
+                <div class="parf">
                     <br/>
                     <input type="checkbox" name="win" value="1"/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
                     <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
@@ -39,40 +44,8 @@
                     Поля или TV <br/>
                     <select id="selfil" name="fieldz[]" multiple="multiple">
                         <optgroup label="Стандартные поля">
-                            <option value="id">id</option>
-                            <option value="pagetitle">pagetitle</option>
-                            <option value="longtitle">longtitle</option>
-                            <option value="description">description</option>
-                            <option value="alias">alias</option>
-                            <option value="published">published</option>
-                            <option value="pub_date">pub_date</option>
-                            <option value="unpub_date">unpub_date</option>
-                            <option value="parent">parent</option>
-                            <option value="isfolder">isfolder</option>
-                            <option value="introtext">introtext</option>
-                            <option value="content">content</option>
-                            <option value="richtext">richtext</option>
-                            <option value="template">template</option>
-                            <option value="menuindex">menuindex</option>
-                            <option value="searchable">searchable</option>
-                            <option value="cacheable">cacheable</option>
-                            <option value="createdby">createdby</option>
-                            <option value="createdon">createdon</option>
-                            <option value="editedby">editedby</option>
-                            <option value="editedon">editedon</option>
-                            <option value="deleted">deleted</option>
-                            <option value="deletedon">deletedon</option>
-                            <option value="deletedby">deletedby</option>
-                            <option value="publishedon">publishedon</option>
-                            <option value="publishedby">publishedby</option>
-                            <option value="menutitle">menutitle</option>
-                            <option value="donthit">donthit</option>
-                            <option value="haskeywords">haskeywords</option>
-                            <option value="hasmetatags">hasmetatags</option>
-                            <option value="privateweb">privateweb</option>
-                            <option value="privatemgr">privatemgr</option>
-                            <option value="content_dispo">content_dispo</option>
-                            <option value="hidemenu">hidemenu</option>
+                            [+fields+]
+                            <option value="url">URL</option>
                         </optgroup>
 
                         <optgroup label="TV - параметры">
@@ -90,7 +63,8 @@
 
                 <div class="alert-ok">
                     ВНИМАНИЕ!<br/>
-                    Перевод в кодировку WIN-1251 работает при условии, что ваш сайт корректно работает с кодировкой UTF-8.
+                    Перевод в кодировку WIN-1251 работает при условии, что ваш сайт корректно работает с кодировкой UTF-8.<br>
+                    Поле URL выдает полный адрес текущего документа, включая домен.
                 </div>
 
             </div>
@@ -110,7 +84,7 @@
     <script>
         $(document).ready(function () {
 
-            <!--sumo select-->
+           // <!--sumo select-->
             $('#selfil').SumoSelect({
                 placeholder: 'Выберите поля...',
                 captionFormat: '{0} Выбрано',
@@ -122,33 +96,30 @@
 
 
             $('body').on('click', '#brsub, .page', function () {
-
                 var data = $('form#export-form').serialize();
+                makeProgress(data);
+            }); //end click
 
+            function makeProgress(data) {
                 loading();
-                //console.log(data);
-
+                console.log(data);
                 $.ajax({
                     type: "POST",
                     url: "/assets/modules/editdocs/ajax.php",
                     data: data,
                     success: function (result) {
-
-                        //alert(result);
-
-                        //var result = JSON.parse (result);
-                        //console.log(result);
-                        if(result=='<div class="alert alert-success">Экспорт успешно совершен!</div>') {
-                            $('#result').html(result);
+                        resp = result.split("|");
+                        if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
+                            $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + "</b>");
+                            makeProgress(data);
+                        } else {
+                            $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + ". Готово!</b>");
                             document.location.href="/assets/modules/editdocs/uploads/export.csv";
+                            $('#result').html('');
                         }
-                        else $('#result').html(result);
-
-
                     }
-
                 }); //end ajax
-            }); //end click
+            }
 
 
 

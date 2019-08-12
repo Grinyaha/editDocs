@@ -124,7 +124,20 @@ h2.tab a {
     width: 99%;
 }
 
+.add-text {
+    font-weight: bold;
+    color: rgb(8, 114, 48);
+}
 
+.upd-text {
+    font-weight: bold;
+    color: rgb(5, 56, 114);
+}
+
+.test-text {
+    font-weight: bold;
+    color: rgb(150, 7, 26);
+}
 
 
 
