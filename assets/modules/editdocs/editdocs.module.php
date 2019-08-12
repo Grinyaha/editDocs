@@ -35,7 +35,7 @@ if (isset($modx->event->params['include_fields']) && $modx->event->params['inclu
     foreach ($tmp as $field) {
         if ($field != 'id') {
             $field_name = isset($field_names[$field]) ? $field_names[$field] : $field;            
-            $fields .= '<option value="' . $field . '">' . (isset($_lang[$field_name]) ? $field_name.' ('.$_lang[$field_name].')' : $field_name) . '</option>';
+            $fields .= '<option value="' . $field . '">' . (isset($_lang[$field_name]) ? $field.' ('.$_lang[$field_name].')' : $field) . '</option>';
         }
     }
 }
