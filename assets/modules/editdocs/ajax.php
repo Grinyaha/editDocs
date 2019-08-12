@@ -633,7 +633,7 @@ class editDocs
     protected function checkTableMC() {     
         global $table_prefix;
      $chmc = $this->modx->db->query("SHOW TABLES LIKE '".$table_prefix."site_content_categories' ");
-     $this->modx->logEvent(1,1, $table_prefix."site_content_categories",'таблица'); 
+     //$this->modx->logEvent(1,1, $table_prefix."site_content_categories",'таблица'); 
         if($this->modx->db->getRecordCount($chmc)>0 ) {
             $mc = true;
         }
