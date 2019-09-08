@@ -253,9 +253,9 @@ class editDocs
     public function importExcel()
     {
 
-        if (!$_POST['parimp'] || $_POST['parimp']=='') {
-            return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data'], $this->params['max_rows']);
-        }
+        // if (!$_POST['parimp'] || $_POST['parimp']=='') {
+        //     return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data'], $this->params['max_rows']);
+        // }
         if ($_SESSION['data']) {
             return $this->importReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data'], $this->params['max_rows']);
         } else return '<div class="alert alert-danger">Сессия устарела, загрузите файл заново! </div>';
@@ -296,7 +296,7 @@ class editDocs
                 // $create[$key] = $value;
             }
              //если НЕ тестовый режим
-                if (!$inbase) { //не существует в базе
+                if ( !$inbase) { //не существует в базе
 
                     if (!$create['parent']) $create['parent']= $this->modx->db->escape($_POST['parimp']);
                     if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);                   
@@ -306,7 +306,7 @@ class editDocs
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new');
                     }
-                    if (!isset($_POST['test'])) { //боевой режим (добавление)
+                    if (!isset($_POST['test']) && empty($_POST['notadd']) ) { //боевой режим (добавление)
                          $this->doc->create($create);
                          $new = $this->doc->save(true, false);
 
@@ -317,9 +317,10 @@ class editDocs
                     else { //тестовый режим (добавление)
                         $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
                     }
+                    if(!empty($_POST['notadd'])) $testInfo = '<b class="test-text">ВЫБРАНА ОТМЕНА ДЕЙСТВИЯ!</b>';
                     
                     foreach ($create as $key => $val) {
-                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавлено</b> '.$testInfo.'<br>';
+                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавление</b> '.$testInfo.'<br>';
                     }
                     $_SESSION['log'] .= '<hr>';
                     $i++;
@@ -335,6 +336,7 @@ class editDocs
                                 $que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category']." WHERE doc=".$edit);
                                 
                             }
+                            $testInfo = '';
                     }
                     else { //тестовый режим (обновление)
                         //$this->modx->logEvent(1,1,print_r($create, true),'create'); 
@@ -342,7 +344,7 @@ class editDocs
                         $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
                     }
                     foreach ($create as $key => $val) {
-                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновлено</b> '.$testInfo.$zz.'<br>';
+                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
                     }
                     $_SESSION['log'] .= '<hr>';
                     $j++;

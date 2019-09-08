@@ -2,7 +2,13 @@
 
     <script>
         $(document).ready(function () {
-            $('#tpl,#checktv').SumoSelect();
+            $('#tpl,#checktv').SumoSelect({          
+                placeholder: 'Выберите поля...',
+                captionFormat: '{0} Выбрано',
+                csvDispCount: 2,
+                search: true,
+                searchText: 'Имя поля или TV'
+                });
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
@@ -91,7 +97,8 @@
         ВНИМАНИЕ!<br />       
             Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b><br>
             Для добавления/редактирования данных связанных с плагином <b>MultiCategories</b> в файле-таблице необходим столбец с названием <b></b>category. Также не забудьте включить нужный чекбокс!<br>
-            При импорте CSV, файл должен быть в кодировке UTF-8.
+            При импорте CSV, файл должен быть в кодировке UTF-8.<br>
+            ID родителя указываем в случае, если нет поля <b>parent</b> в таблице. Приоритет значения из файла-таблицы Excel.
         
     </div>
 
@@ -130,6 +137,10 @@
                 
             </div>
             <div class="clear"></div>
+            <br>
+            <label class="form-check-label">
+                <input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> Не добавлять ЕСЛИ НЕТ СОВПАДЕНИЙ!
+            </label>
             <br>
             <label class="form-check-label">
                 <input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
