@@ -486,6 +486,9 @@ class editDocs
         if ($_POST['neopub']) $addw = 1; else $addw = '';
 
         if ($_POST['fieldz']) {
+
+            if(!empty($_POST['filters'])) $filters = $_POST['filters']; else $filters ='';
+            if(!empty($_POST['addwhere'])) $addwhere = $_POST['addwhere']; else $addwhere ='';
             
             if (!isset($_SESSION['export_total'])) {
                 //только начинаем процесс
@@ -497,7 +500,9 @@ class editDocs
                 'parents' => $parent,
                 'makeUrl' => 0,
                 'showParent' => -1,
-                'showNoPublish' => $addw));
+                'filters' => $filters,
+                'showNoPublish' => $addw
+                ));
                 $total = json_decode($json, true)['total'];
                 $_SESSION['export_total'] = $total;
                 $_SESSION['export_start'] = 0;
@@ -529,6 +534,8 @@ class editDocs
                 fputcsv($file, $header, $dm);
             }
 
+
+
             $DL = $this->modx->runSnippet('DocLister', array(
                 'api' => 1,
                 'idType' => 'parents',
@@ -542,6 +549,8 @@ class editDocs
                 'orderBy' => 'id ASC',
                 'tvList' => $tvlist,
                 'tpl' => '@CODE:' . $ph,
+                'filters' => $filters,
+                //'addWhereList' => $addwhere,
                 'prepare' =>  function($data) {
                     // foreach ($this->params['prevent_date'] as $v) {
                     //     $v = trim($v);

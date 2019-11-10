@@ -33,6 +33,21 @@
                 </div>
 
                 <div class="parf">
+                    Фильтрация по ТВ (DocLister)</br>
+                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например tv:ves:>:1"></i>
+                </div>
+
+                <div class="parf">
+                    Фильтрация по основным полям</br>
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
+                </div>
+                <div class="parf">
+                    <a href="http://docs.evo.im/03_extras/doclister/filtry.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
+                </div>
+
+                <div class="parf">
                     <br/>
                     <input type="checkbox" name="win" value="1"/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
                     <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
@@ -102,12 +117,13 @@
 
             function makeProgress(data) {
                 loading();
-                console.log(data);
+
                 $.ajax({
                     type: "POST",
                     url: "/assets/modules/editdocs/ajax.php",
                     data: data,
                     success: function (result) {
+                        console.log(result);
                         resp = result.split("|");
                         if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
                             $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + "</b>");
