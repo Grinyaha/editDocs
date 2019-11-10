@@ -501,6 +501,7 @@ class editDocs
                 'makeUrl' => 0,
                 'showParent' => -1,
                 'filters' => $filters,
+                'addWhereList' => $addwhere,
                 'showNoPublish' => $addw
                 ));
                 $total = json_decode($json, true)['total'];
@@ -550,7 +551,7 @@ class editDocs
                 'tvList' => $tvlist,
                 'tpl' => '@CODE:' . $ph,
                 'filters' => $filters,
-                //'addWhereList' => $addwhere,
+                'addWhereList' => $addwhere,
                 'prepare' =>  function($data) {
                     // foreach ($this->params['prevent_date'] as $v) {
                     //     $v = trim($v);
