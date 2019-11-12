@@ -24,7 +24,7 @@
                     this.on("success", function (file, responseText) {
                         //console.log(responseText);
                         //excelTable(responseText);
-                        responseText = responseText.split("|");
+                        responseText = responseText.split("#@");
                         $('#result_progress').html('<b>' + responseText[1] + '</b>');
                         $('#result').html(responseText[2]);
                         $('.sending').show(0);
@@ -48,8 +48,8 @@
                     url: "/assets/modules/editdocs/ajax.php",
                     data: dada,
                     success: function (result) {
-                        if(result.indexOf('|') !== -1) { //если ответ не содержит |, а сообщение
-                        resp = result.split("|");
+                        if(result.indexOf('#@') !== -1) { //если ответ не содержит |, а сообщение
+                        resp = result.split("#@");
                         $('#result').html(resp[2]);
                         //console.log(result);
                         if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {

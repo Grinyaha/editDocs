@@ -247,7 +247,7 @@ class editDocs
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
-        echo $_SESSION['import_start'] . '|Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '|' . $this->table($sheetData, $this->params['max_rows']);
+        echo $_SESSION['import_start'] . '#@ Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
     }
 
     public function importExcel()
@@ -368,7 +368,7 @@ class editDocs
             // }           
         }
         if (isset($_POST['test'])) {
-            return ($_SESSION['import_total'] - $this->start_line) . '|' . ($_SESSION['import_total'] - $this->start_line) . '|' . $_SESSION['log'];
+            return ($_SESSION['import_total'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
         }
         $_SESSION['import_i'] += $i;
         $_SESSION['import_j'] += $j;
@@ -378,7 +378,7 @@ class editDocs
         
         $_SESSION['import_start'] = $start + $i + $j;
         //if($_SESSION['import_i'] == $_SESSION['import_j']) $_SESSION['log']='';
-        return ($_SESSION['import_start'] - $this->start_line) . '|' . ($_SESSION['import_total'] - $this->start_line) . '|' . $_SESSION['log'];
+        return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
     }
 
     protected function newMassif($data)
