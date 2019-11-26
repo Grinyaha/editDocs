@@ -295,10 +295,16 @@ class editDocs
                 // }
                 // $create[$key] = $value;
             }
+
+            //если parent нет в массиве, смотрим в POST,
+            if (empty($create['parent'])) {
+                if(empty($_POST['parimp'])) unset($create['parent']);
+                else $create['parent']= $this->modx->db->escape($_POST['parimp']);
+            }
+
              //если НЕ тестовый режим
                 if ( !$inbase) { //не существует в базе
-
-                    if (!$create['parent']) $create['parent']= $this->modx->db->escape($_POST['parimp']);
+                    
                     if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);                   
                     if ($tpl != 'file') $create['template'] = $tpl;
                     if($tpl=='blank')  $create['template'] = 0;
