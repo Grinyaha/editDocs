@@ -76,7 +76,7 @@ class editDocs
     public function __construct($modx)
     {
         $this->modx = $modx;
-        $this->params = $this->parseModuleParams('editDocs');
+        $this->params = $this->parseModuleParams('editDocs');      
         include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
         $this->doc = new modResource($this->modx);
         $this->step = !empty($this->params['step']) && (int)$this->params['step'] > 0 ? (int)$this->params['step'] : 500;//сколько строк за раз импортируем
@@ -96,9 +96,9 @@ class editDocs
     }
 
     public function editDoc()
-    {
-
-
+    {   
+       
+        
         $id = $_POST['id'];
         $data = $_POST['dat'];
         $pole = $_POST['pole'];
@@ -107,7 +107,11 @@ class editDocs
         $this->doc->set($pole, $data);
         $end = $this->doc->save(true, false);
         if($pole=='category' && $data!='' && $data!=0 && $this->checkTableMC() ) {
-            $que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$data." WHERE doc=".$end);
+            $ctm = explode(',',$data);
+            $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $end);
+            foreach ($ctm as $valoc) {
+                $que2 = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$valoc.", doc=".$end);
+            }
         }
 
         if ($end) {
@@ -143,10 +147,10 @@ class editDocs
 
                 //for multiCategories header
                 if(isset($_POST['multed']) && $this->checkTableMC() ) $this->rowth .= '<td>category</td>';
-
+                
                 $this->rowtd .= '<td><textarea name="' . $val . '" class="tarea">[+' . $val . '+]</textarea></td>';
                 //for multiCategories
-                if(isset($_POST['multed']) && $this->checkTableMC() ) $this->rowtd .= '<td><input name="category" class="tarea" type="number" value="[+category+]"></input></td>';
+                if(isset($_POST['multed']) && $this->checkTableMC() ) $this->rowtd .= '<td><input name="category" class="tarea" type="text" value="[+category+]"></input></td>';
             }
 
             $this->tvlist = substr($this->tvlist, 0, strlen($this->tvlist) - 1);
@@ -186,11 +190,19 @@ class editDocs
                 'addWhereList' => $this->addwhere,
                 'showNoPublish' => $this->addw,
                 'prepare' => function($data) {
+                    //проверяем существование таблицы MultiCat и вкл. чекбокса
                     if(isset($_POST['multed']) && $this->checkTableMC() ) {
                         $que = $this->modx->db->query("SELECT category FROM ".$this->modx->getFullTableName('site_content_categories')." WHERE doc=".$data['id']);
-                        $rr = $this->modx->db->getRow($que);
-                        if($rr['category']>0) $data['category']=$rr['category'];
-                        //$data['category'] = 1;
+                        if($this->modx->db->getRecordCount($que)>0) {
+
+                            while ($rr = $this->modx->db->getRow($que)) {
+                                $mcat[] = $rr['category'];
+                            }
+                            $rez = implode(',', $mcat);
+                            if ($rez!='') $data['category'] = $rez;
+                        }
+                        else $data['category']='';
+                        //$data['category'] = $data['id'];
                         return $data;
                     }
                 }
@@ -206,7 +218,7 @@ class editDocs
 
 
     public function uploadFile()
-    {
+   {
 
         $output_dir = MODX_BASE_PATH . "assets/modules/editdocs/uploads/";
 
@@ -243,11 +255,23 @@ class editDocs
             $objPHPExcel = PHPExcel_IOFactory::load($output_dir . $fileName);
             $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
         }
+
+        //заменяем . на , в category
+       $keyz = array_keys($sheetData);
+       $firstKey = $keyz[0];
+       $findcat = array_search('category', $sheetData[$firstKey]);
+
+       if(!empty($findcat)) {
+           foreach($sheetData as $keysh => $valsh) {
+               $sheetData[$keysh][$findcat] = str_replace('.',',',$sheetData[$keysh][$findcat]);
+           }}
+
         $_SESSION['data'] = $sheetData;
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
-        echo $_SESSION['import_start'] . '#@ Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+        echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+        //print_r($sheetData);
     }
 
     public function importExcel()
@@ -269,17 +293,17 @@ class editDocs
         $check = $this->checkField($uniq);
         $i = 0;//количество добавленных
         $j = 0;//количество отредактированных
-        $start = isset($_SESSION['import_start']) ? $_SESSION['import_start'] : 0;
+        $start = isset($_SESSION['import_start']) ? $_SESSION['import_start'] : 0;        
         $finish = isset($_SESSION['import_start']) ? ($start + $this->step) : count($data);
         if($_SESSION['import_i'] == $_SESSION['import_j']) {
             $_SESSION['log']='';
         }
-
+       
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         for ($ii = $start; $ii < $finish; $ii++){
             if (!isset($data[$ii])) continue;
             $val = $data[$ii];
-
+       
             $inbase = 0;
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
@@ -296,85 +320,91 @@ class editDocs
                 // $create[$key] = $value;
             }
 
-
             //если parent нет в массиве, смотрим в POST,
             if (empty($create['parent'])) {
                 if(empty($_POST['parimp'])) unset($create['parent']);
                 else $create['parent']= $this->modx->db->escape($_POST['parimp']);
             }
 
-            //если НЕ тестовый режим
-            if ( !$inbase) { //не существует в базе
+             //если НЕ тестовый режим
+                if ( !$inbase) { //не существует в базе
+                    
+                    if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);                   
+                    if ($tpl != 'file') $create['template'] = $tpl;
+                    if($tpl=='blank')  $create['template'] = 0;
 
-
-                if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);
-                if ($tpl != 'file') $create['template'] = $tpl;
-                if($tpl=='blank')  $create['template'] = 0;
-
-                if ($this->issetPrepare) {
-                    $create = $this->makePrepare($create, 'new');
-                }
-                if (!isset($_POST['test']) && empty($_POST['notadd']) ) { //боевой режим (добавление)
-                    $this->doc->create($create);
-                    $new = $this->doc->save(true, false);
-
-                    if (array_key_exists('category', $create) && isset($_POST['multi']) && $new>0 && $this->checkTableMC() ) {
-                        $que = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category'].",doc=".$new);
+                    if ($this->issetPrepare) {
+                        $create = $this->makePrepare($create, 'new');
                     }
-                }
-                if (!empty($_POST['test'])) { //тестовый режим (добавление)
-                    $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
-                }
-                if(!empty($_POST['notadd'])) $testInfo = '<b class="test-text">Режим импорта отключен!</b>';
+                    if (!isset($_POST['test']) && empty($_POST['notadd']) ) { //боевой режим (добавление)
+                         $this->doc->create($create);
+                         $new = $this->doc->save(true, false);
 
-                foreach ($create as $key => $val) {
-                    $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавление</b> '.$testInfo.'<br>';
-                }
-                $_SESSION['log'] .= '<hr>';
-                $i++;
-            } else if ($inbase > 0) {
-                if ($this->issetPrepare) {
-                    $create = $this->makePrepare($create, 'upd');
-                }
-                if (!isset($_POST['test'])) { //боевой режим (обновление)
-
+                         if (array_key_exists('category', $create) && isset($_POST['multi']) && $new>0 && $this->checkTableMC() ) {
+                             $create['category'] = trim($create['category']);
+                             //$create['category'] = str_replace('.',',',$create['category']);
+                             $arrmc = explode(',',$create['category']);
+                             foreach($arrmc as $vl) {
+                            $que = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$vl.",doc=".$new);                                           }
+                         }
+                    }
+                    else { //тестовый режим (добавление)
+                        $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
+                    }
+                    if(!empty($_POST['notadd'])) $testInfo = '<b class="test-text">ВЫБРАНА ОТМЕНА ДЕЙСТВИЯ!</b>';
+                    
+                    foreach ($create as $key => $val) {
+                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавление</b> '.$testInfo.'<br>';
+                    }
+                    $_SESSION['log'] .= '<hr>';
+                    $i++;
+                } else if ($inbase > 0) {
+                    if ($this->issetPrepare) {
+                        $create = $this->makePrepare($create, 'upd');
+                    }
+                    if (!isset($_POST['test'])) { //боевой режим (обновление)                       
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
-                    //$this->modx->logEvent(1,1,'edit='.$edit,'edit');
-                    //если вкл.мультикатегории
-                    if (array_key_exists('category', $create) && isset($_POST['multi']) && $this->checkTableMC() ) {
-                        $que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category']." WHERE doc=".$edit);
-
+                     //$this->modx->logEvent(1,1,'edit='.$edit,'edit'); 
+                            //если вкл.мультикатегории
+                            if (array_key_exists('category', $create) && isset($_POST['multi']) && $this->checkTableMC() ) {
+                                $ctm = explode(',',$create['category']);
+                                $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $edit);
+                                foreach ($ctm as $valoc) {
+                                    $que2 = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$valoc.", doc=".$edit);
+                                }
+                                //$que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category']." WHERE doc=".$edit);
+                                
+                            }
+                            $testInfo = '';
                     }
-                    $testInfo = '';
-                }
-                else { //тестовый режим (обновление)
-                    //$this->modx->logEvent(1,1,print_r($create, true),'create');
-
-                    $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
-                }
-                foreach ($create as $key => $val) {
-                    $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
-                }
-                $_SESSION['log'] .= '<hr>';
-                $j++;
-            } else {
+                    else { //тестовый режим (обновление)
+                        //$this->modx->logEvent(1,1,print_r($create, true),'create'); 
+                        
+                        $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
+                    }
+                    foreach ($create as $key => $val) {
+                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
+                    }
+                    $_SESSION['log'] .= '<hr>';
+                    $j++;
+                } else {
                 //ошибка проверки
-            }
-
-
+                }
+            
+            
             // else { //тестовый режим
             //     if ($this->issetPrepare) {
             //         $create = $this->makePrepare($create, 'upd');
             //     }
             //     foreach ($create as $key => $val) {
             //         $log .= $key . ' - ' . $val . ' - Тестовый режим! <br>';
-
+                    
             //     }
             //     $log .= '<hr>';
-
+                
             //     $i++;
             //     //return ($_SESSION['import_total'] - $this->start_line) . '|' . ($_SESSION['import_total'] - $this->start_line) . '|' . $log;
-            // }
+            // }           
         }
         if (isset($_POST['test'])) {
             return ($_SESSION['import_total'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
@@ -384,7 +414,7 @@ class editDocs
         if (!isset($_POST['test'])) {
             $_SESSION['log'] .= '<br><b>Добавлено - ' . $_SESSION['import_i'] . ', отредактировано - ' . $_SESSION['import_j'] . ' -> [ok!]</b> <hr>';
         }
-
+        
         $_SESSION['import_start'] = $start + $i + $j;
         //if($_SESSION['import_i'] == $_SESSION['import_j']) $_SESSION['log']='';
         return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
@@ -414,6 +444,7 @@ class editDocs
             }
         }
         unset ($this->data);
+        print_r($this->sheetDataNew);
         return $this->sheetDataNew;
     }
 
@@ -498,20 +529,20 @@ class editDocs
 
             if(!empty($_POST['filters'])) $filters = $_POST['filters']; else $filters ='';
             if(!empty($_POST['addwhere'])) $addwhere = $_POST['addwhere']; else $addwhere ='';
-
+            
             if (!isset($_SESSION['export_total'])) {
                 //только начинаем процесс
                 $json = $this->modx->runSnippet('DocLister', array(
-                    'api' => 'id',
-                    'JSONformat' => 'new',
-                    'idType' => 'parents',
-                    'depth' => $depth,
-                    'parents' => $parent,
-                    'makeUrl' => 0,
-                    'showParent' => -1,
-                    'filters' => $filters,
-                    'addWhereList' => $addwhere,
-                    'showNoPublish' => $addw
+                'api' => 'id',
+                'JSONformat' => 'new',
+                'idType' => 'parents',
+                'depth' => $depth,
+                'parents' => $parent,
+                'makeUrl' => 0,
+                'showParent' => -1,
+                'filters' => $filters,
+                'addWhereList' => $addwhere,
+                'showNoPublish' => $addw
                 ));
                 $total = json_decode($json, true)['total'];
                 $_SESSION['export_total'] = $total;
@@ -539,7 +570,7 @@ class editDocs
 
             if(!empty($_POST['dm'])) $dm = $_POST['dm'];
             else $dm = ';'; //разделитель
-
+            
             if($_SESSION['export_start']==0) { //header только в начале ставим
                 fputcsv($file, $header, $dm);
             }
@@ -580,19 +611,19 @@ class editDocs
             ));
 
             $DL = json_decode($DL, true);
-
+            
             foreach ($DL as $string) {
                 $import = array();
-
+                
                 foreach ($header as $k => $v) {
                     $import[] = ($_POST['win'] == 1) ? iconv('UTF-8', 'WINDOWS-1251', $string[$v]) : $string[$v];
-                }
+                }           
                 //$this->modx->logEvent(1,1,print_r($header, true),'header');
                 fputcsv($file, $import, $dm);
                 $_SESSION['export_start'] ++;
             }
             fclose($file);
-
+            
         }
         $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
         if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
@@ -638,12 +669,12 @@ class editDocs
         return $out;
     }
 
-    public function makePrepare($data, $mode = 'upd', $process = 'import')
+    public function makePrepare($data, $mode = 'upd', $process = 'import') 
     {
         $data = $this->modx->runSnippet($this->snipPrepare, array('data' => $data, 'mode' => $mode, 'process' => $process));
         return $data;
     }
-
+    
     public function checkPrepareSnip()
     {
         $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $this->modx->db->escape($this->snipPrepare) . "' LIMIT 0,1") ? $this->modx->db->escape($this->snipPrepare) : false;
@@ -651,14 +682,14 @@ class editDocs
     }
 
     //проверяем есть ли у нас таблица для MultiCategories
-    protected function checkTableMC() {
+    protected function checkTableMC() {     
         global $table_prefix;
-        $chmc = $this->modx->db->query("SHOW TABLES LIKE '".$table_prefix."site_content_categories' ");
-        //$this->modx->logEvent(1,1, $table_prefix."site_content_categories",'таблица');
+     $chmc = $this->modx->db->query("SHOW TABLES LIKE '".$table_prefix."site_content_categories' ");
+     //$this->modx->logEvent(1,1, $table_prefix."site_content_categories",'таблица'); 
         if($this->modx->db->getRecordCount($chmc)>0 ) {
             $mc = true;
         }
-        else $mc = false;
+        else $mc = false;  
         return $mc;
     }
 }
