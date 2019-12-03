@@ -444,7 +444,7 @@ class editDocs
             }
         }
         unset ($this->data);
-        print_r($this->sheetDataNew);
+        //print_r($this->sheetDataNew);
         return $this->sheetDataNew;
     }
 
