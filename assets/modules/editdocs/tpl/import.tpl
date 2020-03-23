@@ -124,6 +124,7 @@
                 <select id="checktv" name="checktv">
                     <option value="0" selected="selected">без проверки</option>
                     <optgroup label="Основные поля">
+                        <option value="id">id ресурса</option>
                         [+fields+]
                     </optgroup>
                     <optgroup label="TV - параметры">

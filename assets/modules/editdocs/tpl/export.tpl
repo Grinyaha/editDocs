@@ -59,6 +59,7 @@
                     Поля или TV <br/>
                     <select id="selfil" name="fieldz[]" multiple="multiple">
                         <optgroup label="Стандартные поля">
+                            <option value="id" selected disabled>ID (вкл. по умолчанию)</option>
                             [+fields+]
                             <option value="url">URL</option>
                         </optgroup>
