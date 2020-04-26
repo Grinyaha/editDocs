@@ -143,6 +143,7 @@ class editDocs
             foreach ($this->fields as $val) {
                 $this->r .= '[+' . $val . '+] - ';
                 $this->tvlist .= $val . ',';
+                if(!empty($_POST['tvpic'])) $this->tvlist .= $_POST['tvpic'].',';
                 $this->rowth .= '<td>' . $val . '</td>';
 
                 //for multiCategories header
@@ -158,7 +159,7 @@ class editDocs
 <form id="dataf">
     <table class="tabres">
         <tr>
-            <td>id</td>' . $this->rowth . '
+            <td width="100">id</td>' . $this->rowth . '
         </tr>
         ';
             $this->endtab = '</table></form><br/>';
@@ -186,7 +187,7 @@ class editDocs
                 'TplWrapPaginate' => '@CODE: <tr><td colspan="100" align="center"><br/>[+wrap+]<br/></td></tr>',
                 'tvList' => $this->tvlist,
                 'filters' => $this->filters,
-                'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]</td>' . $this->rowtd . '</tr>',
+                'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]<br>[+piczzz+]</td>' . $this->rowtd . '</tr>',
                 'addWhereList' => $this->addwhere,
                 'showNoPublish' => $this->addw,
                 'prepare' => function($data) {
@@ -202,9 +203,17 @@ class editDocs
                             if ($rez!='') $data['category'] = $rez;
                         }
                         else $data['category']='';
-                        //$data['category'] = $data['id'];
-                        return $data;
                     }
+
+                    //show IMG
+                    if(!empty($_POST['tvpic'])) {
+                        $tvpic = $_POST['tvpic'];
+                        $data['piczzz'] = '<img src="'.$data[$tvpic].'" width="100"/>';
+                    }
+                    else $data['piczzz'] = '';
+
+
+                    return $data;
                 }
 
             ));
@@ -564,6 +573,7 @@ class editDocs
                 $header[] = $val;
             }
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
+
             $ph = substr($ph, 0, strlen($ph) - 1);
             $head = substr($head, 0, strlen($head) - 1) . "\r\n";
             //$this->last = array_pop($fields);

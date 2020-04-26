@@ -26,6 +26,11 @@
                         <option value="100">100</option>
                     </select>
                 </div>
+                <div class="parf">
+                    TV-картинка для отображения <br/>
+
+                    <input type="text" name="tvpic" id="" class="inp" style="width: 70px"/>
+                </div>
                  <div class="clear"></div>
 
                 <div class="parf">
@@ -80,14 +85,14 @@
                 </div>
                 <div class="parf">
                     Фильтрация по ТВ (DocLister)</br>
-                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px"/>
-                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например tv:ves:>:1"></i>
+                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px"  placeholder="ПРИМЕР: tv:ves:>:1"/>
+                    <i class="fa fa-question-circle fa-lg" title="Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например tv:ves:>:1"></i>
                 </div>
 
                 <div class="parf">
                     Фильтрация по основным полям</br>
-                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px"/>
-                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px"  placeholder="ПРИМЕР: c.template=2"/>
+                    <i class="fa fa-question-circle fa-lg" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
                 </div>
                 <div class="parf">
                     <a href="http://docs.evo.im/03_extras/doclister/filtry.html" target="_blank"><br/>Документация по фильтрам DocLister</a>

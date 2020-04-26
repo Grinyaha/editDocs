@@ -15,16 +15,13 @@
 
 
 
-		<script>
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
+		<script>    
             $.ajaxSetup({ cache: false });
 		</script>
 
 	</head>
 	<body>
-      <h1>[+session.itemname+]</h1>
+      <h1>[+session.itemname+] v0.4.5</h1>
 
 
 		<div class="sectionBody">
