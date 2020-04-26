@@ -208,7 +208,11 @@ class editDocs
                     //show IMG
                     if(!empty($_POST['tvpic'])) {
                         $tvpic = $_POST['tvpic'];
-                        $data['piczzz'] = '<img src="'.$data[$tvpic].'" width="100"/>';
+                        $slash = '/';
+                        if(substr($data[$tvpic], 0, 1)=='/') $slash = '';
+                        if(substr($data[$tvpic], 0, 4)=='http') $slash = '';
+                            //substr("abcdef", 0, 1)
+                        $data['piczzz'] = '<img src="'.$slash.$data[$tvpic].'" width="100"/>';
                     }
                     else $data['piczzz'] = '';
 
