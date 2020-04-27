@@ -204,13 +204,19 @@
                     success: function (result) {
 
                         $('#warning').html('<div class="alert alert-success">'+result+'</div>');
-
+                        setTimeout(function(){
+                            $('.alert').fadeOut();
+                        }, 3000);
 
 
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
 
                         $('#warning').html('<div class="alert alert-danger">ОШИБКА!</div>');
+
+                        setTimeout(function(){
+                            $('.alert').fadeOut();
+                        }, 3000);
 
                     }
 
