@@ -139,9 +139,27 @@ h2.tab a {
     color: rgb(150, 7, 26);
 }
 
+.td_add {
+    background-color: #e2efe5;
+}
 
+.td_upd {
+    background-color: #e7f8fb;
+}
 
+.td_notadd {
+    background-color: #fbe7e9 !important;
+}
 
+span.td_add, span.td_notadd, span.td_upd {
+    border: 1px solid #aaa;
+    padding: 0 10px;
+}
+
+.result {
+    overflow-y: scroll;
+    height: 500px;
+}
 
 
 
