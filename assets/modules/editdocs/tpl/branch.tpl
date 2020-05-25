@@ -103,15 +103,15 @@
                 <div class="parf">
                     <br/>
                     <label class="form-check-label">
-                     <input class="form-check-input" type="checkbox" name="paginat" value="1"/> Пагинация <br/>
+                     &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="paginat" value="1"/> Пагинация <br/>
                     </label>
                         <div class="clear"></div>
                     <label class="form-check-label">
-                     <input class="form-check-input" type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
+                     &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
                     </label>
                         <div class="clear"></div>
                     <label class="form-check-label">
-                        <input type="checkbox" name="multed" value="1" class="form-check-input" /> <b>category</b> для MultiCategories
+                        &nbsp; &nbsp; &nbsp; <input type="checkbox" name="multed" value="1" class="form-check-input" /> <b>category</b> для MultiCategories
                     </label>
                 </div>
                 <div class="clear"></div>

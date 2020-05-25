@@ -81,8 +81,8 @@ class editDocs
         $this->doc = new modResource($this->modx);
         $this->step = !empty($this->params['step']) && (int)$this->params['step'] > 0 ? (int)$this->params['step'] : 500;//сколько строк за раз импортируем
         $this->start_line = 2;//начинаем импорт со второй строки файла
-        $this->params['max_rows'] = false; //количество выводимых на экран строк после импорта / загрузки файла . false - если не нужно ограничивать
-        //$this->snipPrepare = 'editDocsPrepare';//сниппет prepare - модификация данных при сохранении
+        $this->params['max_rows'] = false; //количество выводимых на экран строк таблицы после импорта / загрузки файла . false - если не нужно ограничивать
+        $this->snipPrepare = !empty($this->params['prepare_snippet']) ? $this->params['prepare_snippet'] : 'editDocsPrepare1';//сниппет prepare 
     }
 
     public function parseModuleParams($name)
@@ -285,6 +285,7 @@ class editDocs
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
         echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
         //print_r($sheetData);
+        $_SESSION['tabrows'] = ''; 
     }
 
     public function importExcel()
@@ -294,7 +295,7 @@ class editDocs
         //     return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data'], $this->params['max_rows']);
         // }
         if ($_SESSION['data']) {
-            return $this->importReady($this->newMassif($_SESSION['data'])) . $this->table($_SESSION['data'], $this->params['max_rows']);
+            return $this->importReady($this->newMassif($_SESSION['data'])) ; //$this->table($_SESSION['data'], $this->params['max_rows'])
         } else return '<div class="alert alert-danger">Сессия устарела, загрузите файл заново! </div>';
     }
 
@@ -310,9 +311,20 @@ class editDocs
         $finish = isset($_SESSION['import_start']) ? ($start + $this->step) : count($data);
         if($_SESSION['import_i'] == $_SESSION['import_j']) {
             $_SESSION['log']='';
-        }
+        }      
        
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
+        if($_SESSION['header_table']) {
+            $theader = '';
+            foreach($_SESSION['header_table'] as $valt) {
+                $theader .= '<td>'.$valt.'</td>';
+                if($valt=='parent') $parh = ''; else $parh = '<td>parent</td>';
+                if($valt=='template') $ptmplh = ''; else $ptmplh = '<td>template</td>';
+            }
+        }
+        $tabh = '<table  class="tabres"><tr>'.$theader.$parh.$ptmplh.'</tr>';
+        $tabe = '</table>';
+
         for ($ii = $start; $ii < $finish; $ii++){
             if (!isset($data[$ii])) continue;
             $val = $data[$ii];
@@ -324,13 +336,6 @@ class editDocs
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
-                // foreach ($this->params['prevent_date'] as $v) {
-                //     $v = trim($v);
-                //     if ($key == $v) {
-                //         $value = str_replace(',', '.', $value);
-                //     }
-                // }
-                // $create[$key] = $value;
             }
 
             //если parent нет в массиве, смотрим в POST,
@@ -345,39 +350,49 @@ class editDocs
                     if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);                   
                     if ($tpl != 'file') $create['template'] = $tpl;
                     if($tpl=='blank')  $create['template'] = 0;
-
-                    if ($this->issetPrepare) {
+                       
+                    //prepare create
+                    if ($this->issetPrepare) {                        
                         $create = $this->makePrepare($create, 'new');
                     }
-                    if (!isset($_POST['test']) && empty($_POST['notadd']) ) { //боевой режим (добавление)
+
+                    //боевой режим (добавление)    
+                    if (!isset($_POST['test']) && empty($_POST['notadd']) ) { 
                          $this->doc->create($create);
                          $new = $this->doc->save(true, false);
 
                          if (array_key_exists('category', $create) && isset($_POST['multi']) && $new>0 && $this->checkTableMC() ) {
-                             $create['category'] = trim($create['category']);
-                             //$create['category'] = str_replace('.',',',$create['category']);
+                             $create['category'] = trim($create['category']);                             
                              $arrmc = explode(',',$create['category']);
                              foreach($arrmc as $vl) {
                             $que = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$vl.",doc=".$new);                                           }
                          }
                     }
-                    else { //тестовый режим (добавление)
+
+                    //тестовый режим (добавление)
+                    else { 
                         $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
                     }
-                    if(!empty($_POST['notadd'])) $testInfo = '<b class="test-text">ВЫБРАНА ОТМЕНА ДЕЙСТВИЯ!</b>';
+                    if(!empty($_POST['notadd'])) { $testInfo = '<b class="test-text">ВЫБРАНА ОТМЕНА ДЕЙСТВИЯ!</b>'; $css = 'td_notadd'; }
+                    else $css = '';
                     
+                    $td = '';
                     foreach ($create as $key => $val) {
-                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавление</b> '.$testInfo.'<br>';
+                        //$_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="add-text">добавление</b> '.$testInfo.'<br>';
+                        $td .= '<td class="td_add '.$css.'">'.$val.' </td>'; //add
                     }
-                    $_SESSION['log'] .= '<hr>';
+                    $tr .= '<tr>'.$td.'</tr> ';
+                    //$_SESSION['log'] .= '<hr>';
                     $i++;
+
+                //боевой режим (обновление)          
                 } else if ($inbase > 0) {
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd');
                     }
-                    if (!isset($_POST['test'])) { //боевой режим (обновление)                       
+                    if (!isset($_POST['test'])) {                      
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
-                     //$this->modx->logEvent(1,1,'edit='.$edit,'edit'); 
+                      
                             //если вкл.мультикатегории
                             if (array_key_exists('category', $create) && isset($_POST['multi']) && $this->checkTableMC() ) {
                                 $ctm = explode(',',$create['category']);
@@ -390,47 +405,46 @@ class editDocs
                             }
                             $testInfo = '';
                     }
-                    else { //тестовый режим (обновление)
-                        //$this->modx->logEvent(1,1,print_r($create, true),'create'); 
-                        
-                        $testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
+                    //тестовый режим (обновление)
+                    else { 
+                        //$this->modx->logEvent(1,1,print_r($create, true),'create');                         
+                        //$testInfo = '<b class="test-text">ТЕСТОВЫЙ РЕЖИМ!</b>';
                     }
+                    $td = '';    
                     foreach ($create as $key => $val) {
-                        $_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
+                        //$_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
+                        $td .= '<td class="td_upd">'.$val.' </td>'; //edit
                     }
-                    $_SESSION['log'] .= '<hr>';
+                    $tr .= '<tr>'.$td.'</tr> ';
+                    //$_SESSION['log'] .= '<hr>';
                     $j++;
-                } else {
-                //ошибка проверки
-                }
-            
-            
-            // else { //тестовый режим
-            //     if ($this->issetPrepare) {
-            //         $create = $this->makePrepare($create, 'upd');
-            //     }
-            //     foreach ($create as $key => $val) {
-            //         $log .= $key . ' - ' . $val . ' - Тестовый режим! <br>';
-                    
-            //     }
-            //     $log .= '<hr>';
-                
-            //     $i++;
-            //     //return ($_SESSION['import_total'] - $this->start_line) . '|' . ($_SESSION['import_total'] - $this->start_line) . '|' . $log;
-            // }           
+                } 
+                   
         }
+$_SESSION['tabrows'] .= $tr ;            
+        //$fulltab = $tabh.$tr.$tabe;
+        $fortab = '<span class="td_add">&nbsp;</span>  добавлено &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> запрет на добавление&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> отредактировано<br><br>';
+        //тестовый режим
         if (isset($_POST['test'])) {
-            return ($_SESSION['import_total'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
+            //$this->modx->logEvent(1,1,print_r($_SESSION['header_table'],true),'проверка заголовка таблицы'); 
+            $_SESSION['log'] = '<br><div class="alert alert-danger">Тестовый режим. Изменения <b>НЕ</b> вносятся</div>';
+            return ($_SESSION['import_total'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'].$fileobr. $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
+            
         }
         $_SESSION['import_i'] += $i;
         $_SESSION['import_j'] += $j;
+        
+        //боевой режим
         if (!isset($_POST['test'])) {
-            $_SESSION['log'] .= '<br><b>Добавлено - ' . $_SESSION['import_i'] . ', отредактировано - ' . $_SESSION['import_j'] . ' -> [ok!]</b> <hr>';
+            $_SESSION['log'] = '<br><b>Добавлено - ' . $_SESSION['import_i'] . ', отредактировано - ' . $_SESSION['import_j'] . '</b> <hr>';
+            $fileobr = '<div class="alert alert-warning">Файл обработан. Для дальнейшей работы необходимо загрузить файл заново.</div>';
+            
         }
         
         $_SESSION['import_start'] = $start + $i + $j;
         //if($_SESSION['import_i'] == $_SESSION['import_j']) $_SESSION['log']='';
-        return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'];
+        return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'].$fileobr. $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
+        // #@ разделители для JS
     }
 
     protected function newMassif($data)
@@ -465,15 +479,16 @@ class editDocs
     {
         $this->header = '<table class="tabres">';
         $this->footer = '</table>';
-        $this->zag = $data[1];
+        //$this->zag = $data[1];
         $out = '';
         $i = 0;
+        $_SESSION['header_table'] = array();
         foreach ($data as $k => $val) {
             $row = '';
             $i++;
             if ($max && $max + 1 < $i) break;
             foreach ($val as $key => $value) {
-
+                if($i==1) $_SESSION['header_table'][] = $value; //заголовок таблицы
                 $row .= '<td>' . $value . '</td>';
             }
             $this->out .= '<tr>' . $row  . '</tr>';

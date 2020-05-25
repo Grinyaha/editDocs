@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="[+manager_path+]/media/style/[+manager_theme+]/style.css" />
-		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css" />
+		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?adw" />
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 
@@ -13,15 +13,13 @@
 		<script type="text/javascript" src="../assets/modules/editdocs/libs/dropzone/dropzone.min.js"></script>
 		<link href="../assets/modules/editdocs/libs/dropzone/dropzone.css" rel="stylesheet">
 
-
-
 		<script>    
             $.ajaxSetup({ cache: false });
 		</script>
 
 	</head>
 	<body>
-      <h1>[+session.itemname+] v0.4.5</h1>
+      <h1>[+session.itemname+] v0.4.6</h1>
 
 
 		<div class="sectionBody">

@@ -140,16 +140,16 @@
             <div class="clear"></div>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> Не добавлять ЕСЛИ НЕТ СОВПАДЕНИЙ!
+                &nbsp; &nbsp; &nbsp; <input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> Не добавлять ЕСЛИ НЕТ СОВПАДЕНИЙ!
             </label>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
+                &nbsp; &nbsp; &nbsp;  <input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
                 (без обновления)
             </label>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" name="multi" value="1" class="form-check-input" /> Импорт для MultiCategories
+                &nbsp; &nbsp; &nbsp; <input type="checkbox" name="multi" value="1" class="form-check-input" /> Импорт для MultiCategories
             </label>
             <br>
 
@@ -166,6 +166,6 @@
 
     <br /><br />
     <div id="result_progress"></div>
-    <div id="result"></div>
+    <div id="result" class="result"></div>
 
 </div>
