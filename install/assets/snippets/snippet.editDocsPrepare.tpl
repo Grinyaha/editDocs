@@ -11,7 +11,9 @@
  * @internal    @modx_category Manager and Admin
  * @internal    @installset base, sample
  */
- 
+
+//ВАЖНО! для отслеживания тестового режима при импорте в сниппет передается переменная $doing, 1 - боевой режим, 0-тестовый режим.
+
 $process = isset($process) ? $process : '';
 $mode = isset($mode) ? $mode : '';
 switch ($process) {

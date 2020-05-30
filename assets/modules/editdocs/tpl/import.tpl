@@ -57,6 +57,18 @@
                             makeProgress(dada);
                         } else {
                             $("#result_progress").html("<b>Импорт: " + resp[0] + " из " + resp[1] + ". Готово!</b>");
+                            
+                            //подчищаем сессии
+                            $.ajax({
+                                type: "POST",
+                                url: "/assets/modules/editdocs/ajax.php",
+                                data: 'cls=1',//clear session_start
+                                success: function (res) {
+                                    console.log(res);
+                                }
+                            });
+
+                    }
                         }
                     }
                     else {
