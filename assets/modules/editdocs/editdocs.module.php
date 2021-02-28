@@ -18,6 +18,18 @@ function str_in($str) {
 }
 global $_lang;
 
+//проверяем версию evo
+$v = $modx->config['settings_version'];
+$vm = explode('.',$v);
+if($vm[0]==3) {
+    if(!file_exists(MODX_BASE_PATH.'core/vendor/pathologic/modxapi/src/modResource.php')) 
+    {
+    echo '<p><br>Для работы модуля необходимо установить пакет MODxAPI для EVO 3. <br><a href="https://github.com/Pathologic/MODxAPI" target="_blank" >https://github.com/Pathologic/MODxAPI</a></p>
+    <p>В папке <b>core</b> выполняем команду из командной строки <b>composer require pathologic/modxapi</b></p>';
+    die;
+    }
+}
+
 //Подключаем обработку шаблонов через DocLister
 include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLTemplate.class.php');
 $dlt = DLTemplate::getInstance($modx);

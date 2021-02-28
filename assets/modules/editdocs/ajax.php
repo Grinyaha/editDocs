@@ -1,5 +1,12 @@
 <?php
 
+// use Pathologic\EvolutionCMS\MODxAPI\modResource;
+
+// if (!class_exists('modResource')) {
+//     echo 'NOT';
+// }
+// else echo 'YES';
+
 define('MODX_API_MODE', true);
 define('IN_MANAGER_MODE', true);
 
@@ -83,10 +90,16 @@ class editDocs
 {
     public function __construct($modx)
     {
-        $this->modx = $modx;
+        $this->modx = $modx;        
         $this->params = $this->parseModuleParams('editDocs');
-        include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
-        $this->doc = new modResource($this->modx);
+
+        $apiClassName = 'Pathologic\EvolutionCMS\MODxAPI\modResource';
+        if(!class_exists($apiClassName)) {
+            include_once(MODX_BASE_PATH . "assets/lib/MODxAPI/modResource.php");
+            $apiClassName = 'modResource';
+        }
+
+        $this->doc = new $apiClassName($this->modx);
         $this->step = !empty($this->params['step']) && (int)$this->params['step'] > 0 ? (int)$this->params['step'] : 500;//сколько строк за раз импортируем
         $this->start_line = 2;//начинаем импорт со второй строки файла
         $this->params['max_rows'] = false; //количество выводимых на экран строк таблицы после импорта / загрузки файла . false - если не нужно ограничивать
