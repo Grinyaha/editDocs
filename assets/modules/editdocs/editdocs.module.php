@@ -22,7 +22,7 @@ global $_lang;
 $v = $modx->config['settings_version'];
 $vm = explode('.',$v);
 if($vm[0]==3) {
-    if(!file_exists(MODX_BASE_PATH.'core/vendor/pathologic/modxapi/src/modResource.php')) 
+    if(!file_exists(MODX_BASE_PATH.'core/vendor/pathologic/modxapi/src/modResource.php'))
     {
     echo '<p><br>Для работы модуля необходимо установить пакет MODxAPI для EVO 3. <br><a href="https://github.com/Pathologic/MODxAPI" target="_blank" >https://github.com/Pathologic/MODxAPI</a></p>
     <p>В папке <b>core</b> выполняем команду из командной строки <b>composer require pathologic/modxapi</b></p>';
@@ -46,7 +46,7 @@ if (isset($modx->event->params['include_fields']) && $modx->event->params['inclu
     $field_names = array('longtitle' => 'long_title', 'content' => 'resource_content', 'published' => 'page_data_published', 'introtext' => 'resource_summary', 'alias' => 'resource_alias', 'template' => 'page_data_template', 'menutitle' => 'resource_opt_menu_title', 'menuindex' => 'resource_opt_menu_index');
     foreach ($tmp as $field) {
         if ($field != 'id') {
-            $field_name = isset($field_names[$field]) ? $field_names[$field] : $field;            
+            $field_name = isset($field_names[$field]) ? $field_names[$field] : $field;
             $fields .= '<option value="' . $field . '">' . (isset($_lang[$field_name]) ? $field.' ('.$_lang[$field_name].')' : $field) . '</option>';
         }
     }
@@ -73,8 +73,9 @@ while ($row = $modx->db->getRow($query2)) {
     $tpl .= '<option value="' . $row['id'] . '">' . $row['templatename'] . '</option>';
 }
 
+if (isset($modx->event->params['win1251']) && $modx->event->params['win1251']=='true') $checked = 'checked';
 
-$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'));
+$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'), 'checked' => $checked );
 
 if ($action == 'branch') {
     $outTpl = $dlt->parseChunk('@FILE:branch', $data);

@@ -49,7 +49,7 @@
 
                 <div class="parf">
                     <br/>
-                    <input type="checkbox" name="win" value="1"/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
+                    <input type="checkbox" name="win" value="1" [+checked+]/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
                     <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
                 </div>
 
