@@ -280,8 +280,15 @@ class editDocs
                
                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
                $reader->setDelimiter(';');
-               $reader->setInputEncoding('CP1251');
-                $spreadsheet = $reader->load($output_dir . $fileName);
+               
+               $handle = file_get_contents($output_dir.$fileName);
+               $coding = mb_detect_encoding($handle,'UTF-8,Windows-1251,ANSI',true);
+
+               if($coding != 'UTF-8') $reader->setInputEncoding('CP1251');               
+               
+                $spreadsheet = $reader->load($output_dir . $fileName);      
+              
+
             }
             else {
                 //$spreadsheet = new Spreadsheet();
@@ -309,7 +316,7 @@ class editDocs
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
-        echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+       echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
         //print_r($sheetData);
         $_SESSION['tabrows'] = '';
     }
