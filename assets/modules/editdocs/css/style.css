@@ -17,7 +17,7 @@ body {
     color: #333;
 }
 .tab-page {
-    min-height: 500px;
+    /* min-height: 500px; */
 }
 
 .clear {
