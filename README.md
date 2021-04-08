@@ -1,5 +1,5 @@
 # editDocs 
-Модуль для Modx Evolution. Для работы необходим DocLister. В работе модуля используется библиотека phpSpreadSheet https://github.com/PHPOffice/phpspreadsheet/
+Модуль для Evolution CMS. Для работы необходим DocLister. В работе модуля используется библиотека phpSpreadSheet https://github.com/PHPOffice/phpspreadsheet/
 <br/><br/>
 <b>модуль доступен для установки из extras</b> <br/><br/>
 Модуль умеет:<br/>
