@@ -27,10 +27,36 @@
                     </select>
                 </div>
                 <div class="parf">
-                    TV-картинка для отображения <br/>
+                    имя TV-image (если есть)<br/>
 
-                    <input type="text" name="tvpic" id="" class="inp" style="width: 70px"/>
+                    <input type="text" name="tvpic" id="" class="inp" style="width: 120px"/>
                 </div>
+
+                <div class="parf">
+                    
+                        Сортировка (поля или TV) <br/>
+                         <select id="order" name="order">
+                            <optgroup label="Стандартные поля">
+                                <option value="id">id</option>
+                                [+fields+]
+                            </optgroup>
+    
+                            <optgroup label="TV - параметры">
+                                [+tvs+]
+                            </optgroup>
+    
+                        </select>
+                    
+                </div>
+
+                <div class="parf">
+                    Сортировка (направление) <br>
+                    <select id="orderas" name="orderas">
+                        <option value="desc" selected="selected"> По убыванию (DESC)</option>
+                        <option value="asc">По возрастанию (ASC)</option>
+                    </select>
+                </div>
+
                  <div class="clear"></div>
 
                 <div class="parf">
@@ -95,7 +121,7 @@
                     <i class="fa fa-question-circle fa-lg" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
                 </div>
                 <div class="parf">
-                    <a href="http://docs.evo.im/03_extras/doclister/filtry.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
+                    <a href="https://docs.evo.im/04_extras/doclister/04_filters.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
                 </div>
 
                 <div class="clear"></div>
@@ -119,7 +145,7 @@
 
 
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn btn-success" work="edit"><i class="fa fa-edit"></i> ПОЕХАЛИ</button>
+                    <button id="brsub" type="button" class="btn btn-success" work="edit"><i class="fa fa-check"></i> ВЫПОЛНИТЬ</button>
                 </div>
 
                 <div class="clear"></div>
@@ -155,6 +181,8 @@
                 searchText: 'Имя поля или TV'
             });
             $('#ed-tree').SumoSelect();
+            
+            $('#order,#orderas').SumoSelect();
 
 
             $('body').on('click', '#brsub, .page', function () {
@@ -266,7 +294,7 @@
 
 
         function loading() {
-            $('#result').html('<div class="loading">Загружаюсь...</div>');
+            $('#result').html('<div class="loading">Обработка данных...</div>');
         }
 
 

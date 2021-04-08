@@ -42,7 +42,7 @@
 
             function makeProgress(dada) {
                 loading();
-                console.log(dada);
+                //console.log(dada);
                 $.ajax({
                     type: "POST",
                     url: "/assets/modules/editdocs/ajax.php",
@@ -97,17 +97,25 @@
         });
 
         function loading() {
-            $('#result').html('<div class="loading">Загружаюсь...</div>');
+            $('#result').html('<div class="loading">Обработка данных...</div>');
         }
 
     </script>
 
-    <div class="alert-ok">
-        ВНИМАНИЕ!<br />       
-            Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b><br>
-            Для добавления/редактирования данных связанных с плагином <b>MultiCategories</b> в файле-таблице необходим столбец с названием <b>category</b> <u>(необходимые категории указываются через запятую).</u> Также не забудьте включить нужный чекбокс!<br>
-            При импорте CSV, файл должен быть в кодировке UTF-8.<br>
+    <div class="alert alert-success">
+       <p> ВНИМАНИЕ!<br /> </p>
+        
+            Для работы импорта в файле Excel должен обязательно быть столбец(поле) с названием <b>pagetitle</b><br><br>
+            
+            Для добавления/редактирования данных связанных с плагином <b>MultiCategories</b> в файле-таблице необходим столбец с названием <b>category</b> <u>(необходимые категории указываются через запятую).</u> Также не забудьте включить нужный чекбокс!<br><br>
+            
+            При импорте CSV, файл должен быть в кодировке WINDOWS-1251.<br><br>
+            
             ID родителя указываем в случае, если нет поля <b>parent</b> в таблице. Приоритет значения из файла-таблицы Excel.
+              
+            
+            
+            
         
     </div>
 
@@ -143,22 +151,22 @@
                 </select>
             </div>
             <div class="subbat">
-                <button class="btn btn-success" id="process" type="button"><i class="fa fa-edit"></i> ПОЕХАЛИ!</button>   
+                <button class="btn btn-success" id="process" type="button"><i class="fa fa-check"></i> НАЧАТЬ ИМПОРТ</button>   
                 
             </div>
             <div class="clear"></div>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> Не добавлять ЕСЛИ НЕТ СОВПАДЕНИЙ!
+                &nbsp;&nbsp;<input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> Не добавлять ЕСЛИ НЕТ СОВПАДЕНИЙ!
             </label>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
+                &nbsp;&nbsp;<input type="checkbox" id="test" name="test" value="1" class="form-check-input" /> Тестовый режим
                 (без обновления)
             </label>
             <br>
             <label class="form-check-label">
-                <input type="checkbox" name="multi" value="1" class="form-check-input" /> Импорт для MultiCategories
+                &nbsp;&nbsp;<input type="checkbox" name="multi" value="1" class="form-check-input" /> Импорт для MultiCategories
             </label>
             <br>
 
@@ -176,5 +184,6 @@
     <br /><br />
     <div id="result_progress"></div>
     <div id="result"></div>
+
 
 </div>

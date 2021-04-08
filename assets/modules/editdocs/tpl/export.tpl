@@ -71,7 +71,7 @@
                     </select>
                 </div>
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-edit"></i>  ПОЕХАЛИ</button>
+                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  НАЧАТЬ ЭКСПОРТ"</button>
 
                 </div>
 
@@ -184,7 +184,7 @@
 
 
         function loading() {
-            $('#result').html('<div class="loading">Загружаюсь...</div>');
+            $('#result').html('<div class="loading">Обработка данных...</div>');
         }
 
 

@@ -5,7 +5,7 @@
         <input type="text" name="parent2" class="inp" style="width: 70px"/> ID родителя КУДА все переносим
         <div class="clear"></div>
         <div class="subbat">
-            <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-edit"></i>  ПОЕХАЛИ</button>
+            <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  ПЕРЕНЕСТИ</button>
 
         </div>
         <div class="mess">
