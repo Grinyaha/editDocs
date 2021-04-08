@@ -71,7 +71,7 @@
                     </select>
                 </div>
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  НАЧАТЬ ЭКСПОРТ"</button>
+                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  НАЧАТЬ ЭКСПОРТ</button>
 
                 </div>
 
