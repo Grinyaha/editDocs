@@ -780,17 +780,16 @@ class editDocs
     //проверяем есть ли у нас таблица для MultiCategories
     protected function checkTableMC() {
 
-        $sql = <<< OUT
-        CREATE TABLE IF NOT EXISTS {$this->modx->getFullTableName('site_content_categories')} (
+        $sql = '
+        CREATE TABLE IF NOT EXISTS '.$this->modx->getFullTableName('site_content_categories').' (
         `doc` int(10) NOT NULL,
         `category` int(10) NOT NULL,
         UNIQUE KEY `link` (`doc`,`category`) USING BTREE,
         KEY `doc` (`doc`),
         KEY `category` (`category`)
-        ) ENGINE=MyISAM;
-        OUT;
+        ) ENGINE=MyISAM;';
         
-        $this->modx->db->query($sql);
+        return $this->modx->db->query($sql);
 
     }
 }
