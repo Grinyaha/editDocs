@@ -1,5 +1,5 @@
 # editDocs 
-PHP >= 3.2 <br>
+PHP >= 7.3 <br>
 Evolution CMS 1.4, 2.0, 3.0<br>
 <br>
 Модуль для Evolution CMS. Для работы необходим DocLister. В работе модуля используется библиотека phpSpreadSheet https://github.com/PHPOffice/phpspreadsheet/
