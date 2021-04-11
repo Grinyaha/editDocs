@@ -12,7 +12,7 @@ if (empty ($modx->config)) {
 }
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')) {
-    $modx->sendRedirect($modx->config['site_url']);
+    $modx->sendRedirect($modx->getConfig('site_url'));
 }
 //////
 if (IN_MANAGER_MODE != "true" || empty($modx) || !($modx instanceof DocumentParser)) {
@@ -31,52 +31,51 @@ if (!isset($_SESSION['mgrValidated'])) {
 
 $obj = new editDocs($modx);
 
-if ($_POST['clear']) {
+if (!empty($_POST['clear'])) {
     $obj->clearCache();
     echo 'Кэш очищен';
 }
 
 
-if ($_POST['bigparent'] || $_POST['bigparent'] == '0') {
+if(!empty($_POST['edit'])) {
     echo $obj->getAllList();
 }
-if ($_POST['bigparent']=='' && $_POST['edit']==1) echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
 
-if ($_POST['id']) {
+if (!empty($_POST['id'])) {
 
     echo $obj->editDoc();
 
 }
 
-if ($_FILES['myfile']) {
+if (!empty($_FILES['myfile'])) {
     //print_r($_FILES);
     echo $obj->uploadFile();
 
 }
 
-if ($_POST['imp']) {
+if (!empty($_POST['imp'])) {
     //print_r($_FILES);
     echo $obj->importExcel();
 }
 
-if ($_POST['export'] && $_POST['stparent']!='') {
+if (!empty($_POST['export'])) {
     //print_r($_FILES);
-    echo $obj -> export();
+    echo $obj->export();
 }
-if ($_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
+//if (!empty($_POST['export']) && $_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
 if (isset($_POST['parent1']) && isset($_POST['parent2']) && $_POST['parent1']!='' && $_POST['parent2']!='') {
     echo $obj -> massMove();
 }
 else if(isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">Не все поля заполнены!</div>';
 
-if($_POST['cls']==1) {
+if(!empty($_POST['cls']) && $_POST['cls']==1) {
     //удаляем сессии после обработки
     $_SESSION['import_start'] = 2; //начинаем импорт со второй строки файла
     $_SESSION['import_i']=0;
     $_SESSION['import_j']=0;
-    unset($_SESSION['tabrows']);
+    $_SESSION['tabrows']='';
     return;
 }
 
@@ -155,15 +154,18 @@ class editDocs
 
         $parent = $this->modx->db->escape($_POST['bigparent']);
 
-        if ($_POST['fields']) {
+        if (!empty($_POST['fields'])) {
 
             $fields = $this->modx->db->escape($_POST['fields']);
             $depth = $this->modx->db->escape($_POST['tree']);
 
-            if ($_POST['paginat']) $disp = 40; else $disp = 0;
-            if ($_POST['neopub']) $addw = 1; else $addw = '';
+            if (!empty($_POST['paginat'])) $disp = 40; else $disp = 0;
+            if (!empty($_POST['neopub'])) $neopubl = 1; else $neopubl = '';
 
 
+            $tvlist = '';
+            $rowth = '';
+            $rowtd = '';
 
             foreach ($fields as $val) {
                 //$this->r .= '[+' . $val . '+] - ';
@@ -218,7 +220,7 @@ class editDocs
                 'filters' => $filters,
                 'tpl' => '@CODE:  <tr class="ed-row"><td class="idd">[+id+]<br>[+piczzz+]</td>' . $rowtd . '</tr>',
                 'addWhereList' => $addwhere,
-                'showNoPublish' => $this->addw,
+                'showNoPublish' => $neopubl,
                 'prepare' => function($data) {
                     //проверяем существование таблицы MultiCat и вкл. чекбокса
                     if(isset($_POST['multed'])) {
@@ -316,9 +318,10 @@ class editDocs
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
-       echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
-        //print_r($sheetData);
         $_SESSION['tabrows'] = '';
+
+       echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+        
     }
 
     public function importExcel()
@@ -348,8 +351,13 @@ class editDocs
         // echo '</pre>';
 
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
+        $ptmplh = '';
+        $parh = '';
+        
         if($_SESSION['header_table']) {
             $theader = '';
+
+
             foreach($_SESSION['header_table'] as $valt) {
                 $theader .= '<td>'.$valt.'</td>';               
             }
@@ -357,14 +365,12 @@ class editDocs
             if(array_search('parent',$_SESSION['header_table'])===false) {
                 if($_POST['parimp']) $parh = '<td>parent</td>';
             }
-            else $parh = '';
+            
 
             if(array_search('template',$_SESSION['header_table'])===false) {
                 if($_POST['tpl']!='file') $ptmplh = '<td>template</td>';
             }
-            else $ptmplh = '';
-
-            
+                        
 
         }
 
@@ -372,6 +378,8 @@ class editDocs
 
         $tabh = '<table  class="tabres"><tr>'.$theader.$parh.$ptmplh.'</tr>';
         $tabe = '</table>';
+
+        $tr = '';
 
         for ($ii = $start; $ii < $finish; $ii++){
             if (!isset($data[$ii])) continue;
@@ -498,7 +506,7 @@ class editDocs
             //$this->modx->logEvent(1,1,$_SESSION['import_start'],'проверка заголовка таблицы '.$_SESSION['import_start']);
             $_SESSION['log'] = '<br><div class="alert alert-danger">Тестовый режим. Изменения <b>НЕ</b> вносятся</div>';
 
-            return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'].$fileobr. $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
+            return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log']. $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
         }
 
         //боевой режим
@@ -517,15 +525,14 @@ class editDocs
     protected function newMassif($data)
     {
         $j = 0;
-        $this->data = $data;
-        $this->sheetDataNew = array();
+        $sheetDataNew = array();
 
-        foreach ($this->data[1] as $zna) {
+        foreach ($data[1] as $zna) {
             $this->newkeys[$j] = $zna;
             $j++;
         }
 
-        foreach ($this->data as $k => $val) {
+        foreach ($data as $k => $val) {
             if ($k > 1) {
                 $i = 0;
                 foreach ($val as $key => $value) {
@@ -534,21 +541,22 @@ class editDocs
 
                     $i++;
                 }
-                $this->sheetDataNew[$k] = $this->dn;
+                $sheetDataNew[$k] = $this->dn;
             }
         }
-        unset ($this->data);
-        //print_r($this->sheetDataNew);
-        return $this->sheetDataNew;
+        unset ($data);
+        //print_r($sheetDataNew);
+        return $sheetDataNew;
     }
 
     protected function table($data, $max = false)
     {
-        $this->header = '<table class="tabres">';
-        $this->footer = '</table>';
-        //$this->zag = $data[1];
+        
+        $header = '<table class="tabres">';
+        $footer = '</table>';
         $out = '';
         $i = 0;
+
         $_SESSION['header_table'] = array();
         foreach ($data as $k => $val) {
             $row = '';
@@ -558,33 +566,32 @@ class editDocs
                 if($i==1) $_SESSION['header_table'][] = $value; //заголовок таблицы
                 $row .= '<td>' . $value . '</td>';
             }
-            $this->out .= '<tr>' . $row  . '</tr>';
+            $out .= '<tr>' . $row  . '</tr>';
         }
-        return $this->header . $this->out . $this->footer;
+        return $header . $out . $footer;
     }
 
     protected function checkField($field)
     {
-        $this->field = $field;
-
+        
         $this->param = array();
         $this->res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
         $this->temp = 0;
         while ($this->row = $this->modx->db->getRow($this->res)) {
-            if ($this->row['name'] == $this->field) {
+            if ($this->row['name'] == $field) {
                 $this->temp = 1;
                 $this->param[0] = 'tv';
-                $this->param[1] = $this->field;
+                $this->param[1] = $field;
             }
         }
         if ($this->temp == 0) {
             $this->res = $this->modx->db->query("SHOW columns FROM " . $this->modx->getFullTableName('site_content') . " where Field = '" . $field . "'");
             if ($this->modx->db->getRecordCount($this->res) > 0) {
                 $this->param[0] = 'nonetv';
-                $this->param[1] = $this->field;
+                $this->param[1] = $field;
             } else {
                 $this->param[0] = 'notfound';
-                $this->param[1] = $this->field;
+                $this->param[1] = $field;
             }
         }
         return $this->param;
@@ -618,9 +625,9 @@ class editDocs
         $parent = $this->modx->db->escape($_POST['stparent']);
         $filename = MODX_BASE_PATH .'assets/modules/editdocs/uploads/export.csv';
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
-        if ($_POST['neopub']) $addw = 1; else $addw = '';
+        if (!empty($_POST['neopub'])) $neopubl = 1; else $neopubl = '';
 
-        if ($_POST['fieldz']) {
+        if (!empty($_POST['fieldz'])) {
 
             if(!empty($_POST['filters'])) $filters = $_POST['filters']; else $filters ='';
             if(!empty($_POST['addwhere'])) $addwhere = $_POST['addwhere']; else $addwhere ='';
@@ -637,7 +644,7 @@ class editDocs
                     'showParent' => -1,
                     'filters' => $filters,
                     'addWhereList' => $addwhere,
-                    'showNoPublish' => $addw
+                    'showNoPublish' => $neopubl
                 ));
                 $total = json_decode($json, true)['total'];
                 $_SESSION['export_total'] = $total;
@@ -649,8 +656,15 @@ class editDocs
             $file = fopen($filename, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
+            
             array_unshift($fields, 'id');
+            
             $url = '';
+            $tvlist = '';
+            $ph = '';
+            $head = '';
+            $header = [];
+
             foreach ($fields as $key => $val) {
                 //if($val=='url') $url = '[+url+];';
                 $tvlist .= $val . ',';
@@ -702,7 +716,7 @@ class editDocs
                     $data['url'] = str_replace('//','/',$data['url']);
                     return $data;
                 },
-                'showNoPublish' => $addw,
+                'showNoPublish' => $neopubl,
                 'urlScheme' => 'full'
             ));
 

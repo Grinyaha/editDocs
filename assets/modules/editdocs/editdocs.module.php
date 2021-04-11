@@ -19,7 +19,7 @@ function str_in($str) {
 global $_lang;
 
 //проверяем версию evo
-$v = $modx->config['settings_version'];
+$v = $modx->getConfig('settings_version');
 $vm = explode('.',$v);
 if($vm[0]==3) {
     if(!file_exists(MODX_BASE_PATH.'core/vendor/pathologic/modxapi/src/modResource.php'))

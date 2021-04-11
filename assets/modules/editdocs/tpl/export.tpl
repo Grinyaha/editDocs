@@ -44,7 +44,7 @@
                     <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
                 </div>
                 <div class="parf">
-                    <a href="http://docs.evo.im/03_extras/doclister/filtry.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
+                    <a href="https://docs.evo.im/04_extras/doclister/04_filters.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
                 </div>
 
                 <div class="parf">
