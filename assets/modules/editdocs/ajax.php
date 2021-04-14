@@ -102,6 +102,7 @@ class editDocs
         $this->snipPrepare = !empty($this->params['prepare_snippet']) ? $this->params['prepare_snippet'] : 'editDocsPrepare1';//сниппет prepare
         
         $this->check = $this->checkTableMC();
+        $this->currArr = [];
    
         
     }
@@ -381,6 +382,9 @@ class editDocs
 
         $tr = '';
 
+        //HERE        
+        $this->currArr($check,$uniq);
+
         for ($ii = $start; $ii < $finish; $ii++){
             if (!isset($data[$ii])) continue;
             $val = $data[$ii];
@@ -388,7 +392,8 @@ class editDocs
             $inbase = 0;
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
-                $inbase = $this->getID($check);
+                //$inbase = $this->getID($check);
+                $inbase = array_search($check[2],$this->currArr);
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
@@ -478,7 +483,7 @@ class editDocs
                 //тестовый режим (обновление)
                 else {
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'upd', 'import', 0); // 1 - game mode
+                        $create = $this->makePrepare($create, 'upd', 'import', 0); // 0 - game mode
                     }
                 }
 
@@ -598,26 +603,33 @@ class editDocs
 
     }
 
-    public function getID($mode)
-    {
+    protected function currArr($check,$name) {        
+        
+        if ($check[0] == 'tv') {
 
-        $this->mode = $mode;
-        if ($this->mode[0] == 'tv') {
-            $this->res = $this->modx->db->query("SELECT contentid FROM " . $this->modx->getFullTableName('site_tmplvar_contentvalues') . " WHERE value='" . $this->mode[2] . "'");
-            if ($this->modx->db->getRecordCount($this->res) > 0) {
-                $this->row = $this->modx->db->getRow($this->res);
-                return $this->row['contentid'];
+            $tvquery = $this->modx->db->query("SELECT id FROM " . $this->modx->getFullTableName('site_tmplvars') . " WHERE name='" . $name . "'");
+            $tvid = $this->modx->db->getRow($tvquery);
+            //$tvid['id']         
+
+            $res = $this->modx->db->query("SELECT contentid,value FROM " . $this->modx->getFullTableName('site_tmplvar_contentvalues') . " WHERE tmplvarid='" . $tvid['id'] . "'");
+            while ( $row = $this->modx->db->getRow($res) ) {
+                $this->currArr[$row['contentid']] = $row['value'];
             }
-        } elseif ($this->mode[0] == 'nonetv') {
 
-            $this->res = $this->modx->db->query("SELECT id FROM " . $this->modx->getFullTableName('site_content') . " WHERE " . $this->mode[1] . "='" . $this->mode[2] . "'");
-            if ($this->modx->db->getRecordCount($this->res) > 0) {
-                $this->row = $this->modx->db->getRow($this->res);
-                return $this->row['id'];
+
+        } elseif ($check[0] == 'nonetv') {
+
+            $res = $this->modx->db->query("SELECT ".$check[1].",id FROM " . $this->modx->getFullTableName('site_content') );
+            while($row = $this->modx->db->getRow($res) ) {
+                $this->currArr[$row['id']] = $row[$check[1]];
+                
             }
         } else return 'Error, check your file!';
 
+        //print_r($this->currArr);
+        return $this;
     }
+
 
     public function export()
     {
@@ -755,14 +767,7 @@ class editDocs
         unset($_SESSION['export_total']);
     }
 
-    protected function checkArt($art){
-
-        $this->art = $art;
-        $this->res = $this->modx->db->query("SELECT contentid,value FROM " .$this->modx->getFullTableName('site_tmplvar_contentvalues')." WHERE  value = '".$this->art."'");
-        $this->data = $this->modx->db->getRecordCount($this->res);
-        return $this->data;
-
-    }
+   
     public function massMove()
     {
         $res = $this->modx->db->query("UPDATE " .$this->modx->getFullTableName('site_content')." SET parent = ".$_POST['parent2']." WHERE  parent = ".$_POST['parent1']."");
