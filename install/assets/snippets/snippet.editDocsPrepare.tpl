@@ -1,16 +1,18 @@
 //<?php
 /**
- * editDocsPrepare
+ * editDocsPrepareExample
  * 
- * Prepare-сниппет для модуля editDocs
+ * Пример-заготовка Prepare-сниппета для модуля editDocs
  *
  * @author      webber (web-ber12@yandex.ru)
  * @category    snippet
  * @version     0.1
  * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal    @modx_category Manager and Admin
+ * @internal    @modx_category editDocs
  * @internal    @installset base, sample
  */
+
+//Не используйте данный сниппет как боевой, скопируйте как новый и пропишите его в настройках, иначе при обновление данный сниппет перезапишется на дефолтный example! 
 
 //ВАЖНО! для отслеживания тестового режима при импорте в сниппет передается переменная $doing, 1 - боевой режим, 0-тестовый режим.
 
