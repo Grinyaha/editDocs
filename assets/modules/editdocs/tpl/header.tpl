@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="[+manager_path+]/media/style/[+manager_theme+]/style.css" />
-		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?adw" />
+		<link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?ad3" />
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 
