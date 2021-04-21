@@ -285,7 +285,16 @@ class editDocs
                $reader->setDelimiter(';');
                
                $handle = file_get_contents($output_dir.$fileName);
-               $coding = mb_detect_encoding($handle,'UTF-8,Windows-1251,ANSI',true);
+               
+               //$this->modx->logEvent(1,1,$handle,'Заголовок лога');
+
+               if($handle) {
+                   $c[] = 'UTF-8';
+                   $c[] = 'Windows-1251';
+
+                $coding = mb_detect_encoding($handle,$c,true);
+               }
+               else $coding = '';
 
                if($coding != 'UTF-8') $reader->setInputEncoding('CP1251');               
                
@@ -320,7 +329,7 @@ class editDocs
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
         $_SESSION['tabrows'] = '';
-
+         
        echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
         
     }
