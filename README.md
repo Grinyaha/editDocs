@@ -5,6 +5,9 @@ Evolution CMS 1.4, 2.0, 3.0<br>
 Модуль для Evolution CMS. Для работы необходим DocLister. В работе модуля используется библиотека phpSpreadSheet https://github.com/PHPOffice/phpspreadsheet/
 <br/><br/>
 <b>модуль доступен для установки из extras</b> <br/><br/>
+
+Документация с примерами здесь https://editdocs.grishin.net/
+
 Модуль умеет:<br/>
 
 - Редактировать основные поля и TV группы документов разной вложенности, а также изменять ID категорий для плагина <a href="https://github.com/Pathologic/MultiCategories">MultiCategories</a><br/>
