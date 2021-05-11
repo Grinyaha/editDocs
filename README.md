@@ -6,7 +6,7 @@ Evolution CMS 1.4, 2.0, 3.0<br>
 <br/><br/>
 <b>модуль доступен для установки из extras</b> <br/>
 
-Документация с примерами здесь https://editdocs.grishin.net/
+Документация с примерами https://editdocs.grishin.net/
 
 Модуль умеет:<br/>
 
