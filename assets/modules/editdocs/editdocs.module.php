@@ -78,15 +78,19 @@ if (isset($modx->event->params['win1251']) && $modx->event->params['win1251']=='
 $data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'), 'checked' => $checked );
 
 if ($action == 'branch') {
+    if(!empty($_SESSION['data'])) unset($_SESSION['data']);
     $outTpl = $dlt->parseChunk('@FILE:branch', $data);
 }
 if ($action == 'import') {
+    if(!empty($_SESSION['data'])) unset($_SESSION['data']);
     $outTpl = $dlt->parseChunk('@FILE:import', $data);
 }
 if ($action == 'export') {
+    if(!empty($_SESSION['data'])) unset($_SESSION['data']);
     $outTpl = $dlt->parseChunk('@FILE:export', $data);
 }
 if ($action == 'mass') {
+    if(!empty($_SESSION['data'])) unset($_SESSION['data']);
     $outTpl = $dlt->parseChunk('@FILE:mass', $data);
 }
 

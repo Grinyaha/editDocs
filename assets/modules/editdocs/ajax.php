@@ -264,7 +264,7 @@ class editDocs
 
     public function uploadFile()
     {
-
+                
         $output_dir = MODX_BASE_PATH . "assets/modules/editdocs/uploads/";
 
         $ret = array();
@@ -641,7 +641,8 @@ class editDocs
 
 
     public function export()
-    {
+    {        
+
         $depth = $this->modx->db->escape($_POST['depth']);
         $parent = $this->modx->db->escape($_POST['stparent']);
         $filename = MODX_BASE_PATH .'assets/modules/editdocs/uploads/export.csv';
@@ -768,6 +769,7 @@ class editDocs
 
     public function clearCache($type = 'full')
     {
+        if(!empty($_SESSION['data'])) unset($_SESSION['data']);
         $this->modx->clearCache($type);
         foreach (glob(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/*') as $file) {
             unlink($file);
