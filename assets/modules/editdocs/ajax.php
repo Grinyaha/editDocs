@@ -86,7 +86,7 @@ class editDocs
 {
     public function __construct($modx)
     {
-        $this->modx = $modx;        
+        $this->modx = $modx;
         $this->params = $this->parseModuleParams('editDocs');
 
         $apiClassName = 'Pathologic\EvolutionCMS\MODxAPI\modResource';
@@ -100,11 +100,11 @@ class editDocs
         $this->start_line = 2;//начинаем импорт со второй строки файла
         $this->params['max_rows'] = false; //количество выводимых на экран строк таблицы после импорта / загрузки файла . false - если не нужно ограничивать
         $this->snipPrepare = !empty($this->params['prepare_snippet']) ? $this->params['prepare_snippet'] : 'editDocsPrepare1';//сниппет prepare
-        
+
         $this->check = $this->checkTableMC();
         $this->currArr = [];
-   
-        
+
+
     }
 
     public function parseModuleParams($name)
@@ -130,9 +130,9 @@ class editDocs
         $end = $this->doc->save(true, false);
         if($pole=='category' && $data!='' && $data!=0) {
             $ctm = explode(',',$data);
-            
+
             if(!empty($end)) {
-             $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $end);
+                $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $end);
             }
             foreach ($ctm as $valoc) {
                 if(!empty($valoc) && !empty($end)) {
@@ -195,8 +195,8 @@ class editDocs
             if($_POST['filters']!='') $filters = $_POST['filters']; else $filters ='';
             if($_POST['addwhere']!='') $addwhere = $_POST['addwhere']; else $addwhere ='';
 
-            
-            if($_POST['order']) $orderBy = $_POST['order'].' '.$_POST['orderas']; 
+
+            if($_POST['order']) $orderBy = $_POST['order'].' '.$_POST['orderas'];
 
             $this->out = $this->modx->runSnippet('DocLister', array(
                 'idType' => 'parents',
@@ -264,7 +264,7 @@ class editDocs
 
     public function uploadFile()
     {
-                
+
         $output_dir = MODX_BASE_PATH . "assets/modules/editdocs/uploads/";
 
         $ret = array();
@@ -277,40 +277,40 @@ class editDocs
             $pathinfo = pathinfo($output_dir . $fileName);
         }
 
-            require MODX_BASE_PATH . "assets/modules/editdocs/libs/vendor/autoload.php";
+        require MODX_BASE_PATH . "assets/modules/editdocs/libs/vendor/autoload.php";
 
-            if (isset($pathinfo['extension']) && $pathinfo['extension'] == 'csv') {
-               
-               $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-               $reader->setDelimiter(';');
-               
-               $handle = file_get_contents($output_dir.$fileName);
-               
-               //$this->modx->logEvent(1,1,$handle,'Заголовок лога');
+        if (isset($pathinfo['extension']) && $pathinfo['extension'] == 'csv') {
 
-               if($handle) {
-                   $c[] = 'UTF-8';
-                   $c[] = 'Windows-1251';
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            $reader->setDelimiter(';');
+
+            $handle = file_get_contents($output_dir.$fileName);
+
+            //$this->modx->logEvent(1,1,$handle,'Заголовок лога');
+
+            if($handle) {
+                $c[] = 'UTF-8';
+                $c[] = 'Windows-1251';
 
                 $coding = mb_detect_encoding($handle,$c,true);
-               }
-               else $coding = '';
-
-               if($coding != 'UTF-8') $reader->setInputEncoding('CP1251');               
-               
-                $spreadsheet = $reader->load($output_dir . $fileName);      
-              
-
             }
-            else {
-                //$spreadsheet = new Spreadsheet();
-                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($output_dir . $fileName);
-            }
+            else $coding = '';
+
+            if($coding != 'UTF-8') $reader->setInputEncoding('CP1251');
+
+            $spreadsheet = $reader->load($output_dir . $fileName);
+
+
+        }
+        else {
+            //$spreadsheet = new Spreadsheet();
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($output_dir . $fileName);
+        }
 
 
 
-            $worksheet = $spreadsheet->getActiveSheet();
-            $sheetData = $worksheet->toArray(null, true, true, true);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $sheetData = $worksheet->toArray(null, true, true, true);
 
         //}
 
@@ -329,9 +329,9 @@ class editDocs
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
         $_SESSION['tabrows'] = '';
-         
-       echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
-        
+
+        echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+
     }
 
     public function importExcel()
@@ -363,24 +363,24 @@ class editDocs
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         $ptmplh = '';
         $parh = '';
-        
+
         if($_SESSION['header_table']) {
             $theader = '';
 
 
             foreach($_SESSION['header_table'] as $valt) {
-                $theader .= '<td>'.$valt.'</td>';               
+                $theader .= '<td>'.$valt.'</td>';
             }
 
             if(array_search('parent',$_SESSION['header_table'])===false) {
                 if($_POST['parimp']) $parh = '<td>parent</td>';
             }
-            
+
 
             if(array_search('template',$_SESSION['header_table'])===false) {
                 if($_POST['tpl']!='file') $ptmplh = '<td>template</td>';
             }
-                        
+
 
         }
 
@@ -391,7 +391,7 @@ class editDocs
 
         $tr = '';
 
-        //HERE        
+        //HERE
         $this->currArr($check,$uniq);
 
         for ($ii = $start; $ii < $finish; $ii++){
@@ -401,8 +401,13 @@ class editDocs
             $inbase = 0;
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
-                //$inbase = $this->getID($check);
-                $inbase = array_search($check[2],$this->currArr);
+
+                $checkf['xls_srav'] = $check[2];
+                if ($this->issetPrepare) {
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1); // 1 - game mode
+                }
+
+                $inbase = array_search($checkf['xls_srav'],$this->currArr); //Сверяемся с выбранным полем и данными в базе.
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
@@ -421,7 +426,7 @@ class editDocs
             //если НЕ тестовый режим
             if ( !$inbase) { //не существует в базе
 
-                
+
 
                 //боевой режим (добавление)
                 if (!isset($_POST['test']) && empty($_POST['notadd']) ) {
@@ -430,16 +435,16 @@ class editDocs
                         $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
                     }
                     $this->doc->create($create);
-                    $new = $this->doc->save(true, false);
+                    $new = $this->doc->save(true, false); //SAVE!!!
 
                     if (array_key_exists('category', $create) && isset($_POST['multi']) && $new>0) {
                         $create['category'] = trim($create['category']);
                         $arrmc = explode(',',$create['category']);
-                       
+
                         foreach($arrmc as $vl) {
                             if(!empty($vl) && !empty($new)) {
-                                 $que = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$vl.",doc=".$new);      
-                            }  
+                                $que = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$vl.",doc=".$new);
+                            }
                         }
                     }
                 }
@@ -472,16 +477,16 @@ class editDocs
 
                     //если вкл.мультикатегории
                     if (array_key_exists('category', $create) && isset($_POST['multi'])) {
-                       
+
                         $ctm = explode(',',$create['category']);
-                       
+
                         if(!empty($edit)) {
                             $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $edit);
                         }
-                       
+
                         foreach ($ctm as $valoc) {
                             if(!empty($valoc) && !empty($edit)) {
-                             $que2 = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$valoc.", doc=".$edit);
+                                $que2 = $this->modx->db->query("INSERT INTO ".$this->modx->getFullTableName('site_content_categories')." SET category=".$valoc.", doc=".$edit);
                             }
                         }
                         //$que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category']." WHERE doc=".$edit);
@@ -565,7 +570,7 @@ class editDocs
 
     protected function table($data, $max = false)
     {
-        
+
         $header = '<table class="tabres">';
         $footer = '</table>';
         $out = '';
@@ -587,7 +592,7 @@ class editDocs
 
     protected function checkField($field)
     {
-        
+
         $this->param = array();
         $this->res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
         $this->temp = 0;
@@ -612,17 +617,25 @@ class editDocs
 
     }
 
-    protected function currArr($check,$name) {        
-        
+    protected function currArr($check,$name) {
+
         if ($check[0] == 'tv') {
 
             $tvquery = $this->modx->db->query("SELECT id FROM " . $this->modx->getFullTableName('site_tmplvars') . " WHERE name='" . $name . "'");
             $tvid = $this->modx->db->getRow($tvquery);
-            //$tvid['id']         
+            //$tvid['id']
 
             $res = $this->modx->db->query("SELECT contentid,value FROM " . $this->modx->getFullTableName('site_tmplvar_contentvalues') . " WHERE tmplvarid='" . $tvid['id'] . "'");
             while ( $row = $this->modx->db->getRow($res) ) {
-                $this->currArr[$row['contentid']] = $row['value'];
+                //собираем массив со всеми значениями ТВ по которому сравниваемся
+
+                $checkf['db_srav'] = $row['value'];
+                if ($this->issetPrepare) {
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1);
+                }
+
+
+                $this->currArr[$row['contentid']] = $checkf['db_srav'];
             }
 
 
@@ -630,8 +643,9 @@ class editDocs
 
             $res = $this->modx->db->query("SELECT ".$check[1].",id FROM " . $this->modx->getFullTableName('site_content') );
             while($row = $this->modx->db->getRow($res) ) {
+                //собираем массив со всеми значениями поля по которому сравниваемся
                 $this->currArr[$row['id']] = $row[$check[1]];
-                
+
             }
         } else return 'Error, check your file!';
 
@@ -641,7 +655,7 @@ class editDocs
 
 
     public function export()
-    {        
+    {
 
         $depth = $this->modx->db->escape($_POST['depth']);
         $parent = $this->modx->db->escape($_POST['stparent']);
@@ -678,9 +692,9 @@ class editDocs
             $file = fopen($filename, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
-            
+
             array_unshift($fields, 'id');
-            
+
             $url = '';
             $tvlist = '';
             $ph = '';
@@ -778,7 +792,7 @@ class editDocs
         unset($_SESSION['export_total']);
     }
 
-   
+
     public function massMove()
     {
         $res = $this->modx->db->query("UPDATE " .$this->modx->getFullTableName('site_content')." SET parent = ".$_POST['parent2']." WHERE  parent = ".$_POST['parent1']."");
@@ -818,7 +832,7 @@ class editDocs
         KEY `doc` (`doc`),
         KEY `category` (`category`)
         ) ENGINE=MyISAM;';
-        
+
         return $this->modx->db->query($sql);
 
     }
