@@ -430,6 +430,12 @@ class editDocs
 
                 //боевой режим (добавление)
                 if (!isset($_POST['test']) && empty($_POST['notadd']) ) {
+
+                    foreach($create as $kv => $vally) {
+                        if($vally==0) $create[$kv] = '0'; //если у значения есть ноль
+                        if($vally=='') $create[$kv] = ' ';
+                    }
+
                     //prepare create
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
@@ -470,6 +476,13 @@ class editDocs
                 //боевой режим (обновление)
             } else if ($inbase > 0) {
                 if (!isset($_POST['test'])) {
+
+                    foreach($create as $kv => $vally) {
+                        if($vally=='') $create[$kv] = ' ';
+                        if($vally=='0') $create[$kv] = '0'; //если у значения есть ноль
+
+                    }
+
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import',1); // 1 - game mode
                     }
