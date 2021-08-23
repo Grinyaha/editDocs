@@ -405,7 +405,7 @@ class editDocs
                 $inbase = array_search($checkf['xls_srav'], $this->currArr); //Сверяемся с выбранным полем и данными в базе.
 
 
-                $this->modx->logEvent(1, 1, $inbase, 'Заголовок лога аааа!');
+                //$this->modx->logEvent(1, 1, $inbase, 'Заголовок лога аааа!');
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
