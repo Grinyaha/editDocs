@@ -69,7 +69,9 @@
                         </optgroup>
 
                     </select>
+
                 </div>
+
                 <div class="subbat">
                     <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  НАЧАТЬ ЭКСПОРТ</button>
 
@@ -89,7 +91,8 @@
         </div>
 
     </form>
-    <br/><br/>
+    <br /><br />
+    <div id="result_progress"></div>
     <div id="result"></div>
 
 
@@ -131,8 +134,8 @@
                             makeProgress(data);
                         } else {
                             $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + ". Готово!</b>");
-                            document.location.href="/assets/modules/editdocs/uploads/export.csv";
-                            $('#result').html('');
+                            //document.location.href="/assets/modules/editdocs/uploads/export.csv";
+                            $('#result').html('<p><br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>СКАЧАТЬ ФАЙЛ .CSV</a> &nbsp; <a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>СКАЧАТЬ ФАЙЛ Excel (.xlsx)</a></p>');
                         }
                     }
                 }); //end ajax

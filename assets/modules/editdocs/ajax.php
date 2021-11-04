@@ -1,6 +1,7 @@
 <?php
 
-//use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 define('MODX_API_MODE', true);
 define('IN_MANAGER_MODE', true);
@@ -87,6 +88,8 @@ class editDocs
     {
         $this->modx = $modx;
         $this->params = $this->parseModuleParams('editDocs');
+
+        require MODX_BASE_PATH . "assets/modules/editdocs/libs/vendor/autoload.php";
 
         $apiClassName = 'Pathologic\EvolutionCMS\MODxAPI\modResource';
         if (!class_exists($apiClassName)) {
@@ -275,7 +278,7 @@ class editDocs
             $pathinfo = pathinfo($output_dir . $fileName);
         }
 
-        require MODX_BASE_PATH . "assets/modules/editdocs/libs/vendor/autoload.php";
+
 
         if (isset($pathinfo['extension']) && $pathinfo['extension'] == 'csv') {
 
@@ -688,6 +691,8 @@ class editDocs
         $depth = $this->modx->db->escape($_POST['depth']);
         $parent = $this->modx->db->escape($_POST['stparent']);
         $filename = MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export.csv';
+        $filename_temp = MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export_temp.csv';
+
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         if (!empty($_POST['neopub'])) $neopubl = 1; else $neopubl = '';
 
@@ -715,9 +720,11 @@ class editDocs
                 $_SESSION['export_start'] = 0;
                 if (file_exists($filename)) {
                     unlink($filename);
+                    unlink($filename_temp);
                 }
             }
             $file = fopen($filename, 'a+');
+            $file_temp = fopen($filename_temp, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
 
@@ -747,6 +754,7 @@ class editDocs
 
             if ($_SESSION['export_start'] == 0) { //header только в начале ставим
                 fputcsv($file, $header, $dm);
+                fputcsv($file_temp, $header, $dm);
             }
 
 
@@ -787,24 +795,38 @@ class editDocs
 
             foreach ($DL as $string) {
                 $import = array();
+                $import_tmp = array();
 
                 foreach ($header as $k => $v) {
                     $import[] = ($_POST['win'] == 1) ? iconv('UTF-8', 'WINDOWS-1251', $string[$v]) : $string[$v];
+                    $import_tmp[] = $string[$v];
+
                 }
                 //$this->modx->logEvent(1,1,print_r($header, true),'header');
                 fputcsv($file, $import, $dm);
+                fputcsv($file_temp, $import_tmp, $dm);
                 $_SESSION['export_start']++;
             }
             fclose($file);
+            fclose($file_temp);
 
         }
         $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
         if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
             unset($_SESSION['export_start']);
             unset($_SESSION['export_total']);
+
+            ///convert to XLS
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            $reader->setDelimiter(';');
+
+            $csvFile = $reader->load($filename_temp);
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($csvFile, "Xlsx");
+            $writer->save(MODX_BASE_PATH.'assets/modules/editdocs/uploads/export.xlsx');
         }
-        if (file_exists($filename)) return $out;
-        else return 'Файла не существует!';
+        //if (file_exists($filename)) return $out;
+        return $out;
+        //else return 'Файла не существует!';
 
     }
 
