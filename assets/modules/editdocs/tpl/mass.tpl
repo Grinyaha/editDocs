@@ -27,7 +27,7 @@
             var data = 'parent1='+parent1+'&parent2='+parent2;
             $.ajax({
                 type: "POST",
-                url: "/assets/modules/editdocs/ajax.php",
+                url: "[+base_url+]assets/modules/editdocs/ajax.php",
                 data: data,
                 success: function (result) {
 
@@ -41,7 +41,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/assets/modules/editdocs/ajax.php",
+                url: "[+base_url+]assets/modules/editdocs/ajax.php",
                 data: "clear=1",
                 success: function (result) {
 

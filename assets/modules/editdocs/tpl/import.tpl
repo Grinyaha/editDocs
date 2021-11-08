@@ -12,7 +12,7 @@
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
-                url: "/assets/modules/editdocs/ajax.php",
+                url: "[+base_url+]assets/modules/editdocs/ajax.php",
                 paramName: "myfile",
                 acceptedFiles: ".xls, .xlsx, .ods, .csv",
                 dictDefaultMessage: "Перетащите сюда нужный EXCEL/CSV-файл или выберите по клику",
@@ -45,7 +45,7 @@
                 //console.log(dada);
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: dada,
                     success: function (result) {
                         if(result.indexOf('#@') !== -1) { //если ответ не содержит |, а сообщение
@@ -60,7 +60,7 @@
                             //подчищаем сессии
                             $.ajax({
                                 type: "POST",
-                                url: "/assets/modules/editdocs/ajax.php",
+                                url: "[+base_url+]assets/modules/editdocs/ajax.php",
                                 data: 'cls=1',//clear session_start
                                 success: function (res) {
                                     console.log(res);
@@ -80,7 +80,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: "clear=1",
                     success: function (result) {
 

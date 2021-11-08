@@ -133,7 +133,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: data,
                     success: function (result) {
                         console.log(result);
@@ -158,7 +158,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: "clear=1",
                     success: function (result) {
 

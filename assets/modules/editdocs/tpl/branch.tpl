@@ -195,7 +195,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php"+lpage,
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php"+lpage,
                     data: data,
                     success: function (result) {
 
@@ -227,7 +227,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: "pole="+pole+"&id="+id+"&dat="+dat,
                     success: function (result) {
 
@@ -256,7 +256,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/assets/modules/editdocs/ajax.php",
+                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: "clear=1",
                     success: function (result) {
 
