@@ -92,7 +92,7 @@
                 <br />
                 <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i> Сбросить кэш</button>
             </div>
-            <input type="hidden" name="imp" value="1" />
+            
             <br />
             
             <div class="clear"></div>
