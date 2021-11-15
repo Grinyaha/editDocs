@@ -718,8 +718,11 @@ class editDocs
                 $total = json_decode($json, true)['total'];
                 $_SESSION['export_total'] = $total;
                 $_SESSION['export_start'] = 0;
-                if (file_exists($filename)) {
+                
+                if (file_exists($filename) ) {
                     unlink($filename);
+                }
+                if (file_exists($filename_temp) ) {
                     unlink($filename_temp);
                 }
             }
