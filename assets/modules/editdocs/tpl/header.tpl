@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="[+manager_path+]/media/style/[+manager_theme+]/style.css" />
-    <link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?ad3" />
+    <link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?ad4" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 
@@ -23,14 +23,14 @@
 </head>
 
 <body>
-    <h1>[+session.itemname+] v1.2.3</h1>
+    <h1>[+session.itemname+] v1.3.0</h1>
 
 
     <div class="sectionBody">
         <div id="modulePane" class="dynamic-tab-pane-control tab-pane">
             <div class="tab-row">
-                <h2 class="tab [+selected.branch+]"><a href="[+moduleurl+]action=branch"><span>Редактирование</span></a></h2>
-                <h2 class="tab [+selected.import+]"><a href="[+moduleurl+]action=import"><span>Импорт / Обновление (Excel/Calc/CSV)</span></a></h2>
-                <h2 class="tab [+selected.export+]"><a href="[+moduleurl+]action=export"><span>Экспорт (CSV)</span></a></h2>
-                <h2 class="tab [+selected.mass+]"><a href="[+moduleurl+]action=mass"><span>Массовый перенос</span></a></h2>
+                <h2 class="tab [+selected.branch+]"><a href="[+moduleurl+]action=branch"><span>[+lang.editing+]</span></a></h2>
+                <h2 class="tab [+selected.import+]"><a href="[+moduleurl+]action=import"><span>[+lang.import+] (Excel/Calc/CSV)</span></a></h2>
+                <h2 class="tab [+selected.export+]"><a href="[+moduleurl+]action=export"><span>[+lang.export+] (XLS/CSV)</span></a></h2>
+                <h2 class="tab [+selected.mass+]"><a href="[+moduleurl+]action=mass"><span>[+lang.mass+]</span></a></h2>
             </div>

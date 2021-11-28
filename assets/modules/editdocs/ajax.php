@@ -34,7 +34,7 @@ $obj = new editDocs($modx);
 
 if (!empty($_POST['clear'])) {
     $obj->clearCache();
-    echo 'Кэш очищен';
+    echo $obj->lang['cleared'];
 }
 
 
@@ -66,9 +66,9 @@ if (!empty($_POST['export'])) {
 }
 //if (!empty($_POST['export']) && $_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
 
-if (isset($_POST['parent1']) && isset($_POST['parent2']) && $_POST['parent1'] != '' && $_POST['parent2'] != '') {
+if (!empty($_POST['parent1']) && !empty($_POST['parent2'])) {
     echo $obj->massMove();
-} else if (isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">Не все поля заполнены!</div>';
+} else if (isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">'.$obj->lang['notall'].'</div>';
 
 if (!empty($_POST['cls']) && $_POST['cls'] == 1) {
     //удаляем сессии после обработки
@@ -106,6 +106,15 @@ class editDocs
         $this->check = $this->checkTableMC();
         $this->currArr = []; //массив с которым сравниваемся
         $this->addArr = []; //массив для новых добавляемых документов
+
+        //language
+        $lng = $modx->getConfig('manager_language');
+        if(file_exists(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php')) require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php');
+        else require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/russian-UTF8.inc.php');
+
+        $this->lang = $lang;
+
+
 
 
     }
@@ -329,7 +338,7 @@ class editDocs
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
         $_SESSION['tabrows'] = '';
 
-        echo $_SESSION['import_start'] . '#@Всего строк - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
+        echo $_SESSION['import_start'] . '#@'.$this->lang['totalrows'].' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $this->table($sheetData, $this->params['max_rows']);
 
     }
 
@@ -341,7 +350,7 @@ class editDocs
         // }
         if ($_SESSION['data']) {
             return $this->importReady($this->newMassif($_SESSION['data'])); //$this->table($_SESSION['data'], $this->params['max_rows'])
-        } else return '<div class="alert alert-danger">Сессия устарела, загрузите файл заново! </div>';
+        } else return '<div class="alert alert-danger">'.$this->lang['sessdead'].'</div>';
     }
 
 
@@ -546,7 +555,7 @@ class editDocs
         }
         $_SESSION['tabrows'] .= $tr;
         //$fulltab = $tabh.$tr.$tabe;
-        $fortab = '<span class="td_add">&nbsp;</span>  добавлено &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> запрет на добавление&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> отредактировано<br><br>';
+        $fortab = '<span class="td_add">&nbsp;</span>  '.$this->lang['added'].' &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> '.$this->lang['stopadd'].'&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> '.$this->lang['edited'].'<br><br>';
 
         $_SESSION['import_i'] += $i;
         $_SESSION['import_j'] += $j;
@@ -554,14 +563,14 @@ class editDocs
         //тестовый режим
         if (isset($_POST['test'])) {
             //$this->modx->logEvent(1,1,$_SESSION['import_start'],'проверка заголовка таблицы '.$_SESSION['import_start']);
-            $_SESSION['log'] = '<br><div class="alert alert-danger">Тестовый режим. Изменения <b>НЕ</b> вносятся</div>';
+            $_SESSION['log'] = '<br><div class="alert alert-danger">'.$this->lang['nowtest'].'</div>';
 
             return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'] . $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
         }
 
         //боевой режим
         if (!isset($_POST['test'])) {
-            $_SESSION['log'] = '<br><b>Добавлено - ' . $_SESSION['import_i'] . ', отредактировано - ' . $_SESSION['import_j'] . '</b> <hr>';
+            $_SESSION['log'] = '<br><b>'.$this->lang['added'].' - ' . $_SESSION['import_i'] . ', '.$this->lang['edited'].' - ' . $_SESSION['import_j'] . '</b> <hr>';
             //$fileobr = '<div class="alert alert-warning">Файл обработан. Для дальнейшей работы необходимо загрузить файл заново.</div>';
 
         }
@@ -852,8 +861,8 @@ class editDocs
         if ($res) {
             $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 1 WHERE  id = " . $_POST['parent2'] . "");
             $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 0 WHERE  id = " . $_POST['parent1'] . "");
-            $out = '<div class="alert alert-success">Перенос успешно завершен! <b>(Не забывайте обновить кэш сайта для отображения изменений в дереве)</b></div>';
-        } else $out = '<div class="alert alert-danger">Ошибка, проверьте ID родительских веток</div>';
+            $out = '<div class="alert alert-success">'.$this->lang['ok_move'].'</b></div>';
+        } else $out = '<div class="alert alert-danger">'.$this->lang['error_tree'].'</div>';
 
 
         $this->clearCache();

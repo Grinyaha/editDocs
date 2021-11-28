@@ -1,16 +1,16 @@
 <div id="tab-page1" class="tab-page" style="display:block;">
     <form  id="mass-form">
         <input type="hidden" name="mass" value="1" />
-        <input type="text" name="parent1" class="inp" style="width: 70px;margin-bottom:2px"/> ID родителя ОТКУДА все переносим<br/>
-        <input type="text" name="parent2" class="inp" style="width: 70px"/> ID родителя КУДА все переносим
+        <input type="number" min="0" name="parent1" class="inp" style="width: 70px;margin-bottom:2px"/> [+lang.movefrom+]<br/>
+        <input type="number" min="0" name="parent2" class="inp" style="width: 70px"/> [+lang.moveto+]
         <div class="clear"></div>
         <div class="subbat">
-            <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  ПЕРЕНЕСТИ</button>
+            <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  [+lang.massmove+]</button>
 
         </div>
         <div class="mess">
             <br/>
-            <button id="clear" type="button" class="btn btn-info"  style="min-width: 170px" ><i class="fa fa-gavel"></i> Сбросить кэш</button>
+            <button id="clear" type="button" class="btn btn-info"  style="min-width: 170px" ><i class="fa fa-gavel"></i> [+lang.clearcache+]</button>
         </div>
     </form>
     <div class="clear"></div>
@@ -54,23 +54,4 @@
 
     });
 
-    //разрешаем только ввод цифр
-    $(document).ready(function() {
-        $(".inp").keydown(function(event) {
-            // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
-            if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
-                // Разрешаем выделение: Ctrl+A
-                (event.keyCode == 65 && event.ctrlKey === true) ||
-                // Разрешаем клавиши навигации: Home, End, Left, Right
-                (event.keyCode >= 35 && event.keyCode <= 39)) {
-                return;
-            }
-            else {
-                // Запрещаем всё, кроме клавиш цифр на основной клавиатуре, а также Num-клавиатуре
-                if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-                    event.preventDefault();
-                }
-            }
-        });
-    });
 </script>

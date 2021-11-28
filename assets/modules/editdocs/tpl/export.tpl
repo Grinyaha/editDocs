@@ -6,13 +6,13 @@
         <div>
             <div class="parf">
                 <div class="parf">
-                    ID родителя<br/>
-                    <input type="text" name="stparent" id="stparent" class="inp" style="width: 70px"/>
+                    ID [+lang.parent+]<br/>
+                    <input type="number" min="0" name="stparent" id="stparent" class="inp" style="width: 70px"/>
 
                     <br/><br/>
                 </div>
                 <div class="parf">
-                    Уровень вложенности<br/>
+                    [+lang.level+]<br/>
 
                     <select id="ed-tree" name="depth">
                         <option value="0" selected="selected">1</option>
@@ -28,43 +28,43 @@
                 </div>
 
                 <div class="parf">
-                    Разделитель:<br>
+                    [+lang.delimiter+]:<br>
                     <input type="text" name="dm" class="inp" style="width: 40px" maxlength="1" value=";"/>
                 </div>
 
                 <div class="parf">
-                    Фильтрация по ТВ (DocLister)</br>
-                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px"/>
-                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например tv:ves:>:1"></i>
+                    [+lang.filtertv+] (DocLister)</br>
+                    <input type="text" name="filters" id="filters" class="inp" style="width: 200px" placeholder="[+lang.example+] tv:ves:>:1"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="[+lang.dltext+] tv:ves:>:1"></i>
                 </div>
 
                 <div class="parf">
-                    Фильтрация по основным полям</br>
-                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px"/>
-                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="Фильтрация согласно правилам SQL запросов, например c.template=2"></i>
+                    [+lang.filterdef+]</br>
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 200px" placeholder="[+lang.example+] c.template=2"/>
+                    <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="right" title="[+lang.sqltext+] c.template=2" ></i>
                 </div>
                 <div class="parf">
-                    <a href="https://docs.evo.im/04_extras/doclister/04_filters.html" target="_blank"><br/>Документация по фильтрам DocLister</a>
+                    <a href="https://docs.evo.im/04_extras/doclister/04_filters.html" target="_blank"><br/>[+lang.docfilters+] DocLister</a>
                 </div>
 
                 <div class="parf">
                     <br/>
-                    <input type="checkbox" name="win" value="1" [+checked+]/> кодировка WINDOWS-1251 (по дефолту UTF-8)<br/>
-                    <input type="checkbox" name="neopub" value="1"/> Включить неопубликованные и помеченные на удаление
+                    <input type="checkbox" name="win" value="1" [+checked+]/> [+lang.kodirovka+]<br/>
+                    <input type="checkbox" name="neopub" value="1"/> [+lang.unpubl+]
                 </div>
 
                 <div class="clear"></div>
 
                 <div class="sumosize">
-                    Поля или TV <br/>
+                    [+lang.fields+] <br/>
                     <select id="selfil" name="fieldz[]" multiple="multiple">
-                        <optgroup label="Стандартные поля">
-                            <option value="id" selected disabled>ID (вкл. по умолчанию)</option>
+                        <optgroup label="[+lang.deffields+]">
+                            <option value="id" selected disabled>ID ([+lang.vkldef+])</option>
                             [+fields+]
                             <option value="url">URL</option>
                         </optgroup>
 
-                        <optgroup label="TV - параметры">
+                        <optgroup label="[+lang.tvoptions+]">
                             [+tvs+]
                         </optgroup>
 
@@ -73,16 +73,16 @@
                 </div>
 
                 <div class="subbat">
-                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  НАЧАТЬ ЭКСПОРТ</button>
+                    <button id="brsub" type="button" class="btn btn-success"><i class="fa fa-check"></i>  [+lang.start_export+]</button>
 
                 </div>
 
                 <div class="clear"></div>
 
                 <div class="alert-ok">
-                    ВНИМАНИЕ!<br/>
-                    Перевод в кодировку WIN-1251 работает при условии, что ваш сайт корректно работает с кодировкой UTF-8.<br>
-                    Поле URL выдает полный адрес текущего документа, включая домен.
+                    <b>[+lang.atention+]</b><br/>
+                    [+lang.iconv+]<br>
+                    [+lang.url+]
                 </div>
 
             </div>
@@ -90,7 +90,7 @@
             <div class="mess">
                 <div id="warning"></div>
                 <br />
-                <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i> Сбросить кэш</button>
+                <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i> [+lang.clearcache+]</button>
             </div>
             
             <br />
@@ -114,11 +114,11 @@
 
            // <!--sumo select-->
             $('#selfil').SumoSelect({
-                placeholder: 'Выберите поля...',
-                captionFormat: '{0} Выбрано',
+                placeholder: '[+lang.selfields+]...',
+                captionFormat: '{0} [+lang.selected+]',
                 csvDispCount: 2,
                 search: true,
-                searchText: 'Имя поля или TV'
+                searchText: '[+lang.fieldortv+]'
             });
             $('#ed-tree').SumoSelect();
 
@@ -139,12 +139,12 @@
                         console.log(result);
                         resp = result.split("|");
                         if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
-                            $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + "</b>");
+                            $("#result_progress").html("<b>[+lang.expord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
                             makeProgress(data);
                         } else {
-                            $("#result_progress").html("<b>Экспорт: " + resp[0] + " из " + resp[1] + ". Готово!</b>");
+                            $("#result_progress").html("<b>[+lang.expord+] " + resp[0] + " [+lang.of+] " + resp[1] + ". [+lang.gotovo+]</b>");
                             //document.location.href="/assets/modules/editdocs/uploads/export.csv";
-                            $('#result').html('<p><br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>СКАЧАТЬ ФАЙЛ .CSV</a> &nbsp; <a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>СКАЧАТЬ ФАЙЛ Excel (.xlsx)</a></p>');
+                            $('#result').html('<p><br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>[+lang.download+] .CSV</a> &nbsp; <a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>[+lang.download+] Excel (.xlsx)</a></p>');
                         }
                     }
                 }); //end ajax
@@ -174,29 +174,9 @@
 
         }); //end ready
 
-        //разрешаем только ввод цифр
-        $(document).ready(function() {
-            $("input#stparent").keydown(function(event) {
-                // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
-                if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
-                    // Разрешаем выделение: Ctrl+A
-                    (event.keyCode == 65 && event.ctrlKey === true) ||
-                    // Разрешаем клавиши навигации: Home, End, Left, Right
-                    (event.keyCode >= 35 && event.keyCode <= 39)) {
-                    return;
-                }
-                else {
-                    // Запрещаем всё, кроме клавиш цифр на основной клавиатуре, а также Num-клавиатуре
-                    if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-                        event.preventDefault();
-                    }
-                }
-            });
-        });
-
 
         function loading() {
-            $('#result').html('<div class="loading">Обработка данных...</div>');
+            $('#result').html('<div class="loading">[+lang.obrabotka+]...</div>');
         }
 
 

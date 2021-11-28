@@ -156,6 +156,14 @@ span.td_add, span.td_notadd, span.td_upd {
     padding: 0 10px;
 }
 
+input[type='number'] {
+    -moz-appearance:textfield !important;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+}
+
 /* .result {
     overflow-y: scroll;
     height: 500px;

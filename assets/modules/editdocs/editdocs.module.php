@@ -62,6 +62,11 @@ while ($row = $modx->db->getRow($query)) {
     $tvs .= '<option value="' . $row['name'] . '">' . $row['name'].' ('.$row['caption'] . ')</option>';
 }
 
+//language
+$lng = $modx->getConfig('manager_language');
+if(file_exists(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php')) require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php');
+else require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/russian-UTF8.inc.php');
+
 //templates list
 $where_tmpl = '';
 if (isset($modx->event->params['include_tmpls']) && $modx->event->params['include_tmpls'] != '') {
@@ -75,7 +80,7 @@ while ($row = $modx->db->getRow($query2)) {
 
 if (isset($modx->event->params['win1251']) && $modx->event->params['win1251']=='true') $checked = 'checked';
 
-$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'), 'checked' => $checked );
+$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'), 'checked' => $checked, 'lang' => $lang );
 
 if ($action == 'branch') {
     if(!empty($_SESSION['data'])) unset($_SESSION['data']);
