@@ -58,7 +58,7 @@ class editDocs
         $data = $_POST['dat'];
         $pole = $_POST['pole'];
 
-        $this->modx->logEvent(1,1,'<pre>'.print_r($_POST,1).'</pre>','mas');
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($_POST,1).'</pre>','mas');
 
         $this->doc->edit($id);
         $this->doc->set($pole, $data);
@@ -626,7 +626,7 @@ class editDocs
 
 
 
-        print_r($sheetDataNew);
+        //print_r($sheetDataNew);
         unset ($data);
         return $sheetDataNew;
     }
