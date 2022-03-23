@@ -21,7 +21,7 @@ $lang['docfilters'] = 'Documentation for filters of';
 $lang['dltext'] = 'Filtration for TV-options according to the rules of the component DocLister, for examp.';
 $lang['sqltext'] = 'Filtering according to the rules of SQL queries, for examp.';
 $lang['pagination'] = 'Pagination';
-$lang['unpubl'] = 'Include unpublished and marked for deletion documents';
+$lang['unpubl'] = 'Show unpublished and marked for deletion documents';
 $lang['for'] = 'for';
 $lang['selfields'] = 'Select fields';
 $lang['selected'] = 'Selected';
@@ -79,6 +79,10 @@ $lang['movefrom'] = '<b>FROM</b> for moving (Parent ID)';
 $lang['moveto'] = '<b>TO</b> for moving (Parent ID)';
 $lang['ok_move'] = 'Transfer completed successfully! <b> (Remember to refresh the site cache to reflect the changes in the tree)';
 $lang['error_tree'] = 'Error, check the ID of the parent branches';
+$lang['srav_field'] = 'Match field from XLS-table';
+$lang['rendertv'] = 'Render TV-fields';
+$lang['nothing'] = 'Nothing selected';
+$lang['fieldxls'] = 'Field from XLS-table';
 
 
 

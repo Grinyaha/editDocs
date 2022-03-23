@@ -2,6 +2,9 @@
 
     <script>
         $(document).ready(function () {
+
+
+
             $('#tpl,#checktv').SumoSelect({
                 placeholder: '[+lang.selfields+]...',
                 captionFormat: '{0} [+lang.selected+]',
@@ -22,12 +25,33 @@
                 dictRemoveFile: "[+lang.delfile+]",
                 init: function () {
                     this.on("success", function (file, responseText) {
-                        //console.log(responseText);
+
                         //excelTable(responseText);
                         responseText = responseText.split("#@");
                         $('#result_progress').html('<b>' + responseText[1] + '</b>');
                         $('#result').html(responseText[2]);
                         $('.sending').show(0);
+
+                        console.log(responseText[3]);
+                        exp = responseText[3].split('||');
+
+                        $('#sravxls').html('');
+                        $('#sravxls').append('<option value=""></option>');
+
+                        exp.forEach(function(entry) {
+                            $('#sravxls').append('<option value="'+entry+'">'+entry+'</option>');
+                        });
+
+
+                        $('#sravxls').SumoSelect({
+                            placeholder: 'select fields',
+                            search: true,
+                            searchText: '[+lang.fieldxls+]'
+                        });
+
+                        $('#sravxls')[0].sumo.reload();
+
+
                     });
                 }
             });
@@ -150,6 +174,15 @@
 
                 </select>
             </div>
+
+            <div class="parf">
+                [+lang.srav_field+] <br>
+
+                   <!--input type="text" name="checktv2" style="width: 200px" class="inp" placeholder=""-->
+                    <select name="checktv2" id="sravxls" class=""></select>
+
+            </div>
+
             <div class="subbat">
                 <button class="btn btn-success" id="process" type="button"><i class="fa fa-check"></i> [+lang.startimport+]</button>
                 

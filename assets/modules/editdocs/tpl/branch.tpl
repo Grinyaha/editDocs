@@ -126,23 +126,38 @@
 
                 <div class="clear"></div>
 
-                <div class="parf">
-                    <br/>
-                    <label class="form-check-label">
-                     &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="paginat" value="1"/> [+lang.pagination+] <br/>
-                    </label>
-                        <div class="clear"></div>
-                    <label class="form-check-label">
-                     &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="neopub" value="1"/> [+lang.unpubl+]
-                    </label>
-                        <div class="clear"></div>
-                    <label class="form-check-label">
-                        &nbsp; &nbsp; &nbsp; <input type="checkbox" name="multed" value="1" class="form-check-input" /> <b>category</b> [+lang.for+] MultiCategories
-                    </label>
-                </div>
-                <div class="clear"></div>
-                <br>
+                <br/>
 
+                <div class="">
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="form-check-label">
+                                &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="rendertv" value="1"/> [+lang.rendertv+] <br/>
+                            </label>
+                            <div class="clear"></div>
+                            <label class="form-check-label">
+                                &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="paginat" value="1"/> [+lang.pagination+] <br/>
+                            </label>
+                        </div>
+                        <div class="col-md-10">
+                            <label class="form-check-label">
+                                &nbsp; &nbsp; &nbsp; <input class="form-check-input" type="checkbox" name="neopub" value="1"/> [+lang.unpubl+]
+                            </label>
+                            <div class="clear"></div>
+                            <label class="form-check-label">
+                                &nbsp; &nbsp; &nbsp; <input type="checkbox" name="multed" value="1" class="form-check-input" /> <b>category</b> [+lang.for+] MultiCategories
+                            </label>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+                <br/>
 
                 <div class="subbat">
                     <button id="brsub" type="button" class="btn btn-success" work="edit"><i class="fa fa-check"></i> [+lang.submit+]</button>
@@ -202,6 +217,12 @@
                         //console.log(result);
                         $('#result').html(result);
 
+                        $('select.sumochb, select.sumosel').SumoSelect({
+                            placeholder: '[+lang.nothing+]...',
+                            captionFormat: '{0} [+lang.selected+]',
+                            csvDispCount: 2
+                        });
+
 
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
@@ -215,14 +236,16 @@
             }); //end click
 
 
-            $('body').on('blur', '.ed-row td input, .ed-row td textarea', function () {
+            $('body').on('change', '.ed-row td input, .ed-row td textarea, .ed-row td select', function () {
 
                 //var data2 = $('form#dataf').serialize();
-                var id = $(this).parent().parent().find('td.idd').html();
-                var pole= $(this).attr('name');
+                var id = $(this).parents('tr.ed-row').find('td.idd').attr('idd');
+                var pole = $(this).attr('name');
                 var dat = $(this).val();
 
-                //console.log(pole);
+                let check = Array.isArray(dat);
+                if(check) dat = dat.join('||');
+                //console.log(dat);
 
                 $.ajax({
                     type: "POST",
@@ -235,7 +258,6 @@
                         setTimeout(function(){
                             $('.alert').fadeOut();
                         }, 3000);
-
 
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
