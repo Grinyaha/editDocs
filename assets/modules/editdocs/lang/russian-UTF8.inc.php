@@ -83,6 +83,7 @@ $lang['srav_field'] = 'Поле соответствия из XLS-таблицы
 $lang['rendertv'] = 'Рендерить ТВ-поля';
 $lang['nothing'] = 'Ничего не выбрано';
 $lang['fieldxls'] = 'Поле из XLS-таблицы';
+$lang['select_all'] = 'Выбрать все';
 
 
 ?>

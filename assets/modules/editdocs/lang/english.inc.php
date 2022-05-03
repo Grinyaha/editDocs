@@ -83,6 +83,7 @@ $lang['srav_field'] = 'Match field from XLS-table';
 $lang['rendertv'] = 'Render TV-fields';
 $lang['nothing'] = 'Nothing selected';
 $lang['fieldxls'] = 'Field from XLS-table';
+$lang['select_all'] = 'Select All';
 
 
 

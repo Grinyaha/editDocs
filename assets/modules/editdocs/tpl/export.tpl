@@ -92,9 +92,9 @@
                 <br />
                 <button id="clear" type="button" class="btn btn-info"><i class="fa fa-gavel"></i> [+lang.clearcache+]</button>
             </div>
-            
+
             <br />
-            
+
             <div class="clear"></div>
 
         </div>
@@ -118,7 +118,9 @@
                 captionFormat: '{0} [+lang.selected+]',
                 csvDispCount: 2,
                 search: true,
-                searchText: '[+lang.fieldortv+]'
+                searchText: '[+lang.fieldortv+]',
+                selectAll: true,
+                locale :  ['OK', 'Cancel', '[+lang.select_all+]']
             });
             $('#ed-tree').SumoSelect();
 

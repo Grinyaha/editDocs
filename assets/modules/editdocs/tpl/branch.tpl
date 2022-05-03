@@ -33,20 +33,20 @@
                 </div>
 
                 <div class="parf">
-                    
+
                         [+lang.sorting+] <br/>
                          <select id="order" name="order">
                             <optgroup label="[+lang.deffields+]">
                                 <option value="id">id</option>
                                 [+fields+]
                             </optgroup>
-    
+
                             <optgroup label="[+lang.tvoptions+]">
                                 [+tvs+]
                             </optgroup>
-    
+
                         </select>
-                    
+
                 </div>
 
                 <div class="parf">
@@ -65,7 +65,7 @@
                      <select id="selfil" name="fields[]" multiple="multiple">
                         <optgroup label="[+lang.deffields+]">
                             [+fields+]
-                            <!-- 
+                            <!--
                             <option value="pagetitle">pagetitle</option>
                             <option value="longtitle">longtitle</option>
                             <option value="description">description</option>
@@ -193,10 +193,12 @@
                 captionFormat: '{0} [+lang.selected+]',
                 csvDispCount: 2,
                 search: true,
-                searchText: '[+lang.fieldortv+]'
+                searchText: '[+lang.fieldortv+]',
+                selectAll: true,
+                locale :  ['OK', 'Cancel', '[+lang.select_all+]']
             });
             $('#ed-tree').SumoSelect();
-            
+
             $('#order,#orderas').SumoSelect();
 
 
