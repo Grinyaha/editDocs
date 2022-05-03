@@ -9,7 +9,7 @@
 
     <script type="text/javascript" src="[+manager_path+]/media/script/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/sumoselect/sumoselect.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/sumoselect/sumoselect.css?v=1" />
 
     <script type="text/javascript" src="../assets/modules/editdocs/libs/dropzone/dropzone.min.js"></script>
     <link href="../assets/modules/editdocs/libs/dropzone/dropzone.css" rel="stylesheet">
