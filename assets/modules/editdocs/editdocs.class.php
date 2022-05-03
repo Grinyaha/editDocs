@@ -452,7 +452,7 @@ class editDocs
 
             //проверка на ноль
             foreach ($create as $kv => $vally) {
-                if ($vally == '') $create[$kv] = ' ';
+                if ($vally == '') $create[$kv] = '';
                 if ($vally == '0' && empty($vally)) $create[$kv] = '0'; //если у значения есть ноль
 
             }
