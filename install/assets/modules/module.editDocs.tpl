@@ -5,7 +5,7 @@
  * necessary install DocLister & MODx API
  *
  * @category	 module
- * @version 	 1.3.7
+ * @version 	 1.3.8
  * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
  * @author	   Alexander Grishin (special thanks Webber - web-ber12@yandex.ru)
  * @git        https://github.com/Grinyaha/editDocs

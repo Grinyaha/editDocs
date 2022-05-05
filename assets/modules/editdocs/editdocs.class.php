@@ -195,7 +195,7 @@ class editDocs
                     //renderTV
                     foreach ( $data as $k => $v) {
 
-                        if($k=='id' || $k=='category' || $k=='parent') {}
+                        if($k=='id' || $k=='category') {}
                         else {
                             if(isset($_SESSION['ed_tv'][$k]) && !empty($_POST['rendertv']) ) {
 
