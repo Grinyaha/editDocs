@@ -210,8 +210,8 @@ class editDocs
 
                                     foreach ( $tmp as $kk => $vv) {
                                         $sel = explode('==', $vv);
-                                            if($sel[1]==$v) $selected = 'selected="selected"'; else $selected='';
-                                            $rs .= '<option value="'.$sel[1].'" '.$selected.'>'.$sel[0].'</option>';
+                                        if($sel[1]==$v) $selected = 'selected="selected"'; else $selected='';
+                                        $rs .= '<option value="'.$sel[1].'" '.$selected.'>'.$sel[0].'</option>';
 
                                     }
 
@@ -219,7 +219,7 @@ class editDocs
                                 }
 
                                 //CHECKBOX && MULTI-SELECT
-                                if($_SESSION['ed_tv'][$k][0]=='checkbox' || $_SESSION['ed_tv'][$k][0]=='listbox-multiple') {
+                                else if($_SESSION['ed_tv'][$k][0]=='checkbox' || $_SESSION['ed_tv'][$k][0]=='listbox-multiple') {
 
                                     $tmp = explode('||',$_SESSION['ed_tv'][$k][1]);
 
@@ -227,9 +227,9 @@ class editDocs
                                     $curch = [];
                                     $expch = explode('||', $v);
 
-                                        foreach ($expch as $vch) {
-                                            $curch[] = $vch;
-                                        }
+                                    foreach ($expch as $vch) {
+                                        $curch[] = $vch;
+                                    }
 
                                     $rs1 = '<select name="'.$k.'" kk="'.$k.'" class="tarea sumochb" multiple>';
                                     $rs2 = '</select>';
@@ -245,6 +245,12 @@ class editDocs
                                     }
 
                                     $data[$k] = '<td>'.$rs1.$rs.$rs2.'</td>';
+                                }
+
+                                else {
+
+                                    $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
+
                                 }
 
 
