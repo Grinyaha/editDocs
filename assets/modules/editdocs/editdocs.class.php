@@ -791,10 +791,10 @@ class editDocs
                 $header[] = $val;
             }
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
-
             $ph = substr($ph, 0, strlen($ph) - 1);
             $head = substr($head, 0, strlen($head) - 1) . "\r\n";
-            //$this->last = array_pop($fields);
+
+            if(!empty($_POST['export_mc'])) $header[] = 'category'; //Добавляем в заголовок category от MultiCategories
 
             if (!empty($_POST['dm'])) $dm = $_POST['dm'];
             else $dm = ';'; //разделитель
@@ -827,6 +827,9 @@ class editDocs
                     //         $data[$v] = str_replace('.', ',', $data[$v]);
                     //     }
                     // }
+                    if(!empty($_POST['export_mc'])) $data['category'] = $this->multicat($data['id']);
+
+
                     if ($this->issetPrepare) {
                         $data = $this->makePrepare($data, 'upd', 'export', 1);
                     }
@@ -931,6 +934,18 @@ class editDocs
 
         return $this->modx->db->query($sql);
 
+    }
+
+    protected function multicat($id) {
+
+        $query = $this->modx->db->query("SELECT category FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=".$id);
+        $out=[];
+        while($row = $this->modx->db->getRow($query)) {
+            if( !empty($row['category'])) $out[] = $row['category'];
+        }
+
+        $outx = implode(',', $out);
+        return $outx;
     }
 }
 

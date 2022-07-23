@@ -84,6 +84,7 @@ $lang['rendertv'] = 'Рендерить ТВ-поля';
 $lang['nothing'] = 'Ничего не выбрано';
 $lang['fieldxls'] = 'Поле из XLS-таблицы';
 $lang['select_all'] = 'Выбрать все';
+$lang['export_mc'] = 'Учитывать ID мультикатегорий';
 
 
 ?>

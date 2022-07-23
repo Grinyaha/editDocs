@@ -47,13 +47,17 @@
                     <a href="https://docs.evo.im/04_extras/doclister/04_filters.html" target="_blank"><br/>[+lang.docfilters+] DocLister</a>
                 </div>
 
+                <div class="clear"></div>
+
                 <div class="parf">
-                    <br/>
+
                     <input type="checkbox" name="win" value="1" [+checked+]/> [+lang.kodirovka+]<br/>
-                    <input type="checkbox" name="neopub" value="1"/> [+lang.unpubl+]
+                    <input type="checkbox" name="neopub" value="1"/> [+lang.unpubl+] <br>
+                    <input type="checkbox" name="export_mc" value="1"/> [+lang.export_mc+]
                 </div>
 
                 <div class="clear"></div>
+                <br>
 
                 <div class="sumosize">
                     [+lang.fields+] <br/>

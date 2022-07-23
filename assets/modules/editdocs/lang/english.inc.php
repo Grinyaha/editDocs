@@ -84,6 +84,7 @@ $lang['rendertv'] = 'Render TV-fields';
 $lang['nothing'] = 'Nothing selected';
 $lang['fieldxls'] = 'Field from XLS-table';
 $lang['select_all'] = 'Select All';
+$lang['export_mc'] = 'Include ID of multicategories';
 
 
 
