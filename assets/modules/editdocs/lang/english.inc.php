@@ -85,7 +85,11 @@ $lang['nothing'] = 'Nothing selected';
 $lang['fieldxls'] = 'Field from XLS-table';
 $lang['select_all'] = 'Select All';
 $lang['export_mc'] = 'Include ID of multicategories';
-
+$lang['limit_msg'] = 'Output is limited by setting of this module <b>max_rows</b>';
+$lang['replace_field'] = 'Field/TV for replace data';
+$lang['nonreplace'] = 'Without replacement';
+$lang['entry'] = 'Looking for entry';
+$lang['replace'] = 'Replace to';
 
 
 

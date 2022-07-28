@@ -85,6 +85,11 @@ $lang['nothing'] = 'Ничего не выбрано';
 $lang['fieldxls'] = 'Поле из XLS-таблицы';
 $lang['select_all'] = 'Выбрать все';
 $lang['export_mc'] = 'Учитывать ID мультикатегорий';
+$lang['limit_msg'] = 'Вывод результатов ограничен настройкой модуля <b>max_rows</b>';
+$lang['replace_field'] = 'Поле/TV для замены данных';
+$lang['nonreplace'] = 'Без замены';
+$lang['entry'] = 'Ищем вхождение';
+$lang['replace'] = 'Заменяем на';
 
 
 ?>

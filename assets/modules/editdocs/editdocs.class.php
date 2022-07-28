@@ -19,7 +19,6 @@ class editDocs
         $this->doc = new $apiClassName($this->modx);
         $this->step = !empty($this->params['step']) && (int)$this->params['step'] > 0 ? (int)$this->params['step'] : 500;//сколько строк за раз импортируем
         $this->start_line = 2;//начинаем импорт со второй строки файла
-        $this->params['max_rows'] = false; //количество выводимых на экран строк таблицы после импорта / загрузки файла . false - если не нужно ограничивать
         $this->snipPrepare = !empty($this->params['prepare_snippet']) ? $this->params['prepare_snippet'] : 'editDocsPrepare1';//сниппет prepare
 
         $this->check = $this->checkTableMC();
@@ -351,7 +350,14 @@ class editDocs
 
         $data_table = $this->table($sheetData, $this->params['max_rows']);
 
-        echo $_SESSION['import_start'] . '#@'.$this->lang['totalrows'].' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $data_table. '#@'.implode('||', $_SESSION['header_table']);
+        $columns = '';
+        if (isset($this->params['columns'])) {
+            $columns = '#@'.$this->params['columns'];
+        }
+
+
+        echo $_SESSION['import_start'] . '#@'.$this->lang['totalrows'].' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $data_table. '#@'.implode('||', $_SESSION['header_table']).$columns;
+
 
     }
 
@@ -476,6 +482,10 @@ class editDocs
                         $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
                     }
 
+                    //search & replace
+                    $create = $this->smallPrepare($create);
+
+
                     $this->doc->create($create);
 
                     $new = $this->doc->save(true, false); //SAVE!!!
@@ -512,6 +522,10 @@ class editDocs
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 0); // 0 - test mode
                     }
+
+                    //search & replace
+                    $create = $this->smallPrepare($create);
+
                 }
 
                 if (!empty($_POST['notadd'])) {
@@ -535,6 +549,9 @@ class editDocs
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 1); // 1 - game mode
                     }
+                    //search & replace
+                    $create = $this->smallPrepare($create);
+
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
 
                     //если вкл.мультикатегории
@@ -560,6 +577,8 @@ class editDocs
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 0); // 0 - game mode
                     }
+                    //search & replace
+                    $create = $this->smallPrepare($create);
                 }
 
 
@@ -637,9 +656,9 @@ class editDocs
         return $sheetDataNew;
     }
 
-    protected function table($data, $max = false)
+    protected function table($data, $max)
     {
-
+        //$this->modx->logEvent(1,1,'_max'.$max,'header');
         $header = '<table class="tabres">';
         $footer = '</table>';
         $out = '';
@@ -648,16 +667,23 @@ class editDocs
         $_SESSION['header_table'] = array();
         foreach ($data as $k => $val) {
             $row = '';
+            $limit_msg = '';
             $i++;
-            if ($max && $max + 1 < $i) break;
-            foreach ($val as $key => $value) {
-
-                if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
-                $row .= '<td>' . $value . '</td>';
+            if ($max && (int)$max + 1 < $i) {
+                $limit_msg = '<br><div style="color: red">'.$this->lang['limit_msg'].'</div>';
+                break;
             }
+
+                foreach ($val as $key => $value) {
+
+                    if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
+                    $row .= '<td>' . $value . '</td>';
+                }
+
             $out .= '<tr>' . $row . '</tr>';
+
         }
-        return $header . $out . $footer;
+        return $header . $out . $footer. $limit_msg;
     }
 
     protected function checkField($field)
@@ -946,6 +972,16 @@ class editDocs
 
         $outx = implode(',', $out);
         return $outx;
+    }
+
+    protected function smallPrepare($data) {
+
+        //search & replace
+        if(!empty($_POST['replace']) && !empty($_POST['needle'])) {
+            $data[$_POST['replace']] = str_replace($_POST['needle'], $_POST['replacement'], $data[$_POST['replace']]);
+        }
+
+        return $data;
     }
 }
 

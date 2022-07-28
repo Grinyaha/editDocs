@@ -5,7 +5,7 @@
 
 
 
-            $('#tpl,#checktv').SumoSelect({
+            $('#tpl,#checktv, #replace').SumoSelect({
                 placeholder: '[+lang.selfields+]...',
                 captionFormat: '{0} [+lang.selected+]',
                 csvDispCount: 2,
@@ -32,8 +32,12 @@
                         $('#result').html(responseText[2]);
                         $('.sending').show(0);
 
-                        console.log(responseText[3]);
+                        console.log(responseText[4]);
+
+                        if(responseText[4] != undefined) columns = responseText[4].split('=='); else columns = false;
                         exp = responseText[3].split('||');
+
+                        //console.log(columns[0]);
 
                         $('#sravxls').html('');
                         $('#sravxls').append('<option value=""></option>');
@@ -49,7 +53,14 @@
                             searchText: '[+lang.fieldxls+]'
                         });
 
+                        if(columns) {
+
+                            $('#sravxls').val(columns[1]);
+                            $('#checktv').val(columns[0]);
+                        }
+
                         $('#sravxls')[0].sumo.reload();
+                        $('#checktv')[0].sumo.reload();
 
 
                     });
@@ -183,10 +194,35 @@
 
             </div>
 
-            <div class="subbat">
-                <button class="btn btn-success" id="process" type="button"><i class="fa fa-check"></i> [+lang.startimport+]</button>
-                
+
+            <div class="clear"></div>
+            <br>
+
+            <div class="parf" style="width: 200px">
+                [+lang.replace_field+] <br>
+                <select id="replace" name="replace">
+                    <option value="0" selected="selected">[+lang.nonreplace+]</option>
+                    <optgroup label="[+lang.deffields+]">
+                        [+fields+]
+                    </optgroup>
+                    <optgroup label="[+lang.tvoptions+]">
+                        [+tvs+]
+                    </optgroup>
+
+                </select>
             </div>
+
+
+            <div class="parf">
+                [+lang.entry+]<br />
+                <input type="text" name="needle" class="inp" style="width: 200px" />
+            </div>
+            <div class="parf">
+                [+lang.replace+]<br />
+                <input type="text" name="replacement" class="inp" style="width: 200px" />
+            </div>
+
+
             <div class="clear"></div>
             <br>
             <label class="form-check-label">
@@ -200,7 +236,12 @@
             <label class="form-check-label">
                 &nbsp;&nbsp;<input type="checkbox" name="multi" value="1" class="form-check-input" /> [+lang.impformc+]
             </label>
-            <br>
+            <br><br>
+
+            <div class="">
+                <button class="btn btn-success" id="process" type="button"><i class="fa fa-check"></i> [+lang.startimport+]</button>
+
+            </div>
 
             <div class="mess">
                 <div id="warning"></div>

@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <h1>[+session.itemname+] v1.3.10</h1>
+    <h1>[+session.itemname+] v1.3.11</h1>
 
 
     <div class="sectionBody">
