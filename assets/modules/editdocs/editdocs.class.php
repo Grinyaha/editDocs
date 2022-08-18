@@ -35,6 +35,10 @@ class editDocs
         $this->lang = $lang;
 
 
+        //Снятие с публикации
+        if (!empty($_POST['unpub']) && !isset($_POST['test'])) {
+            $this->unpublished();
+        }
 
 
     }
@@ -993,11 +997,7 @@ class editDocs
 
     public function unpublished ()
     {
-        if( !empty($_POST['unpub']))
-        {
-            $this->modx->db->query('UPDATE '. $this->modx->getFullTableName("site_content") .' SET published=0 WHERE template IN('.$_POST['unpub'].') ');
-        }
-
+        $this->modx->db->query('UPDATE '. $this->modx->getFullTableName("site_content") .' SET published=0 WHERE template IN('.$_POST['unpub'].') ');
         //$this->modx->logEvent(1,1,$_POST['unpub'],'test');
     }
 }

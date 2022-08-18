@@ -67,10 +67,6 @@ if (!empty($_POST['export'])) {
     echo $obj->export();
 }
 
-//Снятие с публикации
-if (!empty($_POST['unpub']) && !isset($_POST['test'])) {
-    $obj->unpublished();
-}
 
 if (!empty($_POST['parent1']) && !empty($_POST['parent2'])) {
     echo $obj->massMove();
