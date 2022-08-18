@@ -417,7 +417,7 @@ class editDocs
                 if ($_POST['tpl'] != 'file') $ptmplh = '<td>template</td>';
             }
 
-            if(!empty($_POST['unpub'])) $unphd = '<td>published</td>';
+            if(!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $unphd = '<td>published</td>';
             else $unphd='';
 
 
@@ -465,7 +465,7 @@ class editDocs
             if ($tpl == 'blank') $create['template'] = 0;
 
             //если включено снятие с публикации то принудительно публикуем добавляемые
-            if(!empty($_POST['unpub'])) $create['published'] = 1;
+            if(!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $create['published'] = 1;
 
 
             //проверка на ноль
@@ -998,7 +998,7 @@ class editDocs
             $this->modx->db->query('UPDATE '. $this->modx->getFullTableName("site_content") .' SET published=0 WHERE template IN('.$_POST['unpub'].') ');
         }
 
-        $this->modx->logEvent(1,1,$_POST['unpub'],'test');
+        //$this->modx->logEvent(1,1,$_POST['unpub'],'test');
     }
 }
 

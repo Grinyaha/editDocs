@@ -108,7 +108,7 @@
                                 $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
 
                                 dada2 = $('form#pro:not([name="unpub"])').serialize();
-                                dada2 = dada2.replace("unpub","xxx");
+                                dada2 = dada2.replace("unpub","unpub2");
                                 //console.log(dada2);
                                 makeProgress(dada2);
                             } else {
