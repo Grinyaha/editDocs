@@ -11,7 +11,7 @@
                 csvDispCount: 2,
                 search: true,
                 searchText: '[+lang.fieldortv+]'
-                });
+            });
 
             $('#tpl').SumoSelect({
                 placeholder: '[+lang.seltpls+]...',
@@ -101,28 +101,30 @@
                     data: dada,
                     success: function (result) {
                         if(result.indexOf('#@') !== -1) { //если ответ не содержит |, а сообщение
-                        resp = result.split("#@");
-                        $('#result').html(resp[2]);
-                        //console.log(result);
-                        if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
-                            $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
-                            makeProgress(dada);
-                        } else {
-                            $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + ". [+lang.gotovo+]</b>");
-                            //подчищаем сессии
-                            $.ajax({
-                                type: "POST",
-                                url: "[+base_url+]assets/modules/editdocs/ajax.php",
-                                data: 'cls=1',//clear session_start
-                                success: function (res) {
-                                    //console.log(res);
-                                }
-                            });
+                            resp = result.split("#@");
+                            $('#result').html(resp[2]);
+                            //console.log(result);
+                            if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
+                                $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
+
+                                dada = $('form#pro:not([name="unpub"])').serialize();
+                                makeProgress(dada);
+                            } else {
+                                $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + ". [+lang.gotovo+]</b>");
+                                //подчищаем сессии
+                                $.ajax({
+                                    type: "POST",
+                                    url: "[+base_url+]assets/modules/editdocs/ajax.php",
+                                    data: 'cls=1',//clear session_start
+                                    success: function (res) {
+                                        //console.log(res);
+                                    }
+                                });
+                            }
                         }
-                    }
-                    else {
-                        $('#result').html(result);
-                    }
+                        else {
+                            $('#result').html(result);
+                        }
                     }
                 }); //end ajax
             }
@@ -155,20 +157,20 @@
     </script>
 
     <div class="alert alert-success">
-       <p> <b>[+lang.atention+]</b><br /> </p>
-        
-            [+lang.needtitle+] <b>pagetitle</b><br><br>
-            
-            [+lang.foradd+]<br><br>
-            
-            [+lang.impcsv+]<br><br>
-            
-            [+lang.idparent+]
-              
-            
-            
-            
-        
+        <p> <b>[+lang.atention+]</b><br /> </p>
+
+        [+lang.needtitle+] <b>pagetitle</b><br><br>
+
+        [+lang.foradd+]<br><br>
+
+        [+lang.impcsv+]<br><br>
+
+        [+lang.idparent+]
+
+
+
+
+
     </div>
 
     <div id="fileuploader" class="dropzone"></div>
@@ -206,8 +208,8 @@
             <div class="parf">
                 [+lang.srav_field+] <br>
 
-                   <!--input type="text" name="checktv2" style="width: 200px" class="inp" placeholder=""-->
-                    <select name="checktv2" id="sravxls" class=""></select>
+                <!--input type="text" name="checktv2" style="width: 200px" class="inp" placeholder=""-->
+                <select name="checktv2" id="sravxls" class=""></select>
 
             </div>
 
