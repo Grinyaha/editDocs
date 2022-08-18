@@ -417,11 +417,14 @@ class editDocs
                 if ($_POST['tpl'] != 'file') $ptmplh = '<td>template</td>';
             }
 
+            if(!empty($_POST['unpub'])) $unphd = '<td>template</td>';
+            else $unphd='';
+
 
         }
 
 
-        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . '</tr>';
+        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . $unphd. '</tr>';
         $tabe = '</table>';
 
         $tr = '';
@@ -678,11 +681,11 @@ class editDocs
                 break;
             }
 
-                foreach ($val as $key => $value) {
+            foreach ($val as $key => $value) {
 
-                    if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
-                    $row .= '<td>' . $value . '</td>';
-                }
+                if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
+                $row .= '<td>' . $value . '</td>';
+            }
 
             $out .= '<tr>' . $row . '</tr>';
 

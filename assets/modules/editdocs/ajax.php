@@ -68,7 +68,7 @@ if (!empty($_POST['export'])) {
 }
 
 //Снятие с публикации
-if (!empty($_POST['unpub']) && !isset($_POST['test'])) {
+if (!empty($_POST['unpub']) && !isset($_POST['test']) && $_POST['cls'] == 1) {
     $obj->unpublished();
 }
 
