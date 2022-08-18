@@ -24,6 +24,7 @@ $lang['pagination'] = 'Пагинация';
 $lang['unpubl'] = 'Показать неопубликованные и помеченные на удаление';
 $lang['for'] = 'для';
 $lang['selfields'] = 'Выберите поля';
+$lang['seltpls'] = 'Выберите шаблоны';
 $lang['selected'] = 'Выбрано';
 $lang['fieldortv'] = 'Имя поля или TV';
 $lang['razrab'] = 'Разработчик';
@@ -90,6 +91,8 @@ $lang['replace_field'] = 'Поле/TV для замены данных';
 $lang['nonreplace'] = 'Без замены';
 $lang['entry'] = 'Ищем вхождение';
 $lang['replace'] = 'Заменяем на';
+$lang['tplname'] = 'Название шаблона';
+$lang['makeunpub'] = 'Снять с публикации перед импортом документы с шаблонами';
 
 
 ?>

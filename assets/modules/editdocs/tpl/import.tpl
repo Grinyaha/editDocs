@@ -5,13 +5,30 @@
 
 
 
-            $('#tpl,#checktv, #replace').SumoSelect({
+            $('#checktv, #replace').SumoSelect({
                 placeholder: '[+lang.selfields+]...',
                 captionFormat: '{0} [+lang.selected+]',
                 csvDispCount: 2,
                 search: true,
                 searchText: '[+lang.fieldortv+]'
                 });
+
+            $('#tpl').SumoSelect({
+                placeholder: '[+lang.seltpls+]...',
+                captionFormat: '{0} [+lang.selected+]',
+                csvDispCount: 2,
+                search: true,
+                searchText: '[+lang.tplname+]'
+            });
+
+            $('#tpls').SumoSelect({
+                placeholder: '[+lang.seltpls+]...',
+                captionFormat: '{0} [+lang.selected+]',
+                csvDispCount: 2,
+                outputAsCSV: true,
+                search: true,
+                searchText: '[+lang.tplname+]'
+            });
 
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
@@ -225,6 +242,19 @@
 
             <div class="clear"></div>
             <br>
+
+            <div class="parf">
+                [+lang.makeunpub+]<br>
+                <select id="tpls" name="unpub" multiple>
+
+                    [+tpl+]
+                    <option value="blank">(blank) [+lang.nontpl+]</option>
+                </select>
+            </div>
+
+            <div class="clear"></div>
+            <br>
+
             <label class="form-check-label">
                 &nbsp;&nbsp;<input type="checkbox" id="notadd" name="notadd" value="1" class="form-check-input" /> [+lang.noadd+]
             </label>

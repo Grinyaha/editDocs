@@ -461,6 +461,9 @@ class editDocs
             if ($tpl != 'file') $create['template'] = $tpl;
             if ($tpl == 'blank') $create['template'] = 0;
 
+            //если включено снятие с публикации то принудительно публикуем добавляемые
+            if(!empty($_POST['unpub'])) $create['published'] = 1;
+
 
             //проверка на ноль
             foreach ($create as $kv => $vally) {
@@ -477,6 +480,7 @@ class editDocs
                 if (!isset($_POST['test']) && empty($_POST['notadd'])) {
 
 
+
                     //prepare create
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
@@ -485,9 +489,7 @@ class editDocs
                     //search & replace
                     $create = $this->smallPrepare($create);
 
-
                     $this->doc->create($create);
-
                     $new = $this->doc->save(true, false); //SAVE!!!
 
                     //защита от дублей с одинаковыми названиями в загружаемой таблице
@@ -545,14 +547,16 @@ class editDocs
             } else if ($inbase > 0) {
                 if (!isset($_POST['test'])) {
 
-
+                    //prepare
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 1); // 1 - game mode
                     }
+
                     //search & replace
                     $create = $this->smallPrepare($create);
 
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
+
 
                     //если вкл.мультикатегории
                     if (array_key_exists('category', $create) && isset($_POST['multi'])) {
@@ -689,27 +693,27 @@ class editDocs
     protected function checkField($field)
     {
 
-        $this->param = array();
-        $this->res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
-        $this->temp = 0;
-        while ($this->row = $this->modx->db->getRow($this->res)) {
-            if ($this->row['name'] == $field) {
-                $this->temp = 1;
-                $this->param[0] = 'tv';
-                $this->param[1] = $field;
+        $param = array();
+        $res = $this->modx->db->query("SELECT name FROM " . $this->modx->getFullTableName('site_tmplvars'));
+        $temp = 0;
+        while ($row = $this->modx->db->getRow($res)) {
+            if ($row['name'] == $field) {
+                $temp = 1;
+                $param[0] = 'tv';
+                $param[1] = $field;
             }
         }
-        if ($this->temp == 0) {
-            $this->res = $this->modx->db->query("SHOW columns FROM " . $this->modx->getFullTableName('site_content') . " where Field = '" . $field . "'");
-            if ($this->modx->db->getRecordCount($this->res) > 0) {
-                $this->param[0] = 'nonetv';
-                $this->param[1] = $field;
+        if ($temp == 0) {
+            $res = $this->modx->db->query("SHOW columns FROM " . $this->modx->getFullTableName('site_content') . " where Field = '" . $field . "'");
+            if ($this->modx->db->getRecordCount($res) > 0) {
+                $param[0] = 'nonetv';
+                $param[1] = $field;
             } else {
-                $this->param[0] = 'notfound';
-                $this->param[1] = $field;
+                $param[0] = 'notfound';
+                $param[1] = $field;
             }
         }
-        return $this->param;
+        return $param;
 
     }
 
@@ -982,6 +986,16 @@ class editDocs
         }
 
         return $data;
+    }
+
+    public function unpublished ()
+    {
+        if( !empty($_POST['unpub']))
+        {
+            $this->modx->db->query('UPDATE '. $this->modx->getFullTableName("site_content") .' SET published=0 WHERE template IN('.$_POST['unpub'].') ');
+        }
+
+        $this->modx->logEvent(1,1,$_POST['unpub'],'test');
     }
 }
 

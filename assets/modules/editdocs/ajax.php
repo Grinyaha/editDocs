@@ -66,7 +66,11 @@ if (!empty($_POST['export'])) {
     //print_r($_FILES);
     echo $obj->export();
 }
-//if (!empty($_POST['export']) && $_POST['export']==1 && $_POST['stparent']=='') echo '<div class="alert alert-danger">Выберите ID родителя!</div>';
+
+//Снятие с публикации
+if (!empty($_POST['unpub']) && !isset($_POST['test'])) {
+    $obj->unpublished();
+}
 
 if (!empty($_POST['parent1']) && !empty($_POST['parent2'])) {
     echo $obj->massMove();

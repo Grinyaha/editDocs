@@ -24,6 +24,7 @@ $lang['pagination'] = 'Pagination';
 $lang['unpubl'] = 'Show unpublished and marked for deletion documents';
 $lang['for'] = 'for';
 $lang['selfields'] = 'Select fields';
+$lang['seltpls'] = 'Select templates';
 $lang['selected'] = 'Selected';
 $lang['fieldortv'] = 'Field`s name or TV';
 $lang['razrab'] = 'Developer';
@@ -90,6 +91,8 @@ $lang['replace_field'] = 'Field/TV for replace data';
 $lang['nonreplace'] = 'Without replacement';
 $lang['entry'] = 'Looking for entry';
 $lang['replace'] = 'Replace to';
+$lang['tplname'] = 'Name of template';
+$lang['makeunpub'] = 'Unpublish documents with templates before importing';
 
 
 
