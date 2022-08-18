@@ -417,7 +417,7 @@ class editDocs
                 if ($_POST['tpl'] != 'file') $ptmplh = '<td>template</td>';
             }
 
-            if(!empty($_POST['unpub'])) $unphd = '<td>template</td>';
+            if(!empty($_POST['unpub'])) $unphd = '<td>published</td>';
             else $unphd='';
 
 
