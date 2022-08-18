@@ -107,8 +107,10 @@
                             if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
                                 $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
 
-                                dada = $('form#pro:not([name="unpub"])').serialize();
-                                makeProgress(dada);
+                                dada2 = $('form#pro:not([name="unpub"])').serialize();
+                                dada2 = dada2.replace("unpub","xxx");
+                                //console.log(dada2);
+                                makeProgress(dada2);
                             } else {
                                 $("#result_progress").html("<b>[+lang.impord+] " + resp[0] + " [+lang.of+] " + resp[1] + ". [+lang.gotovo+]</b>");
                                 //подчищаем сессии
