@@ -144,6 +144,11 @@
                     success: function (result) {
                         console.log(result);
                         resp = result.split("|");
+                        if(resp[1]==0) {
+                            $('#result').html(resp[0]);
+                            return;
+                        }
+
                         if (parseInt(resp[0], 10) < parseInt(resp[1], 10)) {
                             $("#result_progress").html("<b>[+lang.expord+] " + resp[0] + " [+lang.of+] " + resp[1] + "</b>");
                             makeProgress(data);

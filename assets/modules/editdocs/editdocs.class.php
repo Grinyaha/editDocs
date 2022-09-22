@@ -282,7 +282,7 @@ class editDocs
 
             return $tab . $out . $endtab;
 
-        } else return '<div class="alert alert-danger">Выберите поля/TV для редактирования!</div>';
+        } else return '<div class="alert alert-danger">'.$this->lang['error_empty_fields'].'</div>';
     }
 
 
@@ -773,6 +773,7 @@ class editDocs
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         if (!empty($_POST['neopub'])) $neopubl = 1; else $neopubl = '';
 
+
         if (!empty($_POST['fieldz'])) {
 
             if (!empty($_POST['filters'])) $filters = $_POST['filters']; else $filters = '';
@@ -897,7 +898,8 @@ class editDocs
             fclose($file);
             fclose($file_temp);
 
-        }
+
+
         $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
         if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
             unset($_SESSION['export_start']);
@@ -914,6 +916,8 @@ class editDocs
         //if (file_exists($filename)) return $out;
         return $out;
         //else return 'Файла не существует!';
+        }
+        else return ('<div class="alert alert-danger">'.$this->lang['error_empty_fields'].'</div>|0');
 
     }
 
