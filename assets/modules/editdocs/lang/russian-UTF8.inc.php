@@ -93,7 +93,7 @@ $lang['entry'] = 'Ищем вхождение';
 $lang['replace'] = 'Заменяем на';
 $lang['tplname'] = 'Название шаблона';
 $lang['makeunpub'] = 'Снять с публикации перед импортом документы с шаблонами';
-$lang['error_empty_fields'] = 'Выберите поля/TV для редактиров';
+$lang['error_empty_fields'] = 'Не выбраны поля/TV';
 
 
 ?>

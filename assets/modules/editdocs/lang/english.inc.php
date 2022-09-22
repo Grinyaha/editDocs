@@ -93,7 +93,7 @@ $lang['entry'] = 'Looking for entry';
 $lang['replace'] = 'Replace to';
 $lang['tplname'] = 'Name of template';
 $lang['makeunpub'] = 'Unpublish documents with templates before importing';
-$lang['error_empty_fields'] = 'Select fields/TV for edit';
+$lang['error_empty_fields'] = 'No fields/TV selected';
 
 
 
