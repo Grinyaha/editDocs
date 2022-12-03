@@ -94,6 +94,7 @@ $lang['replace'] = 'Replace to';
 $lang['tplname'] = 'Name of template';
 $lang['makeunpub'] = 'Unpublish documents with templates before importing';
 $lang['error_empty_fields'] = 'No fields/TV selected';
+$lang['multitv'] = 'To import data into MultiTV, specify in the format: one column <b>myMultiTV:caption:0</b> other column <b>myMultiTV:caption:1</b> etc., where myMultiTV is the TV name, caption - caption (NOT name) of paramter, 0 - number of row. See more (Russian Lang.) <a href="https://editdocs.grishin.net/import-dokumentov#import-dannykh-dlya-multitv" target="_blank">документации</a>';
 
 
 

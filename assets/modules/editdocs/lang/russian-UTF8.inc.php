@@ -94,6 +94,7 @@ $lang['replace'] = 'Заменяем на';
 $lang['tplname'] = 'Название шаблона';
 $lang['makeunpub'] = 'Снять с публикации перед импортом документы с шаблонами';
 $lang['error_empty_fields'] = 'Не выбраны поля/TV';
+$lang['multitv'] = 'Для импорта данных в MultiTV указываем в формате: один столбец <b>myMultiTV:caption:0</b> другой столбец <b>myMultiTV:caption:1</b> и тд., где  myMultiTV - имя ТВ, caption - заголовок (НЕ имя) параметра, 0 - номер строки. Подробнее в <a href="https://editdocs.grishin.net/import-dokumentov#import-dannykh-dlya-multitv" target="_blank">документации</a>';
 
 
 ?>

@@ -27,8 +27,8 @@ class editDocs
 
         //language
         $lng = $modx->getConfig('manager_language');
-        if(file_exists(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php')) require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/'.$lng.'.inc.php');
-        else require_once(MODX_BASE_PATH.'assets/modules/editdocs/lang/russian-UTF8.inc.php');
+        if (file_exists(MODX_BASE_PATH . 'assets/modules/editdocs/lang/' . $lng . '.inc.php')) require_once(MODX_BASE_PATH . 'assets/modules/editdocs/lang/' . $lng . '.inc.php');
+        else require_once(MODX_BASE_PATH . 'assets/modules/editdocs/lang/russian-UTF8.inc.php');
 
         $_SESSION['ed_tv'] = $this->tvBase();
 
@@ -88,13 +88,14 @@ class editDocs
 
     }
 
-    protected function tvBase() {
+    protected function tvBase()
+    {
 
-        $query = $this->modx->db->query('SELECT type,name,elements FROM '.$this->modx->getFullTableName('site_tmplvars').'  ');
+        $query = $this->modx->db->query('SELECT type,name,elements FROM ' . $this->modx->getFullTableName('site_tmplvars') . '  ');
 
         $fields = [];
 
-        while($row = $this->modx->db->getRow($query)) {
+        while ($row = $this->modx->db->getRow($query)) {
 
             $fields[$row['name']][0] = $row['type'];
             $fields[$row['name']][1] = $row['elements'];
@@ -138,7 +139,6 @@ class editDocs
             if (isset($_POST['multed'])) $rowth .= '<td>category</td>';
             //for multiCategories
             if (isset($_POST['multed'])) $rowtd .= '<td><input name="category" class="tarea" type="text" value="[+category+]"></input></td>';
-
 
 
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
@@ -196,35 +196,38 @@ class editDocs
                     }
 
                     //renderTV
-                    foreach ( $data as $k => $v) {
+                    foreach ($data as $k => $v) {
 
-                        if($k=='id' || $k=='category') {}
-                        else {
-                            if(isset($_SESSION['ed_tv'][$k]) && !empty($_POST['rendertv']) ) {
+                        if ($k == 'id' || $k == 'category') {
+                        } else {
+                            if (isset($_SESSION['ed_tv'][$k]) && !empty($_POST['rendertv'])) {
 
                                 //SELECT && RADIO && LISTBOX
-                                if($_SESSION['ed_tv'][$k][0]=='dropdown' || $_SESSION['ed_tv'][$k][0]=='option' || $_SESSION['ed_tv'][$k][0]=='listbox') {
+                                if ($_SESSION['ed_tv'][$k][0] == 'dropdown' || $_SESSION['ed_tv'][$k][0] == 'option' || $_SESSION['ed_tv'][$k][0] == 'listbox') {
 
-                                    $tmp = explode('||',$_SESSION['ed_tv'][$k][1]);
+                                    $tmp = explode('||', $_SESSION['ed_tv'][$k][1]);
 
-                                    $rs1 = '<select name="'.$k.'" class="tarea sumosel">';
+                                    $rs1 = '<select name="' . $k . '" class="tarea sumosel">';
                                     $rs2 = '</select>';
                                     $rs = '<option value=""></option>';
 
-                                    foreach ( $tmp as $kk => $vv) {
-                                        $sel = explode('==', $vv);
-                                        if($sel[1]==$v) $selected = 'selected="selected"'; else $selected='';
-                                        $rs .= '<option value="'.$sel[1].'" '.$selected.'>'.$sel[0].'</option>';
+                                    foreach ($tmp as $kk => $vv) {
+                                        if (strpos($vv, '==') !== false) {
+                                            $sel = explode('==', $vv);
+                                            if ($sel[1] == $v) $selected = 'selected="selected"'; else $selected = '';
+                                            $rs .= '<option value="' . $sel[1] . '" ' . $selected . '>' . $sel[0] . '</option>';
+                                        } else {
+                                            if ($vv == $v) $selected = 'selected="selected"'; else $selected = '';
+                                            $rs .= '<option value="' . $vv . '" ' . $selected . '>' . $vv . '</option>';
+                                        }
 
                                     }
 
-                                    $data[$k] = '<td>'.$rs1.$rs.$rs2.'</td>';
-                                }
+                                    $data[$k] = '<td>' . $rs1 . $rs . $rs2 . '</td>';
+                                } //CHECKBOX && MULTI-SELECT
+                                else if ($_SESSION['ed_tv'][$k][0] == 'checkbox' || $_SESSION['ed_tv'][$k][0] == 'listbox-multiple') {
 
-                                //CHECKBOX && MULTI-SELECT
-                                else if($_SESSION['ed_tv'][$k][0]=='checkbox' || $_SESSION['ed_tv'][$k][0]=='listbox-multiple') {
-
-                                    $tmp = explode('||',$_SESSION['ed_tv'][$k][1]);
+                                    $tmp = explode('||', $_SESSION['ed_tv'][$k][1]);
 
                                     //смотрим что в значениях
                                     $curch = [];
@@ -234,31 +237,34 @@ class editDocs
                                         $curch[] = $vch;
                                     }
 
-                                    $rs1 = '<select name="'.$k.'" kk="'.$k.'" class="tarea sumochb" multiple>';
+                                    $rs1 = '<select name="' . $k . '" kk="' . $k . '" class="tarea sumochb" multiple>';
                                     $rs2 = '</select>';
                                     $rs = '';
 
 
-                                    foreach ( $tmp as $kk => $vv) {
-                                        $sel = explode('==', $vv);
-                                        if(array_search($sel[1],$curch)!==false) $selected = 'selected="selected"'; else $selected='';
-                                        //$ch .= '<input type="checkbox" value="'.$sel[1].'" '.$selected.' name="'.$k.'">'.$sel[0].'<br>';
-                                        $rs .= '<option value="'.$sel[1].'" '.$selected.'>'.$sel[0].'</option>';
+                                    foreach ($tmp as $kk => $vv) {
+                                        if (strpos($vv, '==') !== false) {
+                                            $sel = explode('==', $vv);
+                                            if (array_search($sel[1], $curch) !== false) $selected = 'selected="selected"'; else $selected = '';
+                                            //$ch .= '<input type="checkbox" value="'.$sel[1].'" '.$selected.' name="'.$k.'">'.$sel[0].'<br>';
+                                            $rs .= '<option value="' . $sel[1] . '" ' . $selected . '>' . $sel[0] . '</option>';
+                                        }
+                                        else {
+                                            if (array_search($vv, $curch) !== false) $selected = 'selected="selected"'; else $selected = '';
+                                            $rs .= '<option value="' . $vv . '" ' . $selected . '>' . $vv . '</option>';
+                                        }
 
                                     }
 
-                                    $data[$k] = '<td>'.$rs1.$rs.$rs2.'</td>';
-                                }
-
-                                else {
+                                    $data[$k] = '<td>' . $rs1 . $rs . $rs2 . '</td>';
+                                } else {
 
                                     $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
 
                                 }
 
 
-                            }
-                            else $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
+                            } else $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
                         }
                     }
 
@@ -282,7 +288,7 @@ class editDocs
 
             return $tab . $out . $endtab;
 
-        } else return '<div class="alert alert-danger">'.$this->lang['error_empty_fields'].'</div>';
+        } else return '<div class="alert alert-danger">' . $this->lang['error_empty_fields'] . '</div>';
     }
 
 
@@ -300,7 +306,6 @@ class editDocs
             $ret[] = $fileName;
             $pathinfo = pathinfo($output_dir . $fileName);
         }
-
 
 
         if (isset($pathinfo['extension']) && $pathinfo['extension'] == 'csv') {
@@ -356,11 +361,11 @@ class editDocs
 
         $columns = '';
         if (isset($this->params['columns'])) {
-            $columns = '#@'.$this->params['columns'];
+            $columns = '#@' . $this->params['columns'];
         }
 
 
-        echo $_SESSION['import_start'] . '#@'.$this->lang['totalrows'].' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $data_table. '#@'.implode('||', $_SESSION['header_table']).$columns;
+        echo $_SESSION['import_start'] . '#@' . $this->lang['totalrows'] . ' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $data_table . '#@' . implode('||', $_SESSION['header_table']) . $columns;
 
 
     }
@@ -372,11 +377,11 @@ class editDocs
         //     return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data'], $this->params['max_rows']);
         // }
         $this->uni = isset($_POST['checktv']) && $_POST['checktv'] != '0' ? $_POST['checktv'] : 'id';
-        if(isset($_POST['checktv2']) && $_POST['checktv2'] != '') $this->uni2 = $_POST['checktv2'];
+        if (isset($_POST['checktv2']) && $_POST['checktv2'] != '') $this->uni2 = $_POST['checktv2'];
 
         if ($_SESSION['data']) {
             return $this->importReady($this->newMassif($_SESSION['data'])); //$this->table($_SESSION['data'], $this->params['max_rows'])
-        } else return '<div class="alert alert-danger">'.$this->lang['sessdead'].'</div>';
+        } else return '<div class="alert alert-danger">' . $this->lang['sessdead'] . '</div>';
     }
 
 
@@ -404,10 +409,12 @@ class editDocs
         if ($_SESSION['header_table']) {
             $theader = '';
 
+            //переделываем шапку таблицы для MultiTV
+            $_SESSION['header_table'] = $this->reHeader($_SESSION['header_table']);
 
             foreach ($_SESSION['header_table'] as $valt) {
 
-                if(!empty($this->uni2) && $valt==$this->uni2) $valt = $this->uni; //меняем заголовок в рендерной таблице по полю по которому сравниваемся
+                if (!empty($this->uni2) && $valt == $this->uni2) $valt = $this->uni; //меняем заголовок в рендерной таблице по полю по которому сравниваемся
 
                 $theader .= '<td>' . $valt . '</td>';
             }
@@ -421,14 +428,14 @@ class editDocs
                 if ($_POST['tpl'] != 'file') $ptmplh = '<td>template</td>';
             }
 
-            if(!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $unphd = '<td>published</td>';
-            else $unphd='';
+            if (!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $unphd = '<td>published</td>';
+            else $unphd = '';
 
 
         }
 
 
-        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . $unphd. '</tr>';
+        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . $unphd . '</tr>';
         $tabe = '</table>';
 
         $tr = '';
@@ -469,7 +476,7 @@ class editDocs
             if ($tpl == 'blank') $create['template'] = 0;
 
             //если включено снятие с публикации то принудительно публикуем добавляемые
-            if(!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $create['published'] = 1;
+            if (!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $create['published'] = 1;
 
 
             //проверка на ноль
@@ -487,7 +494,6 @@ class editDocs
                 if (!isset($_POST['test']) && empty($_POST['notadd'])) {
 
 
-
                     //prepare create
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
@@ -495,6 +501,9 @@ class editDocs
 
                     //search & replace
                     $create = $this->smallPrepare($create);
+
+                    //MultiTv
+                    $create = $this->multiTv($create);
 
                     $this->doc->create($create);
                     $new = $this->doc->save(true, false); //SAVE!!!
@@ -535,6 +544,9 @@ class editDocs
                     //search & replace
                     $create = $this->smallPrepare($create);
 
+                    //MultiTv
+                    $create = $this->multiTv($create);
+
                 }
 
                 if (!empty($_POST['notadd'])) {
@@ -561,6 +573,9 @@ class editDocs
 
                     //search & replace
                     $create = $this->smallPrepare($create);
+
+                    //MultiTv
+                    $create = $this->multiTv($create);
 
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
 
@@ -590,6 +605,9 @@ class editDocs
                     }
                     //search & replace
                     $create = $this->smallPrepare($create);
+
+                    //MultiTv
+                    $create = $this->multiTv($create);
                 }
 
 
@@ -607,7 +625,7 @@ class editDocs
         }
         $_SESSION['tabrows'] .= $tr;
         //$fulltab = $tabh.$tr.$tabe;
-        $fortab = '<span class="td_add">&nbsp;</span>  '.$this->lang['added'].' &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> '.$this->lang['stopadd'].'&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> '.$this->lang['edited'].'<br><br>';
+        $fortab = '<span class="td_add">&nbsp;</span>  ' . $this->lang['added'] . ' &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> ' . $this->lang['stopadd'] . '&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> ' . $this->lang['edited'] . '<br><br>';
 
         $_SESSION['import_i'] += $i;
         $_SESSION['import_j'] += $j;
@@ -615,14 +633,14 @@ class editDocs
         //тестовый режим
         if (isset($_POST['test'])) {
             //$this->modx->logEvent(1,1,$_SESSION['import_start'],'проверка заголовка таблицы '.$_SESSION['import_start']);
-            $_SESSION['log'] = '<br><div class="alert alert-danger">'.$this->lang['nowtest'].'</div>';
+            $_SESSION['log'] = '<br><div class="alert alert-danger">' . $this->lang['nowtest'] . '</div>';
 
             return ($_SESSION['import_start'] - $this->start_line) . '#@' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $_SESSION['log'] . $fortab . $tabh . $_SESSION['tabrows'] . $tabe;
         }
 
         //боевой режим
         if (!isset($_POST['test'])) {
-            $_SESSION['log'] = '<br><b>'.$this->lang['added'].' - ' . $_SESSION['import_i'] . ', '.$this->lang['edited'].' - ' . $_SESSION['import_j'] . '</b> <hr>';
+            $_SESSION['log'] = '<br><b>' . $this->lang['added'] . ' - ' . $_SESSION['import_i'] . ', ' . $this->lang['edited'] . ' - ' . $_SESSION['import_j'] . '</b> <hr>';
             //$fileobr = '<div class="alert alert-warning">Файл обработан. Для дальнейшей работы необходимо загрузить файл заново.</div>';
 
         }
@@ -637,7 +655,7 @@ class editDocs
 
 
         $j = 0;
-        $newkeys= [];
+        $newkeys = [];
         $sheetDataNew = array();
 
         foreach ($data[1] as $zna) {
@@ -651,7 +669,7 @@ class editDocs
                 foreach ($val as $key => $value) {
                     $z = $newkeys[$i];
 
-                    if(!empty($this->uni2) && $z == $this->uni2) $z = $this->uni;
+                    if (!empty($this->uni2) && $z == $this->uni2) $z = $this->uni;
                     $this->dn[$z] = $value;
 
                     $i++;
@@ -659,7 +677,6 @@ class editDocs
                 $sheetDataNew[$k] = $this->dn;
             }
         }
-
 
 
         //print_r($sheetDataNew);
@@ -681,7 +698,7 @@ class editDocs
             $limit_msg = '';
             $i++;
             if ($max && (int)$max + 1 < $i) {
-                $limit_msg = '<br><div style="color: red">'.$this->lang['limit_msg'].'</div>';
+                $limit_msg = '<br><div style="color: red">' . $this->lang['limit_msg'] . '</div>';
                 break;
             }
 
@@ -694,7 +711,7 @@ class editDocs
             $out .= '<tr>' . $row . '</tr>';
 
         }
-        return $header . $out . $footer. $limit_msg;
+        return $header . $out . $footer . $limit_msg;
     }
 
     protected function checkField($field)
@@ -785,7 +802,7 @@ class editDocs
                 $json = $this->modx->runSnippet('DocLister', array(
                     'returnDLObject' => 1,
                     'idType' => 'parents',
-                    'selectFields'=>'id',
+                    'selectFields' => 'id',
                     'depth' => $depth,
                     'parents' => $parent,
                     'makeUrl' => 0,
@@ -801,10 +818,10 @@ class editDocs
                 $_SESSION['export_total'] = $total;
                 $_SESSION['export_start'] = 0;
 
-                if (file_exists($filename) ) {
+                if (file_exists($filename)) {
                     unlink($filename);
                 }
-                if (file_exists($filename_temp) ) {
+                if (file_exists($filename_temp)) {
                     unlink($filename_temp);
                 }
             }
@@ -832,7 +849,7 @@ class editDocs
             $ph = substr($ph, 0, strlen($ph) - 1);
             $head = substr($head, 0, strlen($head) - 1) . "\r\n";
 
-            if(!empty($_POST['export_mc'])) $header[] = 'category'; //Добавляем в заголовок category от MultiCategories
+            if (!empty($_POST['export_mc'])) $header[] = 'category'; //Добавляем в заголовок category от MultiCategories
 
             if (!empty($_POST['dm'])) $dm = $_POST['dm'];
             else $dm = ';'; //разделитель
@@ -865,7 +882,7 @@ class editDocs
                     //         $data[$v] = str_replace('.', ',', $data[$v]);
                     //     }
                     // }
-                    if(!empty($_POST['export_mc'])) $data['category'] = $this->multicat($data['id']);
+                    if (!empty($_POST['export_mc'])) $data['category'] = $this->multicat($data['id']);
 
 
                     if ($this->issetPrepare) {
@@ -899,25 +916,23 @@ class editDocs
             fclose($file_temp);
 
 
+            $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
+            if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
+                unset($_SESSION['export_start']);
+                unset($_SESSION['export_total']);
 
-        $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
-        if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
-            unset($_SESSION['export_start']);
-            unset($_SESSION['export_total']);
+                ///convert to XLS
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                $reader->setDelimiter(';');
 
-            ///convert to XLS
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-            $reader->setDelimiter(';');
-
-            $csvFile = $reader->load($filename_temp);
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($csvFile, "Xlsx");
-            $writer->save(MODX_BASE_PATH.'assets/modules/editdocs/uploads/export.xlsx');
-        }
-        //if (file_exists($filename)) return $out;
-        return $out;
-        //else return 'Файла не существует!';
-        }
-        else return ('<div class="alert alert-danger">'.$this->lang['error_empty_fields'].'</div>|0');
+                $csvFile = $reader->load($filename_temp);
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($csvFile, "Xlsx");
+                $writer->save(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export.xlsx');
+            }
+            //if (file_exists($filename)) return $out;
+            return $out;
+            //else return 'Файла не существует!';
+        } else return ('<div class="alert alert-danger">' . $this->lang['error_empty_fields'] . '</div>|0');
 
     }
 
@@ -940,8 +955,8 @@ class editDocs
         if ($res) {
             $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 1 WHERE  id = " . $_POST['parent2'] . "");
             $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 0 WHERE  id = " . $_POST['parent1'] . "");
-            $out = '<div class="alert alert-success">'.$this->lang['ok_move'].'</b></div>';
-        } else $out = '<div class="alert alert-danger">'.$this->lang['error_tree'].'</div>';
+            $out = '<div class="alert alert-success">' . $this->lang['ok_move'] . '</b></div>';
+        } else $out = '<div class="alert alert-danger">' . $this->lang['error_tree'] . '</div>';
 
 
         $this->clearCache();
@@ -977,32 +992,102 @@ class editDocs
 
     }
 
-    protected function multicat($id) {
+    protected function multicat($id)
+    {
 
-        $query = $this->modx->db->query("SELECT category FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=".$id);
-        $out=[];
-        while($row = $this->modx->db->getRow($query)) {
-            if( !empty($row['category'])) $out[] = $row['category'];
+        $query = $this->modx->db->query("SELECT category FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $id);
+        $out = [];
+        while ($row = $this->modx->db->getRow($query)) {
+            if (!empty($row['category'])) $out[] = $row['category'];
         }
 
         $outx = implode(',', $out);
         return $outx;
     }
 
-    protected function smallPrepare($data) {
+    protected function smallPrepare($data)
+    {
 
         //search & replace
-        if(!empty($_POST['replace']) && !empty($_POST['needle'])) {
+        if (!empty($_POST['replace']) && !empty($_POST['needle'])) {
             $data[$_POST['replace']] = str_replace($_POST['needle'], $_POST['replacement'], $data[$_POST['replace']]);
         }
 
         return $data;
     }
 
-    public function unpublished ()
+    protected function multiTv($data)
     {
-        $this->modx->db->query('UPDATE '. $this->modx->getFullTableName("site_content") .' SET published=0 WHERE template IN('.$_POST['unpub'].') ');
-        //$this->modx->logEvent(1,1,$_POST['unpub'],'test');
+
+        $arr = []; //массив строки из экселя
+        $retv = '';
+        foreach ($data as $key => $val) {
+
+            if (strpos($key, ':') !== false) {
+
+                $exp = explode(':', $key);
+                $retv = $exp[0];
+                $arr[$exp[2]][$exp[1]] = $val;
+                unset($data[$key]);
+
+            }
+        }
+        if ($retv != '') {
+            //получаем массив из настроек MultiTV
+            include_once(MODX_BASE_PATH . 'assets/tvs/multitv/configs/' . $retv . '.config.inc.php');
+
+            $new_set = [];
+            foreach ($arr as $kj => $vj) {
+                foreach ($vj as $index => $item) {
+                    foreach ($settings['fields'] as $ko => $vo) {
+                        if ($vo['caption'] == $index) {
+                            $arr[$kj][$ko] = $item;
+                            if ($vo['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
+                            if ($index != $ko) unset($arr[$kj][$vo['caption']]);
+                        }
+
+
+                    }
+                }
+            }
+            /*echo '<pre>';
+            print_r($arr);
+            echo '</pre>';*/
+
+            $newarr['fieldValue'] = $arr;
+            $data[$retv] = json_encode($newarr, JSON_UNESCAPED_UNICODE);
+        }
+
+        return $data;
+    }
+
+    protected function reHeader($data)
+    {
+
+        $retv = '';
+        foreach ($data as $key => $val) {
+
+            if (strpos($val, ':') !== false) {
+
+                $exp = explode(':', $val);
+                $retv = $exp[0];
+                unset($data[$key]);
+
+            }
+        }
+        if ($retv != '') $data[] = $retv;
+
+        /*echo '<pre>';
+        print_r($data);
+        echo '</pre>';*/
+
+        return $data;
+    }
+
+
+    public function unpublished()
+    {
+        $this->modx->db->query('UPDATE ' . $this->modx->getFullTableName("site_content") . ' SET published=0 WHERE template IN(' . $_POST['unpub'] . ') ');
     }
 }
 

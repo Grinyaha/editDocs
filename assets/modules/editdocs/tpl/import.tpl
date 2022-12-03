@@ -159,15 +159,28 @@
     </script>
 
     <div class="alert alert-success">
-        <p> <b>[+lang.atention+]</b><br /> </p>
+        <p> <b>⚡[+lang.atention+]</b><br /> </p>
 
-        [+lang.needtitle+] <b>pagetitle</b><br><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md">
+                    <ul >
+                        <li>👉 [+lang.needtitle+] <b>pagetitle</b></li>
+                        <li>👉 [+lang.foradd+]</li>
+                        <li>👉 [+lang.impcsv+]</li>
+                    </ul>
+                </div>
+                <div class="col-md">
+                    <ul >
 
-        [+lang.foradd+]<br><br>
+                        <li>👉 [+lang.idparent+]</li>
+                        <li>👉 [+lang.multitv+]</li>
+                </div>
+            </div>
+        </div>
 
-        [+lang.impcsv+]<br><br>
 
-        [+lang.idparent+]
+
 
 
 
