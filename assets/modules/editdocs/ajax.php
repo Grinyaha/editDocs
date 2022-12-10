@@ -30,7 +30,7 @@ if (!isset($_SESSION['mgrValidated'])) {
 }
 /////
 
-require_once(MODX_BASE_PATH."assets/modules/editdocs/editdocs.class.php");
+require_once(MODX_BASE_PATH . "assets/modules/editdocs/editdocs.class.php");
 
 $obj = new editDocs($modx);
 
@@ -70,7 +70,7 @@ if (!empty($_POST['export'])) {
 
 if (!empty($_POST['parent1']) && !empty($_POST['parent2'])) {
     echo $obj->massMove();
-} else if (isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">'.$obj->lang['notall'].'</div>';
+} else if (isset($_POST['parent1']) || isset($_POST['parent2'])) echo '<div class="alert alert-danger">' . $obj->lang['notall'] . '</div>';
 
 if (!empty($_POST['cls']) && $_POST['cls'] == 1) {
     //удаляем сессии после обработки
@@ -81,7 +81,22 @@ if (!empty($_POST['cls']) && $_POST['cls'] == 1) {
     return;
 }
 
+//save config
+if (!empty($_POST['save_config'])) {
 
+    $obj->saveConfig($_POST);
+}
+
+//ajax select render config files
+if (!empty($_POST['getlist_files'])) {
+
+    echo $obj->loadListFiles($_POST['getlist_files']);
+}
+
+//load config files
+if (!empty($_POST['cfg_file'])) {
+    echo $obj->loadCfgFile($_POST['cfg_file']);
+}
 
 
 ?>

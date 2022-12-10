@@ -18,8 +18,8 @@ $lang['deffields'] = 'Default fields';
 $lang['tvoptions'] = 'TV - Options';
 $lang['filterdef'] = 'Filtering by default fields';
 $lang['docfilters'] = 'Documentation for filters of';
-$lang['dltext'] = 'Filtration for TV-options according to the rules of the component DocLister, for examp.';
-$lang['sqltext'] = 'Filtering according to the rules of SQL queries, for examp.';
+$lang['dltext'] = 'Filtration for TV-options according to the rules of the component DocLister';
+$lang['sqltext'] = 'Filtering according to the rules of SQL queries';
 $lang['pagination'] = 'Pagination';
 $lang['unpubl'] = 'Show unpublished and marked for deletion documents';
 $lang['for'] = 'for';
@@ -94,8 +94,27 @@ $lang['replace'] = 'Replace to';
 $lang['tplname'] = 'Name of template';
 $lang['makeunpub'] = 'Unpublish documents with templates before importing';
 $lang['error_empty_fields'] = 'No fields/TV selected';
-$lang['multitv'] = 'To import data into MultiTV, specify in the format: one column <b>myMultiTV:caption:0</b> other column <b>myMultiTV:caption:1</b> etc., where myMultiTV is the TV name, caption - caption (NOT name) of paramter, 0 - number of row. See more (Russian Lang.) <a href="https://editdocs.grishin.net/import-dokumentov#import-dannykh-dlya-multitv" target="_blank">документации</a>';
-
+$lang['multitv'] = 'To import data into MultiTV, specify in the format: one column <b>myMultiTV:caption:0</b> other column <b>myMultiTV:caption:1</b> etc., where myMultiTV is the TV name, caption - caption (NOT name) of paramter, 0 - number of row. <a href="https://editdocs.grishin.net/import-dokumentov#import-dannykh-dlya-multitv" target="_blank">See more (Russian Lang.) </a>';
+$lang['req_params'] = 'Required options';
+$lang['extra_params'] = 'Extra options';
+$lang['common_params'] = 'Common options';
+$lang['sorting_zag'] = 'Sorting';
+$lang['filtration_zag'] = 'Filtration';
+$lang['configs_zag'] = 'Configs';
+$lang['load_config'] = 'Load config';
+$lang['load_btn'] = 'Load';
+$lang['save_config'] = 'Save config';
+$lang['save_btn'] = 'Save';
+$lang['config_name'] = 'Config`s name';
+$lang['cache_cleared'] = 'Cache cleared';
+$lang['config_saved'] = 'Config saved';
+$lang['config_loaded'] = 'Config loaded';
+$lang['data_replace'] = 'Data replacement in progress';
+$lang['recon_zag'] = 'Fields for reconciliation';
+$lang['before_import'] = 'Options before import';
+$lang['mc_zag'] = 'MultiCategories';
+$lang['if_parent'] = 'If the <b>parent</b> field is not specified in the table file, this value will be used';
+$lang['if_template'] = 'If the <b>template</b> field is not specified in the table file, this value will be used';
 
 
 ?>

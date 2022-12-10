@@ -248,8 +248,7 @@ class editDocs
                                             if (array_search($sel[1], $curch) !== false) $selected = 'selected="selected"'; else $selected = '';
                                             //$ch .= '<input type="checkbox" value="'.$sel[1].'" '.$selected.' name="'.$k.'">'.$sel[0].'<br>';
                                             $rs .= '<option value="' . $sel[1] . '" ' . $selected . '>' . $sel[0] . '</option>';
-                                        }
-                                        else {
+                                        } else {
                                             if (array_search($vv, $curch) !== false) $selected = 'selected="selected"'; else $selected = '';
                                             $rs .= '<option value="' . $vv . '" ' . $selected . '>' . $vv . '</option>';
                                         }
@@ -1088,6 +1087,46 @@ class editDocs
     public function unpublished()
     {
         $this->modx->db->query('UPDATE ' . $this->modx->getFullTableName("site_content") . ' SET published=0 WHERE template IN(' . $_POST['unpub'] . ') ');
+    }
+
+    public function saveConfig($params)
+    {
+
+        $data = "<?php //".$params['save_config']." \r\n  return " . var_export($params, true). " ?>";
+        $newname = $this->modx->stripAlias($params['save_config']);
+        //$newname = htmlspecialchars($newname);
+        //$newname = preg_replace($pattern, $replacement, $newname);
+        file_put_contents(MODX_BASE_PATH . "assets/modules/editdocs/config/".$params['folder']."/" . $newname . ".php", $data);
+
+        return json_encode($params, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function loadListFiles($folder)
+    {
+        /*$files = scandir(MODX_BASE_PATH . "assets/modules/editdocs/config/".$floder);
+        foreach ($files as $key=>$val) {
+            if($val=='.' || $val=='..') unset($files[$key]);
+            $files[$key] = str_replace('.php', '', $files[$key]);
+        }
+        sort($files);*/
+        $arr = [];
+        $i=0;
+        foreach (glob(MODX_BASE_PATH . "assets/modules/editdocs/config/".$folder."/*.php") as $filename) {
+            $line = fgets(fopen($filename, 'r'));
+            $arr[$i]['title'] = str_replace('<?php //','',$line);
+            $arr[$i]['title'] = str_replace(" \r\n",'',$arr[$i]['title']);
+            $arr[$i]['filename'] = str_replace(MODX_BASE_PATH . "assets/modules/editdocs/config/".$folder."/", "",$filename);
+
+            $i++;
+        }
+        sort($arr);
+        return json_encode($arr, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function loadCfgFile($name)
+    {
+        $arr = include_once (MODX_BASE_PATH . "assets/modules/editdocs/config/".$name);
+        return json_encode($arr, JSON_UNESCAPED_UNICODE);
     }
 }
 

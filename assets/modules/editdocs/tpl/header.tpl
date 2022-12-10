@@ -5,11 +5,13 @@
     <link rel="stylesheet" type="text/css" href="[+manager_path+]/media/style/[+manager_theme+]/style.css" />
     <link type="text/css" rel="stylesheet" href="[+base_url+]assets/modules/editdocs/css/style.css?ad4" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-
-    <script type="text/javascript" src="[+manager_path+]/media/script/bootstrap/js/bootstrap.min.js"></script>
+    <!--script type="text/javascript" src="[+manager_path+]/media/script/bootstrap/js/bootstrap.min.js"></script-->
     <script type="text/javascript" src="../assets/modules/editdocs/libs/sumoselect/jquery.sumoselect.min.js"></script>
     <link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/sumoselect/sumoselect.css?v=1" />
+
+    <script type="text/javascript" src="../assets/modules/editdocs/libs/uikit/js/uikit.min.js"></script>
+    <script type="text/javascript" src="../assets/modules/editdocs/libs/uikit/js/uikit-icons.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="../assets/modules/editdocs/libs/uikit/css/uikit.min.css" />
 
     <script type="text/javascript" src="../assets/modules/editdocs/libs/dropzone/dropzone.min.js"></script>
     <link href="../assets/modules/editdocs/libs/dropzone/dropzone.css" rel="stylesheet">
@@ -23,7 +25,9 @@
 </head>
 
 <body>
-    <h1>[+session.itemname+] v1.4.0</h1>
+<div class="uk-margin-left uk-margin-top">
+    <h3>[+session.itemname+] v2.0</h3>
+</div>
 
 
     <div class="sectionBody">

@@ -34,14 +34,16 @@ body {
     float: right;
     min-width: 200px;
 }
+
 .warning {
     position: fixed;
     top: 10px;
     right: 100px;
     z-index: 200;
-    /*padding: 10px;
-    background: #E3FCF6;
-    box-shadow: 0 0 10px 1px #999;*/
+}
+
+.warning2 {
+
 }
 
 .error {
@@ -114,7 +116,7 @@ h2.tab a {
     /*border: 1px solid red;*/
 }
 
-.sending {
+.sending #pro {
     display: none;
 }
 
@@ -164,13 +166,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
 }
 
-/* .result {
-    overflow-y: scroll;
-    height: 500px;
-} */
-
-
-
+.readme {
+    font-size: 1.5rem;
+}
 
 
 

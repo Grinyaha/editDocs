@@ -18,8 +18,8 @@ $lang['deffields'] = 'Дефолтные поля';
 $lang['tvoptions'] = 'TV - Параметры';
 $lang['filterdef'] = 'Фильтрация по основным полям';
 $lang['docfilters'] = 'Документация по фильтрам';
-$lang['dltext'] = 'Фильтрация по ТВ-параметрам согласно правилам компонента DocLister, например';
-$lang['sqltext'] = 'Фильтрация согласно правилам SQL запросов, например';
+$lang['dltext'] = 'Фильтрация по ТВ-параметрам согласно правилам компонента DocLister';
+$lang['sqltext'] = 'Фильтрация согласно правилам SQL запросов';
 $lang['pagination'] = 'Пагинация';
 $lang['unpubl'] = 'Показать неопубликованные и помеченные на удаление';
 $lang['for'] = 'для';
@@ -95,6 +95,44 @@ $lang['tplname'] = 'Название шаблона';
 $lang['makeunpub'] = 'Снять с публикации перед импортом документы с шаблонами';
 $lang['error_empty_fields'] = 'Не выбраны поля/TV';
 $lang['multitv'] = 'Для импорта данных в MultiTV указываем в формате: один столбец <b>myMultiTV:caption:0</b> другой столбец <b>myMultiTV:caption:1</b> и тд., где  myMultiTV - имя ТВ, caption - заголовок (НЕ имя) параметра, 0 - номер строки. Подробнее в <a href="https://editdocs.grishin.net/import-dokumentov#import-dannykh-dlya-multitv" target="_blank">документации</a>';
+$lang['req_params'] = 'Обязательные параметры';
+$lang['extra_params'] = 'Дополнительные параметры';
+$lang['common_params'] = 'Общие параметры';
+$lang['sorting_zag'] = 'Сортировка';
+$lang['filtration_zag'] = 'Фильтрация';
+$lang['configs_zag'] = 'Конфиги';
+$lang['load_config'] = 'Загрузить конфиг';
+$lang['load_btn'] = 'Загрузить';
+$lang['save_config'] = 'Сохранить конфиг';
+$lang['save_btn'] = 'Сохранить';
+$lang['config_name'] = 'Имя конфига';
+$lang['cache_cleared'] = 'Кэш очищен';
+$lang['config_saved'] = 'Конфиг сохранён';
+$lang['config_loaded'] = 'Конфиг загружен';
+$lang['data_replace'] = 'Замена данных на лету';
+$lang['recon_zag'] = 'Поля для сверки';
+$lang['before_import'] = 'Опции до начала импорта';
+$lang['mc_zag'] = 'Мультикатегории';
+$lang['if_parent'] = 'Если в файле-таблице не указано поле <b>parent</b>, будет использованное данное значение';
+$lang['if_template'] = 'Если в файле-таблице не указано поле <b>template</b>, будет использованное данное значение';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ?>
