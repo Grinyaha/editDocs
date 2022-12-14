@@ -3,7 +3,9 @@
     <script>
         $(document).ready(function () {
 
-            $('#config').SumoSelect();
+            $('#config').SumoSelect({
+                placeholder: '[+lang.selconfig+]...',
+            });
 
             $('#checktv, #replace').SumoSelect({
                 placeholder: '[+lang.selfields+]...',
@@ -50,7 +52,8 @@
                         $('.sending #pro').show(0);
                         $('.sending .example').hide(0);
 
-                        //console.log(responseText[4]);
+                        //перематываем до начала параметров
+                        UIkit.scroll('body').scrollTo('#pro');
 
                         //подгружаем список файлов для конфигов
                         loadOptionsCfg();
@@ -69,7 +72,7 @@
 
 
                         $('#sravxls').SumoSelect({
-                            placeholder: 'select fields',
+                            placeholder: '[+lang.selfields+]...',
                             search: true,
                             searchText: '[+lang.fieldxls+]'
                         });
@@ -275,8 +278,7 @@
 
     <!-- HTML -->
 
-    <a class="readme" href="#modal-readme" uk-toggle><span uk-icon="icon: info; ratio: 1.1"></span> Readme!</a>
-
+    <a class="btn btn-info" href="#modal-readme" uk-toggle><span uk-icon="icon: info; ratio: 1"></span> [+lang.help+]</a>
     <div id="modal-readme" class="uk-flex-top" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="width: 1200px">
 
@@ -309,7 +311,7 @@
     </div>
 
 
-    <div id="fileuploader" class="dropzone"></div>
+    <div id="fileuploader" class="dropzone uk-margin-small-top"></div>
 
     <div class="sending uk-margin-top">
         <div class="example">
@@ -425,7 +427,7 @@
                             </select>
                         </div>
                     </div>
-                    <label>
+                    <label style="color: #c00">
                         &nbsp;&nbsp;<input type="checkbox" id="test" name="test" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.testmode+]
                     </label>

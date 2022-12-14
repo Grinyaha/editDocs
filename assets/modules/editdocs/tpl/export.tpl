@@ -166,7 +166,9 @@
                 selectAll: true,
                 locale: ['OK', 'Cancel', '[+lang.select_all+]']
             });
-            $('#ed-tree,#config').SumoSelect();
+            $('#ed-tree,#config').SumoSelect({
+                placeholder: '[+lang.selconfig+]...',
+            });
             loadOptionsCfg();
 
 

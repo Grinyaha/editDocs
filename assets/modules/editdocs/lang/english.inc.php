@@ -51,7 +51,7 @@ $lang['nonchecking'] = 'without checking';
 $lang['startimport'] = 'START IMPORT';
 $lang['idresurs'] = 'document';
 $lang['noadd'] = 'Do not add IF NO MATCH found!';
-$lang['testmode'] = 'Test mode (without add/update)';
+$lang['testmode'] = 'Test mode ON (without add/update)';
 $lang['impformc'] = 'Import with MultiCategories';
 $lang['clearcache'] = 'Clear cache';
 $lang['errorf'] = 'ERROR! Check filtration!';
@@ -115,6 +115,7 @@ $lang['before_import'] = 'Options before import';
 $lang['mc_zag'] = 'MultiCategories';
 $lang['if_parent'] = 'If the <b>parent</b> field is not specified in the table file, this value will be used';
 $lang['if_template'] = 'If the <b>template</b> field is not specified in the table file, this value will be used';
-
+$lang['selconfig'] = 'Select file';
+$lang['help'] = 'Help';
 
 ?>

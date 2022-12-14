@@ -187,11 +187,6 @@
             </button>
         </div>
 
-        <div>
-
-
-        </div>
-
     </form>
 
     <!-- alert edit -->
@@ -218,7 +213,9 @@
                 locale: ['OK', 'Cancel', '[+lang.select_all+]']
             });
 
-            $('#order,#orderas,#ed-tree,#config').SumoSelect();
+            $('#order,#orderas,#ed-tree,#config').SumoSelect({
+                placeholder: '[+lang.selconfig+]...',
+            });
             loadOptionsCfg();
 
 
@@ -244,6 +241,9 @@
                             captionFormat: '{0} [+lang.selected+]',
                             csvDispCount: 2
                         });
+
+                        //перематываем до начала параметров
+                        UIkit.scroll('body').scrollTo('#brsub');
 
 
                     },
