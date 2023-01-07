@@ -117,5 +117,6 @@ $lang['if_parent'] = 'If the <b>parent</b> field is not specified in the table f
 $lang['if_template'] = 'If the <b>template</b> field is not specified in the table file, this value will be used';
 $lang['selconfig'] = 'Select file';
 $lang['help'] = 'Help';
+$lang['separ'] = 'Separator';
 
 ?>

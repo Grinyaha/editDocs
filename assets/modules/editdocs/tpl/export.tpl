@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="uk-margin-top">
-                    Разделитель:<br>
+                    [+lang.separ+]:<br>
                     <input type="text" name="dm" id="dm" class="inp" style="width: 40px" maxlength="1" value=";"/>
                 </div>
                 <hr>
@@ -63,7 +63,7 @@
 
             </div>
             <div column="2">
-                <div><h3>[+lang.sorting_zag+]</h3></div>
+                <div><h3>[+lang.extra_params+]</h3></div>
                 <br>
                 <div class="uk-margin-top_">
                     <label>
