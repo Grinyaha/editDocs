@@ -1038,7 +1038,7 @@ class editDocs
             $new_set = [];
             foreach ($arr as $kj => $vj) {
                 foreach ($vj as $index => $item) {
-                    foreach ($settings['fields'] as $ko => $vo) {
+                    foreach ((array)$settings['fields'] as $ko => $vo) {
                         if ($vo['caption'] == $index) {
                             $arr[$kj][$ko] = $item;
                             if ($vo['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
