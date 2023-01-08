@@ -1036,13 +1036,18 @@ class editDocs
             include_once(MODX_BASE_PATH . 'assets/tvs/multitv/configs/' . $retv . '.config.inc.php');
 
             $new_set = [];
-            foreach ($arr as $kj => $vj) {
-                foreach ($vj as $index => $item) {
-                    foreach ((array)$settings['fields'] as $ko => $vo) {
-                        if ($vo['caption'] == $index) {
+            foreach ($arr as $kj => $vj) { //массив multiTV из экселя
+                foreach ($vj as $index => $item) { //массив одной строки для MultiTV
+                    foreach ( (array)$settings['fields'] as $ko => $vo) { //массив из конфига MultiTV
+
+
+                        if ($settings['fields'][$ko]['caption'] == $index) {
+                            echo $settings['fields'][$ko]['caption'];
+                            echo $index;
                             $arr[$kj][$ko] = $item;
-                            if ($vo['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
+                            if ($settings['fields'][$ko]['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
                             if ($index != $ko) unset($arr[$kj][$vo['caption']]);
+
                         }
 
 
@@ -1051,6 +1056,8 @@ class editDocs
             }
             /*echo '<pre>';
             print_r($arr);
+            print_r($vj);
+            print_r($settings['fields']);
             echo '</pre>';*/
 
             $newarr['fieldValue'] = $arr;
