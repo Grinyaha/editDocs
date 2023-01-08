@@ -1042,8 +1042,7 @@ class editDocs
 
 
                         if ($settings['fields'][$ko]['caption'] == $index) {
-                            echo $settings['fields'][$ko]['caption'];
-                            echo $index;
+
                             $arr[$kj][$ko] = $item;
                             if ($settings['fields'][$ko]['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
                             if ($index != $ko) unset($arr[$kj][$vo['caption']]);
