@@ -1031,33 +1031,31 @@ class editDocs
 
             }
         }
+
         if ($retv != '') {
             //получаем массив из настроек MultiTV
-            include_once(MODX_BASE_PATH . 'assets/tvs/multitv/configs/' . $retv . '.config.inc.php');
+            include(MODX_BASE_PATH . 'assets/tvs/multitv/configs/' . $retv . '.config.inc.php');
 
-            $new_set = [];
             foreach ($arr as $kj => $vj) { //массив multiTV из экселя
                 foreach ($vj as $index => $item) { //массив одной строки для MultiTV
                     foreach ( (array)$settings['fields'] as $ko => $vo) { //массив из конфига MultiTV
 
-
-                        if ($settings['fields'][$ko]['caption'] == $index) {
-
+                        if ($vo['caption'] == $index) {
+                            //echo $ko;
                             $arr[$kj][$ko] = $item;
-                            if ($settings['fields'][$ko]['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
+                            if ($vo['type'] == 'image') $arr[$kj]['thumb'] = $arr[$kj][$ko];
                             if ($index != $ko) unset($arr[$kj][$vo['caption']]);
 
                         }
 
-
                     }
                 }
             }
-            /*echo '<pre>';
-            print_r($arr);
-            print_r($vj);
-            print_r($settings['fields']);
-            echo '</pre>';*/
+            //echo '<pre>';
+            //print_r($arr);
+            //print_r($vj);
+            //print_r($settings['fields']);
+            //echo '</pre>';
 
             $newarr['fieldValue'] = $arr;
             $data[$retv] = json_encode($newarr, JSON_UNESCAPED_UNICODE);
