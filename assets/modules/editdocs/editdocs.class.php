@@ -350,13 +350,15 @@ class editDocs
             }
         }
 
-        $_SESSION['data'] = $sheetData;
+
+
+        $_SESSION['data'] = $this->clearEmptyRows($sheetData);
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
         $_SESSION['import_i'] = $_SESSION['import_j'] = 0;
         $_SESSION['tabrows'] = '';
 
-        $data_table = $this->table($sheetData, $this->params['max_rows']);
+        $data_table = $this->table($this->clearEmptyRows($sheetData), $this->params['max_rows']);
 
         $columns = '';
         if (isset($this->params['columns'])) {
@@ -367,6 +369,21 @@ class editDocs
         echo $_SESSION['import_start'] . '#@' . $this->lang['totalrows'] . ' - ' . ($_SESSION['import_total'] - $this->start_line) . '#@' . $data_table . '#@' . implode('||', $_SESSION['header_table']) . $columns;
 
 
+    }
+
+    protected function clearEmptyRows($data)
+    {
+
+        foreach ($data as $index => $datum) {
+            $i=0;
+            foreach($datum as $kk => $vaa) {
+                if(!empty($vaa)) $i++;
+            }
+            if($i==0) {
+                unset($data[$index]);
+            }
+        }
+        return $data;
     }
 
     public function importExcel()
@@ -386,6 +403,7 @@ class editDocs
 
     protected function importReady($data)
     {
+
         $uniq = $this->uni;
 
         $check = $this->checkField($uniq);
@@ -677,8 +695,6 @@ class editDocs
             }
         }
 
-
-        //print_r($sheetDataNew);
         unset ($data);
         return $sheetDataNew;
     }
