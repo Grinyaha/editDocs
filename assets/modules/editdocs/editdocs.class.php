@@ -34,6 +34,8 @@ class editDocs
 
         $this->lang = $lang;
 
+        if($this->params['event_plugins']=='true') $this->params['event_plugins'] = true;
+        else $this->params['event_plugins'] = false;
 
         //Снятие с публикации
         if (!empty($_POST['unpub']) && !isset($_POST['test'])) {
@@ -65,7 +67,7 @@ class editDocs
 
         $this->doc->edit($id);
         $this->doc->set($pole, $data);
-        $end = $this->doc->save(true, false);
+        $end = $this->doc->save($this->params['event_plugins'], false);
 
         if ($pole == 'category' && $data != '' && $data != 0) {
             $ctm = explode(',', $data);
@@ -523,7 +525,7 @@ class editDocs
                     $create = $this->multiTv($create);
 
                     $this->doc->create($create);
-                    $new = $this->doc->save(true, false); //SAVE!!!
+                    $new = $this->doc->save($this->params['event_plugins'], false); //SAVE!!!
 
                     //защита от дублей с одинаковыми названиями в загружаемой таблице
                     /*$inbase2 = 0;
@@ -594,7 +596,7 @@ class editDocs
                     //MultiTv
                     $create = $this->multiTv($create);
 
-                    $edit = $this->doc->edit($inbase)->fromArray($create)->save(true, false);
+                    $edit = $this->doc->edit($inbase)->fromArray($create)->save($this->params['event_plugins'], false);
 
 
                     //если вкл.мультикатегории
@@ -844,6 +846,8 @@ class editDocs
             $file_temp = fopen($filename_temp, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
+            $fields_custom = explode(';', $this->modx->db->escape($_POST['fieldz_custom']));
+            $fields = array_merge($fields, $fields_custom);
 
             array_unshift($fields, 'id');
 

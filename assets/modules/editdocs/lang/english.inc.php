@@ -118,5 +118,6 @@ $lang['if_template'] = 'If the <b>template</b> field is not specified in the tab
 $lang['selconfig'] = 'Select file';
 $lang['help'] = 'Help';
 $lang['separ'] = 'Separator';
+$lang['fieds_custom'] = 'Add custom columns (if created them in prepare-snippet)';
 
 ?>

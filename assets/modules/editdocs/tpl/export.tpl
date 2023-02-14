@@ -75,6 +75,12 @@
                     <label>
                         <input type="checkbox" name="export_mc"  id="export_mc" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/> [+lang.export_mc+]
                     </label>
+                    <br><br>
+                    <label>
+                        [+lang.fieds_custom+] <br>
+                    <input type="text" name="fieldz_custom" id="fieldz_custom" placeholder="field1;field2;field3">
+                    </label>
+
                 </div>
                 <hr>
                 <div class=""><h3>[+lang.filtration_zag+]</h3></div>
@@ -273,6 +279,8 @@
                             });
                             $('#selfil')[0].sumo.reload();
                         }
+                        //custom fields
+                        $('#fieldz_custom').val(json['fieldz_custom']);
 
                         //уровень вложенности
                         $('#ed-tree').val(json['depth']);
