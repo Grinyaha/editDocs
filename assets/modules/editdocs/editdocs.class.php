@@ -922,7 +922,7 @@ class editDocs
                 $import_tmp = array();
 
                 foreach ($header as $k => $v) {
-                    $import[] = ($_POST['win'] == 1) ? iconv('UTF-8', 'WINDOWS-1251', $string[$v]) : $string[$v];
+                    $import[] = (isset($_POST['win']) && $_POST['win'] == 1) ? iconv('UTF-8', 'WINDOWS-1251', $string[$v]) : $string[$v];
                     $import_tmp[] = $string[$v];
 
                 }
