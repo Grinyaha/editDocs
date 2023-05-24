@@ -34,7 +34,7 @@ class editDocs
 
         $this->lang = $lang;
 
-        if($this->params['event_plugins']=='true') $this->params['event_plugins'] = true;
+        if ($this->params['event_plugins'] == 'true') $this->params['event_plugins'] = true;
         else $this->params['event_plugins'] = false;
 
         //Снятие с публикации
@@ -260,12 +260,17 @@ class editDocs
                                     $data[$k] = '<td>' . $rs1 . $rs . $rs2 . '</td>';
                                 } else {
 
-                                    $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
-
+                                    if ($k != $_POST['tvpic']) {
+                                        $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
+                                    } else $data[$k] = $v;
                                 }
 
 
-                            } else $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
+                            } else {
+                                if ($k != $_POST['tvpic']) {
+                                    $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
+                                } else $data[$k] = $v;
+                            }
                         }
                     }
 
@@ -276,6 +281,7 @@ class editDocs
                         if (substr($data[$tvpic], 0, 1) == '/') $slash = '';
                         if (substr($data[$tvpic], 0, 4) == 'http') $slash = '';
                         //substr("abcdef", 0, 1)
+                        //$this->modx->logEvent(1,1,'<code>'.$data[$tvpic].'</code>','tv pic');
                         $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
                     } else $data['piczzz'] = '';
 
@@ -353,7 +359,6 @@ class editDocs
         }
 
 
-
         $_SESSION['data'] = $this->clearEmptyRows($sheetData);
         $_SESSION['import_start'] = $this->start_line;
         $_SESSION['import_total'] = count($_SESSION['data']) + $_SESSION['import_start'] - 1;
@@ -377,11 +382,11 @@ class editDocs
     {
 
         foreach ($data as $index => $datum) {
-            $i=0;
-            foreach($datum as $kk => $vaa) {
-                if(!empty($vaa)) $i++;
+            $i = 0;
+            foreach ($datum as $kk => $vaa) {
+                if (!empty($vaa)) $i++;
             }
-            if($i==0) {
+            if ($i == 0) {
                 unset($data[$index]);
             }
         }
@@ -1058,7 +1063,7 @@ class editDocs
 
             foreach ($arr as $kj => $vj) { //массив multiTV из экселя
                 foreach ($vj as $index => $item) { //массив одной строки для MultiTV
-                    foreach ( (array)$settings['fields'] as $ko => $vo) { //массив из конфига MultiTV
+                    foreach ((array)$settings['fields'] as $ko => $vo) { //массив из конфига MultiTV
 
                         if ($vo['caption'] == $index) {
                             //echo $ko;
@@ -1116,11 +1121,11 @@ class editDocs
     public function saveConfig($params)
     {
 
-        $data = "<?php //".$params['save_config']." \r\n  return " . var_export($params, true). " ?>";
+        $data = "<?php //" . $params['save_config'] . " \r\n  return " . var_export($params, true) . " ?>";
         $newname = $this->modx->stripAlias($params['save_config']);
         //$newname = htmlspecialchars($newname);
         //$newname = preg_replace($pattern, $replacement, $newname);
-        file_put_contents(MODX_BASE_PATH . "assets/modules/editdocs/config/".$params['folder']."/" . $newname . ".php", $data);
+        file_put_contents(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $params['folder'] . "/" . $newname . ".php", $data);
 
         return json_encode($params, JSON_UNESCAPED_UNICODE);
     }
@@ -1134,12 +1139,12 @@ class editDocs
         }
         sort($files);*/
         $arr = [];
-        $i=0;
-        foreach (glob(MODX_BASE_PATH . "assets/modules/editdocs/config/".$folder."/*.php") as $filename) {
+        $i = 0;
+        foreach (glob(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $folder . "/*.php") as $filename) {
             $line = fgets(fopen($filename, 'r'));
-            $arr[$i]['title'] = str_replace('<?php //','',$line);
-            $arr[$i]['title'] = str_replace(" \r\n",'',$arr[$i]['title']);
-            $arr[$i]['filename'] = str_replace(MODX_BASE_PATH . "assets/modules/editdocs/config/".$folder."/", "",$filename);
+            $arr[$i]['title'] = str_replace('<?php //', '', $line);
+            $arr[$i]['title'] = str_replace(" \r\n", '', $arr[$i]['title']);
+            $arr[$i]['filename'] = str_replace(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $folder . "/", "", $filename);
 
             $i++;
         }
@@ -1149,7 +1154,7 @@ class editDocs
 
     public function loadCfgFile($name)
     {
-        $arr = include_once (MODX_BASE_PATH . "assets/modules/editdocs/config/".$name);
+        $arr = include_once(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $name);
         return json_encode($arr, JSON_UNESCAPED_UNICODE);
     }
 }
