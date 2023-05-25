@@ -280,9 +280,11 @@ class editDocs
                         $slash = '/';
                         if (substr($data[$tvpic], 0, 1) == '/') $slash = '';
                         if (substr($data[$tvpic], 0, 4) == 'http') $slash = '';
-                        //substr("abcdef", 0, 1)
+
                         //$this->modx->logEvent(1,1,'<code>'.$data[$tvpic].'</code>','tv pic');
-                        $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
+                        if(!empty($data[$tvpic])) $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
+                        else $data['piczzz'] = '';
+
                     } else $data['piczzz'] = '';
 
 
