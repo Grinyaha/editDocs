@@ -278,7 +278,7 @@
 
     <!-- HTML -->
 
-    <a class="btn btn-info" href="#modal-readme" uk-toggle><span uk-icon="icon: info; ratio: 1"></span> [+lang.help+]</a>
+    <a class="btn btn-info" href="#modal-readme" uk-toggle>[+lang.help+] <span uk-icon="icon: info; ratio: 1"></span> </a>
     <div id="modal-readme" class="uk-flex-top" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="width: 1200px">
 
@@ -327,13 +327,18 @@
                     <div class=""><h3>[+lang.common_params+]</h3></div>
 
                     <div class="uk-margin-bottom">
-                        ID [+lang.parent+]<br/>
+                        <div >
+                        ID [+lang.parent+] <sup><span uk-icon="icon: info"
+                                                 uk-tooltip="[+lang.if_parent+]"></span></sup>
+                        </div>
                         <input type="number" min="0" name="parimp" id="parent" class="uk-input" style="width: 100px"/>
-                        <span uk-icon="icon: info"
-                              uk-tooltip="[+lang.if_parent+]"></span>
+
                     </div>
                     <div class="uk-margin-bottom">
-                        [+lang.tpl+]<br/>
+                        <div>
+                        [+lang.tpl+] <sup><span class="uk-inline" uk-icon="icon: info"
+                                                  uk-tooltip="[+lang.if_template+]"></span></sup>
+                        </div>
 
                         <div class=" uk-width-medium uk-inline">
                             <select id="tpl" name="tpl">
@@ -342,8 +347,7 @@
                                 <option value="blank">(blank) [+lang.nontpl+]</option>
                             </select>
                         </div>
-                        &nbsp; <span class="uk-inline" uk-icon="icon: info"
-                              uk-tooltip="[+lang.if_template+]"></span>
+
                     </div>
                     <hr>
                     <div class=""><h3 class="uk-margin-remove_">[+lang.data_replace+]</h3></div>

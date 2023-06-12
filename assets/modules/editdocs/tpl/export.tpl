@@ -67,18 +67,24 @@
                 <br>
                 <div class="uk-margin-top_">
                     <label>
-                        <input type="checkbox" name="win" id="win" value="1" [+checked+] style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/> [+lang.kodirovka+]
+                        <input type="checkbox" name="win" id="win" value="1" [+checked+]
+                               style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
+                        [+lang.kodirovka+]
                     </label>
                     <label>
-                        <input type="checkbox" name="neopub"  id="neopub" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/> [+lang.unpubl+]
+                        <input type="checkbox" name="neopub" id="neopub" value="1"
+                               style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
+                        [+lang.unpubl+]
                     </label>
                     <label>
-                        <input type="checkbox" name="export_mc"  id="export_mc" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/> [+lang.export_mc+]
+                        <input type="checkbox" name="export_mc" id="export_mc" value="1"
+                               style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
+                        [+lang.export_mc+]
                     </label>
                     <br><br>
                     <label>
                         [+lang.fieds_custom+] <br>
-                    <input type="text" name="fieldz_custom" id="fieldz_custom" placeholder="field1;field2;field3">
+                        <input type="text" name="fieldz_custom" id="fieldz_custom" placeholder="field1;field2;field3">
                     </label>
 
                 </div>
@@ -86,19 +92,28 @@
                 <div class=""><h3>[+lang.filtration_zag+]</h3></div>
 
                 <div class="uk-margin-top">
-                    [+lang.filtertv+] (DocLister)</br>
-                    <input type="text" name="filters" id="filters" class="inp" style="width: 300px"  placeholder="[+lang.example+] tv:ves:>:1"/>
-                    &nbsp; <span class="uk-inline" uk-icon="icon: info" uk-tooltip="[+lang.dltext+]"></span>
+
+                        [+lang.filtertv+] (DocLister) <sup><span class="uk-inline" uk-icon="icon: info"
+                                                            uk-tooltip="[+lang.dltext+]"></span></sup>
+
+                    <input type="text" name="filters" id="filters" class="inp" style="max-width: 300px"
+                           placeholder="[+lang.example+] tv:ves:>:1"/>
+
 
                 </div>
 
                 <div class="uk-margin-top">
-                    [+lang.filterdef+]</br>
-                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 300px"  placeholder="[+lang.example+] c.template=2"/>
-                    &nbsp; <span class="uk-inline" uk-icon="icon: info" uk-tooltip="[+lang.sqltext+]"></span>
+
+                        [+lang.filterdef+] <sup><span class="uk-inline" uk-icon="icon: info"
+                                                 uk-tooltip="[+lang.sqltext+]"></span></sup>
+                    
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="max-width: 300px"
+                           placeholder="[+lang.example+] c.template=2"/>
+
                 </div>
                 <div class="parf">
-                    <a href="https://github.com/0test/evo-newdocs/blob/main/v1/04_Компоненты/DocLister/04_Фильтры.md" target="_blank"><br/>[+lang.docfilters+] DocLister</a>
+                    <a href="https://github.com/0test/evo-newdocs/blob/main/v1/04_Компоненты/DocLister/04_Фильтры.md"
+                       target="_blank"><br/>[+lang.docfilters+] DocLister</a>
                 </div>
 
 
@@ -123,7 +138,7 @@
                     <div class="" style="margin: 0">
 
                         <input name="save_config" type="text" id="cfg_name" placeholder="[+lang.config_name+]"
-                               style="width: 250px">
+                               style="max-width: 250px">
                         <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                     </div>
                 </div>
@@ -143,7 +158,8 @@
         </div>
 
         <div class="uk-text-center uk-margin-large-top">
-            <button class="btn btn-success btn-lg" id="brsub" type="button" style="padding-left: 50px; padding-right: 50px"><i class="fa fa-check"></i>
+            <button class="btn btn-success btn-lg" id="brsub" type="button"
+                    style="padding-left: 50px; padding-right: 50px"><i class="fa fa-check"></i>
                 [+lang.start_export+]
             </button>
         </div>
@@ -154,7 +170,6 @@
         <div id="result_progress"></div>
         <div id="result"></div>
     </div>
-
 
 
     <script type="text/javascript"
@@ -310,9 +325,7 @@
             });
 
 
-            }); //end ready
-
-
+        }); //end ready
 
 
         function loading() {

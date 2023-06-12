@@ -121,18 +121,24 @@
                 <div class=""><h3>[+lang.filtration_zag+]</h3></div>
 
                 <div class="uk-margin-top">
-                    [+lang.filtertv+] (DocLister)</br>
-                    <input type="text" name="filters" id="filters" class="inp" style="width: 300px"
+
+                        [+lang.filtertv+] (DocLister) <sup><span class="uk-inline" uk-icon="icon: info"
+                                                                   uk-tooltip="[+lang.dltext+]"></span></sup>
+
+                    <input type="text" name="filters" id="filters" class="inp" style="max-width: 300px"
                            placeholder="[+lang.example+] tv:ves:>:1"/>
-                    &nbsp; <span class="uk-inline" uk-icon="icon: info" uk-tooltip="[+lang.dltext+]"></span>
+
 
                 </div>
 
                 <div class="uk-margin-top">
-                    [+lang.filterdef+]</br>
-                    <input type="text" name="addwhere" id="addwhere" class="inp" style="width: 300px"
+
+                        [+lang.filterdef+] <sup><span class="uk-inline" uk-icon="icon: info"
+                                                        uk-tooltip="[+lang.sqltext+]"></span></sup>
+
+                    <input type="text" name="addwhere" id="addwhere" class="inp" style="max-width: 300px"
                            placeholder="[+lang.example+] c.template=2"/>
-                    &nbsp; <span class="uk-inline" uk-icon="icon: info" uk-tooltip="[+lang.sqltext+]"></span>
+
                 </div>
                 <div class="parf">
                     <a href="https://github.com/0test/evo-newdocs/blob/main/v1/04_Компоненты/DocLister/04_Фильтры.md"
