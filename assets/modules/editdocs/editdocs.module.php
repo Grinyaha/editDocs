@@ -79,7 +79,7 @@ while ($row = $modx->db->getRow($query2)) {
 }
 
 //prepare snippets
-$pquery = $modx->db->query("SELECT name FROM " . $modx->getFullTableName('site_snippets') . "WHERE name LIKE '%editDocs%' AND disabled=0");
+$pquery = $modx->db->query("SELECT name FROM " . $modx->getFullTableName('site_snippets') . " WHERE name LIKE '%editDocs%' AND disabled=0");
 $prp = '';
 while ($rou = $modx->db->getRow($pquery)) {
     $prp .= '<option value="' . $rou['name'] . '">' . $rou['name'] . '</option>';
