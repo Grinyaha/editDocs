@@ -78,9 +78,31 @@ while ($row = $modx->db->getRow($query2)) {
     $tpl .= '<option value="' . $row['id'] . '">' . $row['templatename'] . '</option>';
 }
 
+//prepare snippets
+$pquery = $modx->db->query("SELECT name FROM " . $modx->getFullTableName('site_snippets') . "WHERE name LIKE '%editDocs%' AND disabled=0");
+$prp = '';
+while ($rou = $modx->db->getRow($pquery)) {
+    $prp .= '<option value="' . $rou['name'] . '">' . $rou['name'] . '</option>';
+}
+
 if (isset($modx->event->params['win1251']) && $modx->event->params['win1251']=='true') $checked = 'checked';
 
-$data = array ('tpl' => $tpl, 'fields' => $fields, 'tvs' => $tvs, 'moduleurl' => $moduleurl, 'manager_theme' => $modx->config['manager_theme'], 'manager_path' => $modx->getManagerPath(), 'base_url' => $modx->config['base_url'], 'session' => $_SESSION,'get' => $_GET, 'action' => $action , 'selected' => array($action => 'selected'), 'checked' => $checked, 'lang' => $lang );
+$data = array (
+    'tpl' => $tpl,
+    'fields' => $fields,
+    'tvs' => $tvs,
+    'moduleurl' => $moduleurl,
+    'manager_theme' => $modx->config['manager_theme'],
+    'manager_path' => $modx->getManagerPath(),
+    'base_url' => $modx->config['base_url'],
+    'session' => $_SESSION,
+    'get' => $_GET,
+    'action' => $action ,
+    'selected' => array($action => 'selected'),
+    'checked' => $checked,
+    'lang' => $lang,
+    'prepare_options' => $prp
+);
 
 if ($action == 'branch') {
     if(!empty($_SESSION['data'])) unset($_SESSION['data']);

@@ -32,6 +32,14 @@
                 searchText: '[+lang.tplname+]'
             });
 
+            $('#prep_snip').SumoSelect({
+                placeholder: '',
+                captionFormat: '{0} [+lang.selected+]',
+                csvDispCount: 2,
+                search: true,
+                searchText: '[+lang.name_snippet+]'
+            });
+
             Dropzone.autoDiscover = false;
             $("div#fileuploader").dropzone({
                 url: "[+base_url+]assets/modules/editdocs/ajax.php",
@@ -215,6 +223,12 @@
                         //Импорт + MultiCategories
                         if (json['multi'] == "1") $('#multi').prop('checked', true);
                         else $('#multi').prop('checked', false);
+                        //Reset + MultiCategories
+                        if (json['multi_reset'] == "1") $('#multi_reset').prop('checked', true);
+                        else $('#multi_reset').prop('checked', false);
+                        //prepare snippet
+                        $('#prep_snip').val(json['prep_snip']);
+                        $('#prep_snip')[0].sumo.reload();
                     }
                 }); //end ajax
             }); //end click
@@ -442,6 +456,11 @@
                         &nbsp;<input type="checkbox" name="multi" id="multi" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.impformc+]
                     </label>
+                    <br>
+                    <label>
+                        &nbsp;<input type="checkbox" name="multi_reset" id="multi_reset" value="1" style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
+                        [+lang.multi_reset+]
+                    </label>
 
                 </div>
                 <div column="3">
@@ -468,6 +487,19 @@
                             <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                         </div>
                     </div>
+                    <hr>
+                    <div class=""><h3>Prepare - [+lang.snippet+]</h3></div>
+                    <div class="uk-width-medium uk-margin-bottom">
+                        [+lang.need_snippet+]<br>
+                        <div class="uk-inline" style="width: 250px">
+                            <select id="prep_snip" name="prep_snip">
+                                <option value="none">[+lang.without_snippet+]</option>
+                                [+prepare_options+]
+                            </select>
+                        </div>
+                    </div>
+
+
                     <hr>
                     <div class=""><h3>[+lang.clearcache+]</h3></div>
 

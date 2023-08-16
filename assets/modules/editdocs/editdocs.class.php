@@ -19,7 +19,7 @@ class editDocs
         $this->doc = new $apiClassName($this->modx);
         $this->step = !empty($this->params['step']) && (int)$this->params['step'] > 0 ? (int)$this->params['step'] : 500;//сколько строк за раз импортируем
         $this->start_line = 2;//начинаем импорт со второй строки файла
-        $this->snipPrepare = !empty($this->params['prepare_snippet']) ? $this->params['prepare_snippet'] : 'editDocsPrepare1';//сниппет prepare
+        $this->snipPrepare = !empty($_POST['prep_snip']) ? $_POST['prep_snip'] : false;//сниппет prepare
 
         $this->check = $this->checkTableMC();
         $this->currArr = []; //массив с которым сравниваемся
@@ -482,10 +482,8 @@ class editDocs
                     $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1); // 1 - game mode
                 }
 
+                //$this->modx->logEvent(1,1,'<pre>'.print_r($checkf, true).'</pre>','Заголовок лога!');
                 $inbase = array_search($checkf['xls_srav'], $this->currArr); //Сверяемся с выбранным полем и данными в базе.
-
-
-                //$this->modx->logEvent(1, 1, $inbase, 'Заголовок лога аааа!');
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
@@ -611,7 +609,7 @@ class editDocs
 
                         $ctm = explode(',', $create['category']);
 
-                        if (!empty($edit)) {
+                        if (!empty($edit) && !empty($_POST['multi_reset'])) {
                             $que = $this->modx->db->query("DELETE FROM " . $this->modx->getFullTableName('site_content_categories') . " WHERE doc=" . $edit);
                         }
 
@@ -997,7 +995,10 @@ class editDocs
 
     public function checkPrepareSnip()
     {
-        $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $this->modx->db->escape($this->snipPrepare) . "' LIMIT 0,1") ? $this->modx->db->escape($this->snipPrepare) : false;
+        if(empty($_POST['prep_snip']) || $_POST['prep_snip']=='none') $this->issetPrepare = false;
+        else {
+            $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $_POST['prep_snip'] . "' AND disabled = 0 LIMIT 0,1") ? $this->modx->db->escape($_POST['prep_snip']) : false;
+        }
         return $this;
     }
 

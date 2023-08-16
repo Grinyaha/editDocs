@@ -106,7 +106,7 @@
 
                         [+lang.filterdef+] <sup><span class="uk-inline" uk-icon="icon: info"
                                                  uk-tooltip="[+lang.sqltext+]"></span></sup>
-                    
+
                     <input type="text" name="addwhere" id="addwhere" class="inp" style="max-width: 300px"
                            placeholder="[+lang.example+] c.template=2"/>
 
@@ -142,6 +142,18 @@
                         <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                     </div>
                 </div>
+                <hr>
+                <div class=""><h3>Prepare - [+lang.snippet+]</h3></div>
+                <div class="uk-width-medium uk-margin-bottom">
+                    [+lang.need_snippet+]<br>
+                    <div class="uk-inline" style="width: 250px">
+                        <select id="prep_snip" name="prep_snip">
+                            <option value="none">[+lang.without_snippet+]</option>
+                            [+prepare_options+]
+                        </select>
+                    </div>
+                </div>
+
                 <hr>
                 <div class=""><h3>[+lang.clearcache+]</h3></div>
 
@@ -190,6 +202,15 @@
             $('#ed-tree,#config').SumoSelect({
                 placeholder: '[+lang.selconfig+]...',
             });
+
+            $('#prep_snip').SumoSelect({
+                placeholder: '',
+                captionFormat: '{0} [+lang.selected+]',
+                csvDispCount: 2,
+                search: true,
+                searchText: '[+lang.name_snippet+]'
+            });
+
             loadOptionsCfg();
 
 
@@ -320,6 +341,10 @@
                         //Фильтрация по основным полям
                         $('#addwhere').val(json['addwhere']);
 
+                        //prepare snippet
+                        $('#prep_snip').val(json['prep_snip']);
+                        $('#prep_snip')[0].sumo.reload();
+
                     }
                 }); //end ajax
             });
@@ -360,6 +385,7 @@
                 $('.ahtung').fadeOut();
             }, 3000);
         }
+
 
 
     </script>

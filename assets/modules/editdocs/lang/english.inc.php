@@ -119,5 +119,10 @@ $lang['selconfig'] = 'Select file';
 $lang['help'] = 'Help';
 $lang['separ'] = 'Separator';
 $lang['fieds_custom'] = 'Add custom columns (if created them in prepare-snippet)';
+$lang['name_snippet'] = 'Snippet´s name';
+$lang['without_snippet'] = 'Without prepare-snippet';
+$lang['snippet'] = 'snippet';
+$lang['need_snippet'] = 'Select the desired prepare-snippet';
+$lang['multi_reset'] = 'Erase old data and add current <br>(otherwise just add)';
 
 ?>

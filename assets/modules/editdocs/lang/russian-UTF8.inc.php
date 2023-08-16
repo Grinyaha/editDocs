@@ -119,8 +119,11 @@ $lang['selconfig'] = 'Выберите файл';
 $lang['help'] = 'Помощь';
 $lang['separ'] = 'Разделитель';
 $lang['fieds_custom'] = 'Добавить кастомные столбцы (создаются в prepare-сниппете)';
-
-
+$lang['name_snippet'] = 'Имя сниппета';
+$lang['without_snippet'] = 'Без prepare-сниппета';
+$lang['snippet'] = 'сниппет';
+$lang['need_snippet'] = 'Выберите нужный prepare-сниппет';
+$lang['multi_reset'] = 'Стереть старые данные и добавить текущие <br>(иначе только добавить)';
 
 
 
