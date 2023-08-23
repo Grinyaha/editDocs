@@ -422,9 +422,9 @@ class editDocs
         $finish = isset($_SESSION['import_start']) ? ($start + $this->step) : count($data);
 
 
-        // echo '<pre>';
-        // print_r($_SESSION['header_table']);
-        // echo '</pre>';
+        /*echo '<pre>';
+        print_r($_SESSION['header_table']);
+        echo '</pre>';*/
 
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         $ptmplh = '';
@@ -694,11 +694,11 @@ class editDocs
                     $z = $newkeys[$i];
 
                     if (!empty($this->uni2) && $z == $this->uni2) $z = $this->uni;
-                    $this->dn[$z] = $value;
+                    $this->dn[trim($z)] = $value;
 
                     $i++;
                 }
-                $sheetDataNew[$k] = $this->dn;
+                $sheetDataNew[trim($k)] = $this->dn;
             }
         }
 
@@ -726,7 +726,7 @@ class editDocs
 
             foreach ($val as $key => $value) {
 
-                if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
+                if ($i == 1) $_SESSION['header_table'][] = trim($value); //заголовок таблицы
                 $row .= '<td>' . $value . '</td>';
             }
 
