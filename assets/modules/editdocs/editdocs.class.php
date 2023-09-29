@@ -3,6 +3,8 @@
 
 class editDocs
 {
+    public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $addArr, $lang, $issetPrepare, $uni, $dn;
+    //public $params;
     public function __construct($modx)
     {
         $this->modx = $modx;
@@ -926,10 +928,11 @@ class editDocs
                 $import = array();
                 $import_tmp = array();
 
-                foreach ($header as $k => $v) {
-                    $import[] = (isset($_POST['win']) && $_POST['win'] == 1) ? iconv('UTF-8', 'WINDOWS-1251', $string[$v]) : $string[$v];
-                    $import_tmp[] = $string[$v];
-
+                foreach ($header as $v) {
+                    if(!empty($v)) {
+                        $import[] = (isset($_POST['win']) && $_POST['win'] == 1) ? mb_convert_encoding($string[$v], 'WINDOWS-1251') : $string[$v];
+                        $import_tmp[] = $string[$v];
+                    }
                 }
                 //$this->modx->logEvent(1,1,print_r($header, true),'header');
                 fputcsv($file, $import, $dm);
