@@ -552,7 +552,9 @@ class editDocs
 
 
                     if (array_key_exists('category', $create) && isset($_POST['multi']) && $new > 0) {
-                        $create['category'] = trim($create['category']);
+                        if(!empty($create['category'])) {
+                            $create['category'] = trim($create['category']);
+                        }
                         $arrmc = explode(',', $create['category']);
 
                         foreach ($arrmc as $vl) {
@@ -696,10 +698,12 @@ class editDocs
                     $z = $newkeys[$i];
 
                     if (!empty($this->uni2) && $z == $this->uni2) $z = $this->uni;
-                    $this->dn[trim($z)] = $value;
+                    if(!empty($z)) $z = trim($z);
+                    $this->dn[$z] = $value;
 
                     $i++;
                 }
+
                 $sheetDataNew[trim($k)] = $this->dn;
             }
         }
@@ -727,8 +731,8 @@ class editDocs
             }
 
             foreach ($val as $key => $value) {
-
-                if ($i == 1) $_SESSION['header_table'][] = trim($value); //заголовок таблицы
+                if(!empty($value)) $value = trim($value);
+                if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
                 $row .= '<td>' . $value . '</td>';
             }
 
