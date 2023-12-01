@@ -7,7 +7,7 @@
     <hr>
     <p> [+lang.ifyou+]</p>
 
-    <a href="https://yoomoney.ru/to/41001460027073" target="_blank">Yoomoney.ru</a> |
+    Перевод в рублях на карту MIR 2202203211510732 |
     <a href="https://my.qiwi.com/Aleksandr-GDS7hif1fK" target="_blank">Qiwi</a>
 
 
