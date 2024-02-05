@@ -873,7 +873,8 @@ class editDocs
                 $tvlist .= $val . ',';
                 $ph .= '[+' . $val . '+];';
                 $head .= $val . ';';
-                $header[] = $val;
+                if(!empty($val)) $header[] = $val;
+
             }
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
             $ph = substr($ph, 0, strlen($ph) - 1);
