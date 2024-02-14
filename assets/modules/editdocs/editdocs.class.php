@@ -642,7 +642,7 @@ class editDocs
                 $td = '';
                 foreach ($create as $key => $val) {
                     //$_SESSION['log'] .= $key . ' - ' . $val . ' - <b class="upd-text">обновление</b> '.$testInfo.'<br>';
-                    if(!empty($val)) $td .= '<td class="td_upd">' . $val . ' </td>'; //edit
+                    $td .= '<td class="td_upd">' . $val . ' </td>'; //edit
                 }
                 $tr .= '<tr>' . $td . '</tr> ';
                 //$_SESSION['log'] .= '<hr>';
@@ -714,7 +714,6 @@ class editDocs
 
     protected function table($data, $max)
     {
-
         //$this->modx->logEvent(1,1,'_max'.$max,'header');
         $header = '<table class="tabres">';
         $footer = '</table>';
@@ -732,11 +731,9 @@ class editDocs
             }
 
             foreach ($val as $key => $value) {
-                if(!empty($value)) {
-                    $value = trim($value);
-                    if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
-                    $row .= '<td>' . $value . '</td>';
-                }
+                if(!empty($value)) $value = trim($value);
+                if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
+                $row .= '<td>' . $value . '</td>';
             }
 
             $out .= '<tr>' . $row . '</tr>';
@@ -1117,7 +1114,7 @@ class editDocs
 
             }
         }
-        if (!empty($retv)) $data[] = $retv;
+        if ($retv != '') $data[] = $retv;
 
         /*echo '<pre>';
         print_r($data);
