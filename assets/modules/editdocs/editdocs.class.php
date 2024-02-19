@@ -493,7 +493,7 @@ class editDocs
 
             //если parent нет в массиве, смотрим в POST,
             if (empty($create['parent'])) {
-                if (empty($_POST['parimp'])) unset($create['parent']);
+                if (empty($_POST['parimp'])) $create['parent']=0;
                 else $create['parent'] = $this->modx->db->escape($_POST['parimp']);
             }
 
