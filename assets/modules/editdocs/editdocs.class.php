@@ -432,7 +432,7 @@ class editDocs
         $ptmplh = '';
         $parh = '';
 
-        //$this->modx->logEvent(1,1,print_r($data,1),'TEST2');
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($_SESSION['header_table'],1).'</pre>','TEST2');
 
         if ($_SESSION['header_table']) {
             $theader = '';
@@ -492,9 +492,8 @@ class editDocs
             }
 
             //если parent нет в массиве, смотрим в POST,
-            if (empty($create['parent'])) {
-                if (empty($_POST['parimp'])) $create['parent']=0;
-                else $create['parent'] = $this->modx->db->escape($_POST['parimp']);
+            if (!isset($create['parent'])) {
+                if (!empty($_POST['parimp'])) $create['parent'] = $this->modx->db->escape($_POST['parimp']);
             }
 
             if ($_POST['tpl']) $tpl = $this->modx->db->escape($_POST['tpl']);
@@ -512,11 +511,9 @@ class editDocs
 
             }
 
-            //если НЕ тестовый режим
-            if (!$inbase) { //не существует в базе
+            //боевой режим (добавление)
+            if ($inbase === false) { //не существует в базе
 
-
-                //боевой режим (добавление)
                 if (!isset($_POST['test']) && empty($_POST['notadd'])) {
 
 
@@ -563,7 +560,8 @@ class editDocs
                             }
                         }
                     }
-                } //тестовый режим (добавление)
+                }
+                //тестовый режим (добавление)
                 else {
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 0); // 0 - test mode
@@ -626,7 +624,8 @@ class editDocs
 
                     }
                     $testInfo = '';
-                } //тестовый режим (обновление)
+                }
+                //тестовый режим (обновление)
                 else {
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 0); // 0 - game mode
