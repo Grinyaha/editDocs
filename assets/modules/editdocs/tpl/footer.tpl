@@ -7,8 +7,7 @@
     <hr>
     <p> [+lang.ifyou+]</p>
 
-    Перевод в рублях на карту MIR 2202203211510732 |
-    <a href="https://my.qiwi.com/Aleksandr-GDS7hif1fK" target="_blank">Qiwi</a>
+    Перевод в рублях на карту MIR 2202203211510732
 
 
 </div>
