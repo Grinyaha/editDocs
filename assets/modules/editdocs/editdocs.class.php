@@ -4,6 +4,7 @@
 class editDocs
 {
     public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $addArr, $lang, $issetPrepare, $uni, $dn;
+
     //public $params;
     public function __construct($modx)
     {
@@ -284,7 +285,7 @@ class editDocs
                         if (substr($data[$tvpic], 0, 4) == 'http') $slash = '';
 
                         //$this->modx->logEvent(1,1,'<code>'.$data[$tvpic].'</code>','tv pic');
-                        if(!empty($data[$tvpic])) $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
+                        if (!empty($data[$tvpic])) $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
                         else $data['piczzz'] = '';
 
                     } else $data['piczzz'] = '';
@@ -476,12 +477,13 @@ class editDocs
             $val = $data[$ii];
 
             $inbase = 0;
+
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
 
                 $checkf['xls_srav'] = $check[2];
                 if ($this->issetPrepare) {
-                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1); // 1 - game mode
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii-1); // 1 - game mode
                 }
 
                 //$this->modx->logEvent(1,1,'<pre>'.print_r($checkf, true).'</pre>','Заголовок лога!');
@@ -519,7 +521,7 @@ class editDocs
 
                     //prepare create
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'new', 'import', 1); // 1 - game mode
+                        $create = $this->makePrepare($create, 'new', 'import', 1, $ii-1); // 1 - game mode
                     }
 
                     //search & replace
@@ -549,7 +551,7 @@ class editDocs
 
 
                     if (array_key_exists('category', $create) && isset($_POST['multi']) && $new > 0) {
-                        if(!empty($create['category'])) {
+                        if (!empty($create['category'])) {
                             $create['category'] = trim($create['category']);
                         }
                         $arrmc = explode(',', $create['category']);
@@ -560,11 +562,10 @@ class editDocs
                             }
                         }
                     }
-                }
-                //тестовый режим (добавление)
+                } //тестовый режим (добавление)
                 else {
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'new', 'import', 0); // 0 - test mode
+                        $create = $this->makePrepare($create, 'new', 'import', 0, $ii-1); // 0 - test mode
                     }
 
                     //search & replace
@@ -594,7 +595,7 @@ class editDocs
 
                     //prepare
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'upd', 'import', 1); // 1 - game mode
+                        $create = $this->makePrepare($create, 'upd', 'import', 1, $ii-1); // 1 - game mode
                     }
 
                     //search & replace
@@ -624,11 +625,10 @@ class editDocs
 
                     }
                     $testInfo = '';
-                }
-                //тестовый режим (обновление)
+                } //тестовый режим (обновление)
                 else {
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'upd', 'import', 0); // 0 - game mode
+                        $create = $this->makePrepare($create, 'upd', 'import', 0, $ii-1); // 0 - game mode
                     }
                     //search & replace
                     $create = $this->smallPrepare($create);
@@ -660,6 +660,7 @@ class editDocs
         $_SESSION['import_i'] += $i;
         $_SESSION['import_j'] += $j;
         $_SESSION['import_start'] = $start + $i + $j;
+
         //тестовый режим
         if (isset($_POST['test'])) {
             //$this->modx->logEvent(1,1,$_SESSION['import_start'],'проверка заголовка таблицы '.$_SESSION['import_start']);
@@ -700,7 +701,7 @@ class editDocs
                     $z = $newkeys[$i];
 
                     if (!empty($this->uni2) && $z == $this->uni2) $z = $this->uni;
-                    if(!empty($z)) $z = trim($z);
+                    if (!empty($z)) $z = trim($z);
                     $this->dn[$z] = $value;
 
                     $i++;
@@ -733,7 +734,7 @@ class editDocs
             }
 
             foreach ($val as $key => $value) {
-                if(!empty($value)) $value = trim($value);
+                if (!empty($value)) $value = trim($value);
                 if ($i == 1) $_SESSION['header_table'][] = $value; //заголовок таблицы
                 $row .= '<td>' . $value . '</td>';
             }
@@ -786,7 +787,7 @@ class editDocs
 
                 $checkf['db_srav'] = $row['value'];
                 if ($this->issetPrepare) {
-                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1);
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii-1);
                 }
 
                 //собираем массив со всеми значениями поля по которому сравниваемся
@@ -875,7 +876,7 @@ class editDocs
                 $tvlist .= $val . ',';
                 $ph .= '[+' . $val . '+];';
                 $head .= $val . ';';
-                if(!empty($val)) $header[] = $val;
+                if (!empty($val)) $header[] = $val;
 
             }
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
@@ -919,7 +920,7 @@ class editDocs
 
 
                     if ($this->issetPrepare) {
-                        $data = $this->makePrepare($data, 'upd', 'export', 1);
+                        $data = $this->makePrepare($data, 'upd', 'export', 1, $ii-1);
                     }
                     $data['url'] = MODX_SITE_URL . $this->modx->makeUrl($data['id']);
                     $data['url'] = str_replace('//', '/', $data['url']);
@@ -936,7 +937,7 @@ class editDocs
                 $import_tmp = array();
 
                 foreach ($header as $v) {
-                    if(!empty($v)) {
+                    if (!empty($v)) {
                         $import[] = (isset($_POST['win']) && $_POST['win'] == 1) ? mb_convert_encoding($string[$v], 'WINDOWS-1251') : $string[$v];
                         $import_tmp[] = $string[$v];
                     }
@@ -997,15 +998,15 @@ class editDocs
         return $out;
     }
 
-    public function makePrepare($data, $mode, $process, $doing)
+    public function makePrepare($data, $mode, $process, $doing, $iteration)
     {
-        $data = $this->modx->runSnippet($this->snipPrepare, array('data' => $data, 'mode' => $mode, 'process' => $process, 'doing' => $doing));
+        $data = $this->modx->runSnippet($this->snipPrepare, array('data' => $data, 'mode' => $mode, 'process' => $process, 'doing' => $doing, 'iteration' => $iteration));
         return $data;
     }
 
     public function checkPrepareSnip()
     {
-        if(empty($_POST['prep_snip']) || $_POST['prep_snip']=='none') $this->issetPrepare = false;
+        if (empty($_POST['prep_snip']) || $_POST['prep_snip'] == 'none') $this->issetPrepare = false;
         else {
             $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $_POST['prep_snip'] . "' AND disabled = 0 LIMIT 0,1") ? $this->modx->db->escape($_POST['prep_snip']) : false;
         }
