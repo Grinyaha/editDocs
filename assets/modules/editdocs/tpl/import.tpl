@@ -140,12 +140,18 @@
                                     data: 'cls=1',//clear session_start
                                     success: function (res) {
                                         //console.log(res);
+                                    },
+                                    error:function(xhr,ajaxOptions,thrownError){
+                                        $('#result').html(thrownError+'\r\n'+xhr.statusText+'\r\n'+xhr.responseText);
                                     }
                                 });
                             }
                         } else {
                             $('#result').html(result);
                         }
+                    },
+                    error:function(xhr,ajaxOptions,thrownError){
+                        $('#result').html(thrownError+'\r\n'+xhr.statusText+'\r\n'+xhr.responseText);
                     }
                 }); //end ajax
             }

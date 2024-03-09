@@ -242,6 +242,9 @@
                             //document.location.href="/assets/modules/editdocs/uploads/export.csv";
                             $('#result').html('<p><br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>[+lang.download+] .CSV</a> &nbsp; <a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>[+lang.download+] Excel (.xlsx)</a></p>');
                         }
+                    },
+                    error:function(xhr,ajaxOptions,thrownError){
+                        $('#result').html(thrownError+'\r\n'+xhr.statusText+'\r\n'+xhr.responseText);
                     }
                 }); //end ajax
             }
