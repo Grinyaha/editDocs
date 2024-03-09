@@ -432,7 +432,7 @@ class editDocs
         $ptmplh = '';
         $parh = '';
 
-        //$this->modx->logEvent(1,1,'<pre>'.print_r($_SESSION['header_table'],1).'</pre>','TEST2');
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($_SESSION['header_table'],1).'</pre>','TEST!!!');
 
         if ($_SESSION['header_table']) {
             $theader = '';
@@ -511,8 +511,8 @@ class editDocs
 
             }
 
-            //боевой режим (добавление)
-            if ($inbase === false) { //не существует в базе
+            //режим (добавление)
+            if (!$inbase) {  //не существует в базе
 
                 if (!isset($_POST['test']) && empty($_POST['notadd'])) {
 
@@ -588,8 +588,8 @@ class editDocs
                 //$_SESSION['log'] .= '<hr>';
                 $i++;
 
-                //боевой режим (обновление)
-            } else if ($inbase > 0) {
+
+            } else if ($inbase > 0) { //существует в базе
                 if (!isset($_POST['test'])) {
 
                     //prepare
@@ -650,6 +650,9 @@ class editDocs
 
 
         }
+
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($_SESSION, true).'</pre>','Заголовок лога!3');
+
         $_SESSION['tabrows'] .= $tr;
         //$fulltab = $tabh.$tr.$tabe;
         $fortab = '<span class="td_add">&nbsp;</span>  ' . $this->lang['added'] . ' &nbsp;&nbsp;&nbsp; <span class="td_notadd">&nbsp;</span> ' . $this->lang['stopadd'] . '&nbsp;&nbsp;&nbsp; <span class="td_upd">&nbsp;</span> ' . $this->lang['edited'] . '<br><br>';
