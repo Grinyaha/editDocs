@@ -787,7 +787,7 @@ class editDocs
 
                 $checkf['db_srav'] = $row['value'];
                 if ($this->issetPrepare) {
-                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii-1);
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, 0);
                 }
 
                 //собираем массив со всеми значениями поля по которому сравниваемся
@@ -920,7 +920,7 @@ class editDocs
 
 
                     if ($this->issetPrepare) {
-                        $data = $this->makePrepare($data, 'upd', 'export', 1, $ii-1);
+                        $data = $this->makePrepare($data, 'upd', 'export', 1, 0);
                     }
                     $data['url'] = MODX_SITE_URL . $this->modx->makeUrl($data['id']);
                     $data['url'] = str_replace('//', '/', $data['url']);
