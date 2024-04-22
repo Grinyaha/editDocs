@@ -11,7 +11,7 @@
 
                 <div class="uk-margin-top">
                     ID [+lang.parent+]<br/>
-                    <input type="number" min="0" name="stparent" class="inp" id="stparent" style="width: 100px"/>
+                    <input type="text" min="0" name="stparent" class="inp" id="stparent" style="width: 100px"/>
                 </div>
 
                 <div class="uk-margin-top">
