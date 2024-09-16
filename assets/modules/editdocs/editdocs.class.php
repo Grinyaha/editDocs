@@ -519,7 +519,7 @@ class editDocs
 
             }
             //разделы и подразделы
-            $create = $this->treeCategories($create);
+            $create = $this->treeCategories($create, $_POST['test']);
 
             //режим (добавление)
             if (!$inbase) {  //не существует в базе
@@ -1190,40 +1190,91 @@ class editDocs
         return json_encode($arr, JSON_UNESCAPED_UNICODE);
     }
 
-    protected function treeCategories($data)
+    protected function treeCategories($datas, $test)
     {
+        if($test) return $datas; //если тестовый режим то ничего не делаем!
 
-        if (is_array($data)) {
+        if (is_array($datas)) {
             $i = 0;
+            $data = [];
+            $tpl = [];
             //подсчитывает сколько у нас ed_category
-            foreach ($data as $k => $v) {
+            foreach ($datas as $k => $v) {
                 if (strpos($k, 'ed_category') !== false) {
                     $i++;
+                    $data['ed_category'.$i] = $v;
+                    $tmp = explode('#', $k);
+                    $tpl[$i] = $tmp[1];
                 }
+                else $data[$k] = $v;
+                //создаем новый массив где нет # в столбцах
             }
-            //перебираем все категории и вычисляем конечный parent нужного раздела
-            for ($x = 1; $x <= $i; $x++) {
-                if ($x == 1) {
-                    $id = $this->currArr2[$data['ed_category' . $x]]['id'];
-                } else {
-                    if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
-                        if (!empty($data['ed_category' . $x])) {
-                            $id = $this->currArr2[$data['ed_category' . $x]]['id'];
-                        } else {
-                            $id = $this->currArr2[$data['ed_category' . $x]]['parent'];
-                        }
 
+            //перебираем все категории и вычисляем конечный parent нужного раздела
+
+            for ($x = 1; $x <= $i; $x++) {
+                //ниже пиздец там цикл, я там сам ничего не понял, но главное работает
+                //первая итерация
+                if ($x == 1) {
+                    //если существует 1-й уровень в каталоге
+                    if(isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
+                        $id = $this->currArr2[$data['ed_category' . $x]]['id'];
+                        $prnt = $id;
+                    }
+                    else {
+                        //если нет то создаем его
+                        $this->doc->create(array(
+                            'pagetitle' => $data['ed_category' . $x],
+                            'template' => $tpl[$x],
+                            'parent' => $_POST['parimp']
+                        ));
+                        $id = $this->doc->save($this->params['event_plugins'], false);
+
+                        $prnt = $id;
+                        $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
+                        $this->currArr2[$data['ed_category' . $x]]['parent'] = $_POST['parimp'];
+                    }
+                //последующие итерации ed_category
+                } else {
+                    if(isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
+
+                        if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
+                            if ($data['ed_category' . $x]!="") {
+                                $id = $this->currArr2[$data['ed_category' . $x]]['id'];
+                            } else {
+                                $id = $this->currArr2[$data['ed_category' . $x]]['parent'];
+                            }
+                            $prnt = $id;
+                        }
+                    }
+                    else {
+
+                        if($data['ed_category' . $x]!="") {
+                            $this->doc->create(array(
+                                'pagetitle' => $data['ed_category' . $x],
+                                'template' => $tpl[$x],
+                                'parent' => $prnt
+                            ));
+                            $id = $this->doc->save($this->params['event_plugins'], false);
+
+                            $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
+                            $this->currArr2[$data['ed_category' . $x]]['parent'] = $prnt;
+                            $prnt = $id;
+                        }
+                        else $prnt = $id;
+                        //$this->modx->logEvent(1,1,'<pre>'.print_r($data['ed_category' . $x], true).'</pre>','Заголовок лога 44');
                     }
                 }
-            }
 
-            if ($id > 0) {
-                $data['parent'] = $id;
-                //$count = count($_SESSION['header_table']) + 1;
-                //if(!array_search('parent',$_SESSION['header_table'])) $_SESSION['header_table'][$count] = 'parent';
+            } //end for
+
+
+
+            if ($prnt > 0) {
+                $datas['parent'] = $prnt;
             }
         }
-        return $data;
+       return $datas;
     }
 }
 
