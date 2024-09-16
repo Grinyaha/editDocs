@@ -9,7 +9,7 @@
 
                 <div class="uk-margin-top">
                     ID [+lang.parent+]<br/>
-                    <input type="number" min="0" name="bigparent" class="inp" id="bigparent" style="width: 100px"/>
+                    <input type="text" min="0" name="bigparent" class="inp" id="bigparent" style="max-width: 300px" placeholder="только числа через запятую!"/>
 
                 </div>
 
@@ -219,8 +219,13 @@
                 locale: ['OK', 'Cancel', '[+lang.select_all+]']
             });
 
-            $('#order,#orderas,#ed-tree,#config').SumoSelect({
+            $('#order,#orderas').SumoSelect({
                 placeholder: '[+lang.selconfig+]...',
+                search: true,
+                searchText: '[+lang.fieldortv+]'
+            });
+            $('#ed-tree,#config').SumoSelect({
+                placeholder: '[+lang.selconfig+]...'
             });
             loadOptionsCfg();
 

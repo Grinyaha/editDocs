@@ -3,7 +3,7 @@
 
 class editDocs
 {
-    public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $addArr, $lang, $issetPrepare, $uni, $dn;
+    public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $currArr2, $addArr, $lang, $issetPrepare, $uni, $dn;
 
     //public $params;
     public function __construct($modx)
@@ -26,6 +26,7 @@ class editDocs
 
         $this->check = $this->checkTableMC();
         $this->currArr = []; //массив с которым сравниваемся
+        $this->currArr2 = []; //для разделов подразделов
         $this->addArr = []; //массив для новых добавляемых документов
 
         //language
@@ -432,6 +433,7 @@ class editDocs
         $this->checkPrepareSnip();//проверяем, есть ли обработчик prepare (сниппет)
         $ptmplh = '';
         $parh = '';
+        $parc = '';
 
         //$this->modx->logEvent(1,1,'<pre>'.print_r($_SESSION['header_table'],1).'</pre>','TEST!!!');
 
@@ -452,9 +454,13 @@ class editDocs
                 if ($_POST['parimp']) $parh = '<td>parent</td>';
             }
 
-
             if (array_search('template', $_SESSION['header_table']) === false) {
                 if ($_POST['tpl'] != 'file') $ptmplh = '<td>template</td>';
+            }
+
+            //категории разделы
+            if (array_search('ed_category1', $_SESSION['header_table']) && $parc == '') {
+                $parc = '<td>parent</td>';
             }
 
             if (!empty($_POST['unpub']) || !empty($_POST['unpub2'])) $unphd = '<td>published</td>';
@@ -464,13 +470,13 @@ class editDocs
         }
 
 
-        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . $unphd . '</tr>';
+        $tabh = '<table  class="tabres"><tr>' . $theader . $parh . $ptmplh . $parc . $unphd . '</tr>';
         $tabe = '</table>';
 
         $tr = '';
 
         //HERE
-        $this->currArr($check, $uniq);
+        $this->allArr($check, $uniq, $theader);
 
         for ($ii = $start; $ii < $finish; $ii++) {
             if (!isset($data[$ii])) continue;
@@ -483,11 +489,11 @@ class editDocs
 
                 $checkf['xls_srav'] = $check[2];
                 if ($this->issetPrepare) {
-                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii-1); // 1 - game mode
+                    $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii - 1); // 1 - game mode
                 }
 
                 //$this->modx->logEvent(1,1,'<pre>'.print_r($checkf, true).'</pre>','Заголовок лога!');
-                $inbase = array_search($checkf['xls_srav'], $this->currArr); //Сверяемся с выбранным полем и данными в базе.
+                $inbase = array_search($checkf['xls_srav'], $this->currArr); //Сверяемся со значением выбранного поля и данными в базе.
             }
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
@@ -512,6 +518,8 @@ class editDocs
                 if ($vally == '0' && empty($vally)) $create[$kv] = '0'; //если у значения есть ноль
 
             }
+            //разделы и подразделы
+            $create = $this->treeCategories($create);
 
             //режим (добавление)
             if (!$inbase) {  //не существует в базе
@@ -521,7 +529,7 @@ class editDocs
 
                     //prepare create
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'new', 'import', 1, $ii-1); // 1 - game mode
+                        $create = $this->makePrepare($create, 'new', 'import', 1, $ii - 1); // 1 - game mode
                     }
 
                     //search & replace
@@ -565,7 +573,7 @@ class editDocs
                 } //тестовый режим (добавление)
                 else {
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'new', 'import', 0, $ii-1); // 0 - test mode
+                        $create = $this->makePrepare($create, 'new', 'import', 0, $ii - 1); // 0 - test mode
                     }
 
                     //search & replace
@@ -595,7 +603,7 @@ class editDocs
 
                     //prepare
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'upd', 'import', 1, $ii-1); // 1 - game mode
+                        $create = $this->makePrepare($create, 'upd', 'import', 1, $ii - 1); // 1 - game mode
                     }
 
                     //search & replace
@@ -604,6 +612,7 @@ class editDocs
                     //MultiTv
                     $create = $this->multiTv($create);
 
+                    //EDIT
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save($this->params['event_plugins'], false);
 
 
@@ -628,7 +637,7 @@ class editDocs
                 } //тестовый режим (обновление)
                 else {
                     if ($this->issetPrepare) {
-                        $create = $this->makePrepare($create, 'upd', 'import', 0, $ii-1); // 0 - game mode
+                        $create = $this->makePrepare($create, 'upd', 'import', 0, $ii - 1); // 0 - game mode
                     }
                     //search & replace
                     $create = $this->smallPrepare($create);
@@ -772,14 +781,24 @@ class editDocs
 
     }
 
-    protected function currArr($check, $name)
+    protected function allArr($check, $name, $theader)
     {
+        //для категории/разделы, проверяем нужно ли делать запрос на предмет всего массива документов
+        $theader = strip_tags($theader);
+        if (strpos($theader, 'ed_category1') !== false) {
+            $que = $this->modx->db->query("SELECT pagetitle,id,parent FROM " . $this->modx->getFullTableName('site_content'));
+            while ($ro = $this->modx->db->getRow($que)) {
+                //собираем массив со всеми значениями поля по которому сравниваемся
+                $this->currArr2[$ro['pagetitle']]['id'] = $ro['id'];
+                $this->currArr2[$ro['pagetitle']]['parent'] = $ro['parent'];
+            }
+        }
+
 
         if ($check[0] == 'tv') {
 
             $tvquery = $this->modx->db->query("SELECT id FROM " . $this->modx->getFullTableName('site_tmplvars') . " WHERE name='" . $name . "'");
             $tvid = $this->modx->db->getRow($tvquery);
-            //$tvid['id']
 
             $res = $this->modx->db->query("SELECT contentid,value FROM " . $this->modx->getFullTableName('site_tmplvar_contentvalues') . " WHERE tmplvarid='" . $tvid['id'] . "'");
             while ($row = $this->modx->db->getRow($res)) {
@@ -1120,9 +1139,8 @@ class editDocs
         if ($retv != '') $data[] = $retv;
 
         /*echo '<pre>';
-        print_r($data);
-        echo '</pre>';*/
-
+       print_r($data);
+       echo '</pre>';*/
         return $data;
     }
 
@@ -1170,6 +1188,42 @@ class editDocs
     {
         $arr = include_once(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $name);
         return json_encode($arr, JSON_UNESCAPED_UNICODE);
+    }
+
+    protected function treeCategories($data)
+    {
+
+        if (is_array($data)) {
+            $i = 0;
+            //подсчитывает сколько у нас ed_category
+            foreach ($data as $k => $v) {
+                if (strpos($k, 'ed_category') !== false) {
+                    $i++;
+                }
+            }
+            //перебираем все категории и вычисляем конечный parent нужного раздела
+            for ($x = 1; $x <= $i; $x++) {
+                if ($x == 1) {
+                    $id = $this->currArr2[$data['ed_category' . $x]]['id'];
+                } else {
+                    if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
+                        if (!empty($data['ed_category' . $x])) {
+                            $id = $this->currArr2[$data['ed_category' . $x]]['id'];
+                        } else {
+                            $id = $this->currArr2[$data['ed_category' . $x]]['parent'];
+                        }
+
+                    }
+                }
+            }
+
+            if ($id > 0) {
+                $data['parent'] = $id;
+                //$count = count($_SESSION['header_table']) + 1;
+                //if(!array_search('parent',$_SESSION['header_table'])) $_SESSION['header_table'][$count] = 'parent';
+            }
+        }
+        return $data;
     }
 }
 
