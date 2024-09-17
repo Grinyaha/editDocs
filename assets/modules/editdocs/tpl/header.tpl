@@ -26,7 +26,7 @@
 
 <body>
 <div class="uk-margin-left uk-margin-top">
-    <h3>[+session.itemname+] v2.2.0</h3>
+    <h3>[+session.itemname+] v2.2.1</h3>
 </div>
 
 
