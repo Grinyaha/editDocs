@@ -1236,7 +1236,7 @@ class editDocs
                     }
                 //последующие итерации ed_category
                 } else {
-                    if(isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
+                    if(isset($this->currArr2[$data['ed_category' . $x]]['id']) && $this->currArr2[$data['ed_category' . $x]]['parent']==$prnt) {
 
                         if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
                             if ($data['ed_category' . $x]!="") {
@@ -1262,10 +1262,10 @@ class editDocs
                             $prnt = $id;
                         }
                         else $prnt = $id;
-                        //$this->modx->logEvent(1,1,'<pre>'.print_r($data['ed_category' . $x], true).'</pre>','Заголовок лога 44');
+
                     }
                 }
-
+//if($x == 3) $this->modx->logEvent(1,1,'<pre>'.print_r($this->currArr2, true).'</pre>','Заголовок лога 3');
             } //end for
 
 
