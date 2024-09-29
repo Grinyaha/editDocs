@@ -81,11 +81,11 @@
                                style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.export_mc+]
                     </label>
-                    <br><br>
-                    <label>
+                    <br>
+                    <!--label>
                         [+lang.fieds_custom+] <br>
                         <input type="text" name="fieldz_custom" id="fieldz_custom" placeholder="field1;field2;field3">
-                    </label>
+                    </label-->
 
                 </div>
                 <hr>
