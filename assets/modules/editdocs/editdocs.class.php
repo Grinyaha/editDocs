@@ -1192,6 +1192,15 @@ class editDocs
 
     protected function treeCategories($datas, $test)
     {
+        //проверка есть ли ed_category
+        $l=0;
+        foreach ($datas as $kkk => $vvv) {
+            if(strpos($kkk, 'ed_category')!==false) $l++;
+        }
+        if($l==0) return $datas;
+
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($datas, true).'</pre>','Заголовок лога 3');
+
         if($test) return $datas; //если тестовый режим то ничего не делаем!
 
         if (is_array($datas)) {
@@ -1265,7 +1274,7 @@ class editDocs
 
                     }
                 }
-//if($x == 3) $this->modx->logEvent(1,1,'<pre>'.print_r($this->currArr2, true).'</pre>','Заголовок лога 3');
+
             } //end for
 
 
