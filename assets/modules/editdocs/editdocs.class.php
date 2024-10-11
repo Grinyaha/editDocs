@@ -879,8 +879,8 @@ class editDocs
             $file_temp = fopen($filename_temp, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
-            $fields_custom = explode(';', $this->modx->db->escape($_POST['fieldz_custom']));
-            $fields = array_merge($fields, $fields_custom);
+            //$fields_custom = explode(';', $this->modx->db->escape($_POST['fieldz_custom']));
+            //$fields = array_merge($fields, $fields_custom);
 
             array_unshift($fields, 'id');
 
