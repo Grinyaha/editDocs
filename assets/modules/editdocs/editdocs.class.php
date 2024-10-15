@@ -940,25 +940,25 @@ class editDocs
             ));
 
             $DL = json_decode($DL, true);
+            sort($DL);
 
+            $i = 0;
+            $mass = [];
+            foreach ($DL[0] as $ky => $vl) {
 
-                $i = 0;
-                $mass = [];
-                foreach ($DL[1] as $ky => $vl) {
-
-                    if ($ky == "e_pagetitle") $i++;
-                    if ($i > 0 && $ky != "e_pagetitle" && !in_array("category", $header))
-                    {
-                        $mass[] = $ky;
-                    }
-                    else {
-                        if($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
-                    }
+                if ($ky == "e_pagetitle") $i++;
+                if ($i > 0 && $ky != "e_pagetitle" && !in_array("category", $header))
+                {
+                    $mass[] = $ky;
                 }
+                else {
+                    if($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
+                }
+            }
             $header = array_merge($header, $mass);
 
 
-           // $this->modx->logEvent(1, 1, '<pre>' . print_r($header, true) . '</pre>', 'Заголовок лога 1');
+            //$this->modx->logEvent(1, 1, '<pre>' . print_r($DL, true) . '</pre>', 'Заголовок лога 1');
 
 
             if ($_SESSION['export_start'] == 0) { //header только в начале ставим
