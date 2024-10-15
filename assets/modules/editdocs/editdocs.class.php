@@ -893,13 +893,12 @@ class editDocs
             foreach ($fields as $key => $val) {
                 //if($val=='url') $url = '[+url+];';
                 $tvlist .= $val . ',';
-                $ph .= '[+' . $val . '+];';
                 $head .= $val . ';';
                 if (!empty($val)) $header[] = $val;
 
             }
             $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
-            $ph = substr($ph, 0, strlen($ph) - 1);
+
             $head = substr($head, 0, strlen($head) - 1) . "\r\n";
 
             if (!empty($_POST['export_mc'])) $header[] = 'category'; //Добавляем в заголовок category от MultiCategories
@@ -907,12 +906,8 @@ class editDocs
             if (!empty($_POST['dm'])) $dm = $_POST['dm'];
             else $dm = ';'; //разделитель
 
-            if ($_SESSION['export_start'] == 0) { //header только в начале ставим
-                fputcsv($file, $header, $dm);
-                fputcsv($file_temp, $header, $dm);
-            }
 
-
+            $xx = implode(',', $header);
             $DL = $this->modx->runSnippet('DocLister', array(
                 'api' => 1,
                 'idType' => 'parents',
@@ -925,24 +920,19 @@ class editDocs
                 'tvPrefix' => '',
                 'orderBy' => 'id ASC',
                 'tvList' => $tvlist,
-                'tpl' => '@CODE:' . $ph,
                 'filters' => $filters,
                 'addWhereList' => $addwhere,
                 'prepare' => function ($data) {
-                    // foreach ($this->params['prevent_date'] as $v) {
-                    //     $v = trim($v);
-                    //     if (isset($data[$v])) {
-                    //         $data[$v] = str_replace('.', ',', $data[$v]);
-                    //     }
-                    // }
-                    if (!empty($_POST['export_mc'])) $data['category'] = $this->multicat($data['id']);
 
+                    if (!empty($_POST['export_mc'])) $data['category'] = $this->multicat($data['id']);
 
                     if ($this->issetPrepare) {
                         $data = $this->makePrepare($data, 'upd', 'export', 1, 0);
                     }
-                    $data['url'] = MODX_SITE_URL . $this->modx->makeUrl($data['id']);
-                    $data['url'] = str_replace('//', '/', $data['url']);
+
+                    $url = substr(MODX_SITE_URL, 0, strlen(MODX_SITE_URL) - 1);
+                    $data['url'] = $url . $this->modx->makeUrl($data['id']);
+
                     return $data;
                 },
                 'showNoPublish' => $neopubl,
@@ -950,6 +940,31 @@ class editDocs
             ));
 
             $DL = json_decode($DL, true);
+
+
+                $i = 0;
+                $mass = [];
+                foreach ($DL[1] as $ky => $vl) {
+
+                    if ($ky == "e_pagetitle") $i++;
+                    if ($i > 0 && $ky != "e_pagetitle" && !in_array("category", $header))
+                    {
+                        $mass[] = $ky;
+                    }
+                    else {
+                        if($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
+                    }
+                }
+            $header = array_merge($header, $mass);
+
+
+           // $this->modx->logEvent(1, 1, '<pre>' . print_r($header, true) . '</pre>', 'Заголовок лога 1');
+
+
+            if ($_SESSION['export_start'] == 0) { //header только в начале ставим
+                fputcsv($file, $header, $dm);
+                fputcsv($file_temp, $header, $dm);
+            }
 
             foreach ($DL as $string) {
                 $import = array();
@@ -1193,15 +1208,15 @@ class editDocs
     protected function treeCategories($datas, $test)
     {
         //проверка есть ли ed_category
-        $l=0;
+        $l = 0;
         foreach ($datas as $kkk => $vvv) {
-            if(strpos($kkk, 'ed_category')!==false) $l++;
+            if (strpos($kkk, 'ed_category') !== false) $l++;
         }
-        if($l==0) return $datas;
+        if ($l == 0) return $datas;
 
         //$this->modx->logEvent(1,1,'<pre>'.print_r($datas, true).'</pre>','Заголовок лога 3');
 
-        if($test) return $datas; //если тестовый режим то ничего не делаем!
+        if ($test) return $datas; //если тестовый режим то ничего не делаем!
 
         if (is_array($datas)) {
             $i = 0;
@@ -1211,11 +1226,10 @@ class editDocs
             foreach ($datas as $k => $v) {
                 if (strpos($k, 'ed_category') !== false) {
                     $i++;
-                    $data['ed_category'.$i] = $v;
+                    $data['ed_category' . $i] = $v;
                     $tmp = explode('#', $k);
                     $tpl[$i] = $tmp[1];
-                }
-                else $data[$k] = $v;
+                } else $data[$k] = $v;
                 //создаем новый массив где нет # в столбцах
             }
 
@@ -1226,11 +1240,10 @@ class editDocs
                 //первая итерация
                 if ($x == 1) {
                     //если существует 1-й уровень в каталоге
-                    if(isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
+                    if (isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
                         $id = $this->currArr2[$data['ed_category' . $x]]['id'];
                         $prnt = $id;
-                    }
-                    else {
+                    } else {
                         //если нет то создаем его
                         $this->doc->create(array(
                             'pagetitle' => $data['ed_category' . $x],
@@ -1243,22 +1256,21 @@ class editDocs
                         $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
                         $this->currArr2[$data['ed_category' . $x]]['parent'] = $_POST['parimp'];
                     }
-                //последующие итерации ed_category
+                    //последующие итерации ed_category
                 } else {
-                    if(isset($this->currArr2[$data['ed_category' . $x]]['id']) && $this->currArr2[$data['ed_category' . $x]]['parent']==$prnt) {
+                    if (isset($this->currArr2[$data['ed_category' . $x]]['id']) && $this->currArr2[$data['ed_category' . $x]]['parent'] == $prnt) {
 
                         if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
-                            if ($data['ed_category' . $x]!="") {
+                            if ($data['ed_category' . $x] != "") {
                                 $id = $this->currArr2[$data['ed_category' . $x]]['id'];
                             } else {
                                 $id = $this->currArr2[$data['ed_category' . $x]]['parent'];
                             }
                             $prnt = $id;
                         }
-                    }
-                    else {
+                    } else {
 
-                        if($data['ed_category' . $x]!="") {
+                        if ($data['ed_category' . $x] != "") {
                             $this->doc->create(array(
                                 'pagetitle' => $data['ed_category' . $x],
                                 'template' => $tpl[$x],
@@ -1269,8 +1281,7 @@ class editDocs
                             $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
                             $this->currArr2[$data['ed_category' . $x]]['parent'] = $prnt;
                             $prnt = $id;
-                        }
-                        else $prnt = $id;
+                        } else $prnt = $id;
 
                     }
                 }
@@ -1278,12 +1289,11 @@ class editDocs
             } //end for
 
 
-
             if ($prnt > 0) {
                 $datas['parent'] = $prnt;
             }
         }
-       return $datas;
+        return $datas;
     }
 }
 
