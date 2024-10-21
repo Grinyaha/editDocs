@@ -425,7 +425,7 @@ class editDocs
         $start = isset($_SESSION['import_start']) ? $_SESSION['import_start'] : 0;
         $finish = isset($_SESSION['import_start']) ? ($start + $this->step) : count($data);
 
-        if(empty($_POST['test'])) $_POST['test'] = false;
+        //if(empty($_POST['test'])) $_POST['test'] = false;
 
         /*echo '<pre>';
         print_r($_SESSION['header_table']);
@@ -520,7 +520,7 @@ class editDocs
 
             }
             //разделы и подразделы
-            //$create = $this->treeCategories($create, $_POST['test']);
+            $create = $this->treeCategories($create, $_POST['test']);
 
             //режим (добавление)
             if (!$inbase) {  //не существует в базе
