@@ -17,9 +17,18 @@
 
 $process = isset($process) ? $process : '';
 $mode = isset($mode) ? $mode : '';
+$total = $_SESSION['import_total']-2; //последняя итерация
+
 switch ($process) {
     case 'import':
         //обработчик импорта
+
+        //первая итерация
+		//if ($iteration == 1) { }
+
+		//последняя итерация
+		//if ($iteration == $total) { }
+
         switch ($mode) {
             case 'upd':
                 //обновляем ресурс
