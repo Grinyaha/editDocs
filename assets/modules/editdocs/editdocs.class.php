@@ -425,8 +425,6 @@ class editDocs
         $start = isset($_SESSION['import_start']) ? $_SESSION['import_start'] : 0;
         $finish = isset($_SESSION['import_start']) ? ($start + $this->step) : count($data);
 
-        //if(empty($_POST['test'])) $_POST['test'] = false;
-
         /*echo '<pre>';
         print_r($_SESSION['header_table']);
         echo '</pre>';*/
@@ -520,7 +518,8 @@ class editDocs
 
             }
             //разделы и подразделы
-            $create = $this->treeCategories($create, $_POST['test']);
+            if (!isset($_POST['test'])) $testing = false; else $testing = $_POST['test'];
+            $create = $this->treeCategories($create, $testing);
 
             //режим (добавление)
             if (!$inbase) {  //не существует в базе
@@ -948,12 +947,10 @@ class editDocs
             foreach ($DL[0] as $ky => $vl) {
 
                 if ($ky == "e_pagetitle") $i++;
-                if ($i > 0 && $ky != "e_pagetitle" && !in_array("category", $header))
-                {
+                if ($i > 0 && $ky != "e_pagetitle" && !in_array("category", $header)) {
                     $mass[] = $ky;
-                }
-                else {
-                    if($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
+                } else {
+                    if ($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
                 }
             }
             $header = array_merge($header, $mass);
