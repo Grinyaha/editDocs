@@ -520,7 +520,7 @@ class editDocs
 
             }
             //разделы и подразделы
-            $create = $this->treeCategories($create, $_POST['test']);
+            //$create = $this->treeCategories($create, $_POST['test']);
 
             //режим (добавление)
             if (!$inbase) {  //не существует в базе
