@@ -298,7 +298,6 @@
 
     <!-- HTML -->
 
-    <a class="btn btn-info" href="#modal-readme" uk-toggle>[+lang.help+] <span uk-icon="icon: info; ratio: 1"></span> </a>
     <div id="modal-readme" class="uk-flex-top" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="width: 1200px">
 
@@ -336,6 +335,8 @@
     <div class="sending uk-margin-top">
         <div class="example">
             <img src="/assets/modules/editdocs/css/example.png">
+            <br><br>
+            <a class="btn btn-info" href="#modal-readme" uk-toggle>[+lang.help+] <span uk-icon="icon: info; ratio: 1"></span> </a>
         </div>
         <form id="pro">
             <input type="hidden" name="imp" value="1"/>

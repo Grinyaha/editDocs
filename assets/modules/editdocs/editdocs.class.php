@@ -184,7 +184,7 @@ class editDocs
                 'TplWrapPaginate' => '@CODE: <tr><td colspan="100" align="center"><br/>[+wrap+]<br/></td></tr>',
                 'tvList' => $tvlist,
                 'filters' => $filters,
-                'tpl' => '@CODE:  <tr class="ed-row"><td class="idd" idd="[+id+]">[+id+]<br>[+piczzz+]</td>' . $rowtd . '</tr>',
+                'tpl' => '@CODE:  <tr class="ed-row"><td class="idd" idd="[+id+]">[+id+]<br>[+picsss+]</td>' . $rowtd . '</tr>',
                 'addWhereList' => $addwhere,
                 'showNoPublish' => $neopubl,
                 'prepare' => function ($data) {
@@ -201,11 +201,29 @@ class editDocs
                         } else $data['category'] = '';
                     }
 
+                    //render TV PIC
+                    $tvpic = '';
+                    if (!empty($_POST['tvpic'])) $tvpic = $_POST['tvpic'];
+
                     //renderTV
                     foreach ($data as $k => $v) {
 
                         if ($k == 'id' || $k == 'category') {
                         } else {
+
+                            //show IMG
+                            $opic = '';
+                            if (!empty($tvpic) && $k == $tvpic) {
+
+                                $slash = '/';
+                                if (substr($data[$tvpic], 0, 1) == '/') $slash = '';
+                                if (substr($data[$tvpic], 0, 4) == 'http') $slash = '';
+
+                                //$this->modx->logEvent(1,1,'<code>'.$data[$tvpic].'</code>','tv pic');
+                                if (!empty($data[$tvpic])) $opic = '<img src="' . $slash . $data[$tvpic] . '" width="100" >';
+
+                            }
+
                             if (isset($_SESSION['ed_tv'][$k]) && !empty($_POST['rendertv'])) {
 
                                 //SELECT && RADIO && LISTBOX
@@ -263,34 +281,18 @@ class editDocs
 
                                     $data[$k] = '<td>' . $rs1 . $rs . $rs2 . '</td>';
                                 } else {
-
-                                    if ($k != $_POST['tvpic']) {
-                                        $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
-                                    } else $data[$k] = $v;
+                                    //если рендер ТВ ON
+                                    $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea>' . $opic . '</td>';
                                 }
 
 
                             } else {
-                                if ($k != $_POST['tvpic']) {
-                                    $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea></td>';
-                                } else $data[$k] = $v;
+                                //если рендер ТВ OFF
+                                $data[$k] = '<td><textarea name="' . $k . '" class="tarea">' . $v . '</textarea>' . $opic . '</td>';
                             }
+
                         }
                     }
-
-                    //show IMG
-                    if (!empty($_POST['tvpic'])) {
-                        $tvpic = $_POST['tvpic'];
-                        $slash = '/';
-                        if (substr($data[$tvpic], 0, 1) == '/') $slash = '';
-                        if (substr($data[$tvpic], 0, 4) == 'http') $slash = '';
-
-                        //$this->modx->logEvent(1,1,'<code>'.$data[$tvpic].'</code>','tv pic');
-                        if (!empty($data[$tvpic])) $data['piczzz'] = '<img src="' . $slash . $data[$tvpic] . '" width="100"/>';
-                        else $data['piczzz'] = '';
-
-                    } else $data['piczzz'] = '';
-
 
                     return $data;
                 }
@@ -940,7 +942,7 @@ class editDocs
             ));
 
             $DL = json_decode($DL, true);
-            sort($DL);
+            $DL = array_values($DL);
 
             $i = 0;
             $mass = [];
