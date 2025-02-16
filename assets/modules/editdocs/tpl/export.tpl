@@ -82,10 +82,6 @@
                         [+lang.export_mc+]
                     </label>
                     <br>
-                    <!--label>
-                        [+lang.fieds_custom+] <br>
-                        <input type="text" name="fieldz_custom" id="fieldz_custom" placeholder="field1;field2;field3">
-                    </label-->
 
                 </div>
                 <hr>
@@ -93,8 +89,8 @@
 
                 <div class="uk-margin-top">
 
-                        [+lang.filtertv+] (DocLister) <sup><span class="uk-inline" uk-icon="icon: info"
-                                                            uk-tooltip="[+lang.dltext+]"></span></sup>
+                    [+lang.filtertv+] (DocLister) <sup><span class="uk-inline" uk-icon="icon: info"
+                                                             uk-tooltip="[+lang.dltext+]"></span></sup>
 
                     <input type="text" name="filters" id="filters" class="inp" style="max-width: 300px"
                            placeholder="[+lang.example+] tv:ves:>:1"/>
@@ -104,8 +100,8 @@
 
                 <div class="uk-margin-top">
 
-                        [+lang.filterdef+] <sup><span class="uk-inline" uk-icon="icon: info"
-                                                 uk-tooltip="[+lang.sqltext+]"></span></sup>
+                    [+lang.filterdef+] <sup><span class="uk-inline" uk-icon="icon: info"
+                                                  uk-tooltip="[+lang.sqltext+]"></span></sup>
 
                     <input type="text" name="addwhere" id="addwhere" class="inp" style="max-width: 300px"
                            placeholder="[+lang.example+] c.template=2"/>
@@ -141,6 +137,7 @@
                                style="max-width: 250px">
                         <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                     </div>
+                    <a href="#" id="chcur_conf">[+lang.fill_sconf+]</a>
                 </div>
                 <hr>
                 <div class=""><h3>Prepare - [+lang.snippet+]</h3></div>
@@ -201,6 +198,7 @@
             });
             $('#ed-tree,#config').SumoSelect({
                 placeholder: '[+lang.selconfig+]...',
+                search: true,
             });
 
             $('#prep_snip').SumoSelect({
@@ -350,6 +348,14 @@
 
                     }
                 }); //end ajax
+            });
+
+            //jquery
+            $('body').on('click', '#chcur_conf', function (e) {
+                e.preventDefault();
+                let cur = $('#config option:selected').text();
+                $('#cfg_name').val(cur);
+                $('#save_btn').attr('disabled', false);
             });
 
 

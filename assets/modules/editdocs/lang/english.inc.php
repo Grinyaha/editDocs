@@ -124,5 +124,6 @@ $lang['without_snippet'] = 'Without prepare-snippet';
 $lang['snippet'] = 'snippet';
 $lang['need_snippet'] = 'Select the desired prepare-snippet';
 $lang['multi_reset'] = 'Erase old data and add current <br>(otherwise just add)';
+$lang['fill_sconf'] = 'fill with the name of the current config';
 
 ?>

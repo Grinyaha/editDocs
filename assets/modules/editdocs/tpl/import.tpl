@@ -5,6 +5,7 @@
 
             $('#config').SumoSelect({
                 placeholder: '[+lang.selconfig+]...',
+                search: true
             });
 
             $('#checktv, #replace').SumoSelect({
@@ -259,6 +260,14 @@
             }); //end click
 
 
+            $('body').on('click', '#chcur_conf', function (e) {
+                e.preventDefault();
+                let cur = $('#config option:selected').text();
+                $('#cfg_name').val(cur);
+                $('#save_btn').attr('disabled', false);
+            });
+
+
         });
 
         //подгружаем список файлов для конфигов
@@ -493,6 +502,7 @@
                                    style="width: 250px">
                             <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                         </div>
+                        <a href="#" id="chcur_conf">[+lang.fill_sconf+]</a>
                     </div>
                     <hr>
                     <div class=""><h3>Prepare - [+lang.snippet+]</h3></div>

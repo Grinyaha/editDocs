@@ -169,6 +169,7 @@
                                style="width: 250px">
                         <button type="button" id="save_btn" disabled>[+lang.save_btn+]</button>
                     </div>
+                    <a href="#" id="chcur_conf">[+lang.fill_sconf+]</a>
                 </div>
                 <hr>
                 <div class=""><h3>[+lang.clearcache+]</h3></div>
@@ -225,7 +226,8 @@
                 searchText: '[+lang.fieldortv+]'
             });
             $('#ed-tree,#config').SumoSelect({
-                placeholder: '[+lang.selconfig+]...'
+                placeholder: '[+lang.selconfig+]...',
+                search: true
             });
             loadOptionsCfg();
 
@@ -410,6 +412,14 @@
                     }
                 }); //end ajax
             }); //end click
+
+            //fill save config
+            $('body').on('click', '#chcur_conf', function (e) {
+                e.preventDefault();
+                let cur = $('#config option:selected').text();
+                $('#cfg_name').val(cur);
+                $('#save_btn').attr('disabled', false);
+            });
 
         }); //end ready
 

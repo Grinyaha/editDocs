@@ -124,6 +124,7 @@ $lang['without_snippet'] = 'Без prepare-сниппета';
 $lang['snippet'] = 'сниппет';
 $lang['need_snippet'] = 'Выберите нужный prepare-сниппет';
 $lang['multi_reset'] = 'Стереть старые данные и добавить текущие <br>(иначе только добавить)';
+$lang['fill_sconf'] = 'вписать имя текущего конфига';
 
 
 
