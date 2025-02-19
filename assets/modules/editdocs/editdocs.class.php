@@ -629,7 +629,7 @@ class editDocs
 
                         foreach ($ctm as $valoc) {
                             if (!empty($valoc) && !empty($edit)) {
-                                $que2 = $this->modx->db->query("INSERT INTO " . $this->modx->getFullTableName('site_content_categories') . " SET category=" . $valoc . ", doc=" . $edit);
+                                $que2 = $this->modx->db->query("INSERT IGNORE INTO " . $this->modx->getFullTableName('site_content_categories') . " SET category=" . $valoc . ", doc=" . $edit);
                             }
                         }
                         //$que = $this->modx->db->query("UPDATE ".$this->modx->getFullTableName('site_content_categories')." SET category=".$create['category']." WHERE doc=".$edit);
