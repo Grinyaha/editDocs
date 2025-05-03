@@ -408,7 +408,7 @@ class editDocs
         //     return '<div class="alert alert-danger ">Введите ID родителя!</div>' . $this->table($_SESSION['data'], $this->params['max_rows']);
         // }
         $this->uni = isset($_POST['checktv']) && $_POST['checktv'] != '0' ? $_POST['checktv'] : 'id';
-        if (isset($_POST['checktv2']) && $_POST['checktv2'] != '') $this->uni2 = $_POST['checktv2'];
+        //if (isset($_POST['checktv2']) && $_POST['checktv2'] != '') $this->uni2 = $_POST['checktv2'];
 
         if ($_SESSION['data']) {
             return $this->importReady($this->newMassif($_SESSION['data'])); //$this->table($_SESSION['data'], $this->params['max_rows'])
@@ -479,11 +479,18 @@ class editDocs
         //HERE
         $this->allArr($check, $uniq, $theader);
 
+        //фиксим названия таблицы по сопоставлениям
+        foreach ($data as $kg => $am) {
+            $data[$kg] = $this->megaPrepare($am);
+        }
+
         for ($ii = $start; $ii < $finish; $ii++) {
             if (!isset($data[$ii])) continue;
             $val = $data[$ii];
 
             $inbase = 0;
+
+
 
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
@@ -493,9 +500,10 @@ class editDocs
                     $checkf = $this->makePrepare($checkf, 'srav', 'srav', 1, $ii - 1); // 1 - game mode
                 }
 
-                //$this->modx->logEvent(1,1,'<pre>'.print_r($checkf, true).'</pre>','Заголовок лога!');
+
                 $inbase = array_search($checkf['xls_srav'], $this->currArr); //Сверяемся со значением выбранного поля и данными в базе.
             }
+
             foreach ($val as $key => $value) {
                 $create[$key] = $value;
             }
@@ -607,6 +615,7 @@ class editDocs
                 if (!isset($_POST['test'])) {
 
                     $create = $this->megaPrepare($create);
+
                     //prepare
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 1, $ii - 1); // 1 - game mode
@@ -733,7 +742,8 @@ class editDocs
 
     protected function table($data, $max)
     {
-        //$this->modx->logEvent(1,1,'_max'.$max,'header');
+        //$this->modx->logEvent(1,1,'<pre>'.print_r($data, true).'</pre>','Заголовок лога Wwde');
+
         $header = '<table class="tabres">';
         $footer = '</table>';
         $out = '';
@@ -1070,7 +1080,7 @@ class editDocs
                 $result[$key] = $value;
             }
         }
-
+        
         return $result;
     }
 
