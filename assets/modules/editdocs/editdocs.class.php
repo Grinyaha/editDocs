@@ -528,6 +528,7 @@ class editDocs
 
                 if (!isset($_POST['test']) && empty($_POST['notadd'])) {
 
+                    $create = $this->megaPrepare($create);
 
                     //prepare create
                     if ($this->issetPrepare) {
@@ -574,6 +575,8 @@ class editDocs
                     }
                 } //тестовый режим (добавление)
                 else {
+                    $create = $this->megaPrepare($create);
+
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'new', 'import', 0, $ii - 1); // 0 - test mode
                     }
@@ -603,6 +606,7 @@ class editDocs
             } else if ($inbase > 0) { //существует в базе
                 if (!isset($_POST['test'])) {
 
+                    $create = $this->megaPrepare($create);
                     //prepare
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 1, $ii - 1); // 1 - game mode
@@ -638,6 +642,7 @@ class editDocs
                     $testInfo = '';
                 } //тестовый режим (обновление)
                 else {
+                    $create = $this->megaPrepare($create);
                     if ($this->issetPrepare) {
                         $create = $this->makePrepare($create, 'upd', 'import', 0, $ii - 1); // 0 - game mode
                     }
@@ -779,6 +784,7 @@ class editDocs
                 $param[1] = $field;
             }
         }
+
         return $param;
 
     }
@@ -1035,6 +1041,7 @@ class editDocs
     public function makePrepare($data, $mode, $process, $doing, $iteration)
     {
         $data = $this->modx->runSnippet($this->snipPrepare, array('data' => $data, 'mode' => $mode, 'process' => $process, 'doing' => $doing, 'iteration' => $iteration));
+
         return $data;
     }
 
@@ -1045,6 +1052,26 @@ class editDocs
             $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $_POST['prep_snip'] . "' AND disabled = 0 LIMIT 0,1") ? $this->modx->db->escape($_POST['prep_snip']) : false;
         }
         return $this;
+    }
+
+    protected function megaPrepare($data)
+    {
+        $result = [];
+        $mapping = [];
+        foreach ($_POST['sravxls'] as $index => $key) {
+            $value = $_POST['sravbd'][$index];
+            $mapping[$key] = ($value === '0') ? $key : $value;
+        }
+
+        foreach ($data as $key => $value) {
+            if (array_key_exists($key, $mapping)) {
+                $result[$mapping[$key]] = $value;
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
     //проверяем есть ли у нас таблица для MultiCategories

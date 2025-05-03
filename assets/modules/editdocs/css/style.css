@@ -170,5 +170,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     font-size: 1.5rem;
 }
 
+.srtd input {
+    border: none !important;
+}
+
 
 

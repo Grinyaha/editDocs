@@ -67,33 +67,45 @@
                         //подгружаем список файлов для конфигов
                         loadOptionsCfg();
 
-                        if (responseText[4] != undefined) columns = responseText[4].split('=='); else columns = false;
+
+
+                        if (responseText[4] != undefined) columns = responseText[4].split('==');
+                        else columns = false;
                         exp = responseText[3].split('||');
 
-                        //console.log(columns[0]);
+                        console.log(responseText[3]);
 
-                        $('#sravxls').html('');
-                        $('#sravxls').append('<option value=""></option>');
+                        $('#srav_list').html('');
+                        //$('#srav_list').append('');
 
+                        let i=0;
                         exp.forEach(function (entry) {
-                            $('#sravxls').append('<option value="' + entry + '">' + entry + '</option>');
+                            $('#srav_list').append('<tr><td class="srtd"><input type="text" name="sravxls['+i+']" readonly value="' + entry + '" id="sravxls'+i+'"/></td><td><select class="sravbd" name="sravbd['+i+']" id="sravbd'+i+'"></select></td></tr>');
+
+                            let str = $("#checktv").html();
+                            let checktv = str.replace("[+lang.nonchecking+]","[+lang.as_is+]");
+
+                            $("#sravbd"+i).html(checktv);
+
+                            $(".sravbd").SumoSelect({
+                                placeholder: '[+lang.selfields+]...',
+                                search: true,
+                                searchText: '[+lang.fieldxls+]'
+                            });
+
+                            i++;
                         });
 
 
-                        $('#sravxls').SumoSelect({
-                            placeholder: '[+lang.selfields+]...',
-                            search: true,
-                            searchText: '[+lang.fieldxls+]'
-                        });
 
                         if (columns) {
 
-                            $('#sravxls').val(columns[1]);
+                            //$('#sravxls').val(columns[1]);
                             $('#checktv').val(columns[0]);
                         }
 
                         $('#sravxls')[0].sumo.reload();
-                        $('#checktv')[0].sumo.reload();
+                        $('.sravbd')[0].sumo.reload();
 
 
                     });
@@ -201,8 +213,14 @@
                         $('#checktv')[0].sumo.reload();
 
                         //Поле соответствия из XLS-таблицы
-                        $('#sravxls').val(json['checktv2']);
-                        $('#sravxls')[0].sumo.reload();
+                        json['sravxls'].forEach((data,key) => {
+                            $('#sravxls'+key).val(data);
+                        });
+                        json['sravbd'].forEach((data,key) => {
+                            $('#sravbd'+key).val(data);
+                            $('#sravbd'+key)[0].sumo.reload();
+                        });
+
 
                         //Поле/TV для замены данных
                         $('#replace').val(json['replace']);
@@ -236,6 +254,8 @@
                         //prepare snippet
                         $('#prep_snip').val(json['prep_snip']);
                         $('#prep_snip')[0].sumo.reload();
+
+
                     }
                 }); //end ajax
             }); //end click
@@ -433,10 +453,10 @@
                         </select>
                     </div>
                     <div class="uk-margin-bottom uk-width-medium">
-                        [+lang.srav_field+] <br>
 
-                        <!--input type="text" name="checktv2" style="width: 200px" class="inp" placeholder=""-->
-                        <select name="checktv2" id="sravxls" class=""></select>
+                        <a href="javascript:void(0)" uk-toggle>[+lang.srav_field+]</a>
+                        <div uk-dropdown="mode: click"><table id="srav_list"></table></div>
+
 
                     </div>
 
