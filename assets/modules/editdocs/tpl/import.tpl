@@ -90,7 +90,7 @@
                             $(".sravbd").SumoSelect({
                                 placeholder: '[+lang.selfields+]...',
                                 search: true,
-                                searchText: '[+lang.fieldxls+]'
+                                searchText: '[+lang.fieldbd+]'
                             });
 
                             i++;

@@ -80,10 +80,10 @@ $lang['movefrom'] = '<b>FROM</b> for moving (Parent ID)';
 $lang['moveto'] = '<b>TO</b> for moving (Parent ID)';
 $lang['ok_move'] = 'Transfer completed successfully! <b> (Remember to refresh the site cache to reflect the changes in the tree)';
 $lang['error_tree'] = 'Error, check the ID of the parent branches';
-$lang['srav_field'] = 'Match field from XLS-table';
+$lang['srav_field'] = 'Match fields from XLS-table to DB';
 $lang['rendertv'] = 'Render TV-fields';
 $lang['nothing'] = 'Nothing selected';
-$lang['fieldxls'] = 'Field from XLS-table';
+$lang['fieldbd'] = 'Field from DB or TV';
 $lang['select_all'] = 'Select All';
 $lang['export_mc'] = 'Include ID of multicategories';
 $lang['limit_msg'] = 'Output is limited by setting of this module <b>max_rows</b>';
@@ -125,5 +125,6 @@ $lang['snippet'] = 'snippet';
 $lang['need_snippet'] = 'Select the desired prepare-snippet';
 $lang['multi_reset'] = 'Erase old data and add current <br>(otherwise just add)';
 $lang['fill_sconf'] = 'fill with the name of the current config';
+$lang['as_is'] = 'leave as is';
 
 ?>
