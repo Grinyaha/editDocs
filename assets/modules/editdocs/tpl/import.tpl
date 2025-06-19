@@ -217,8 +217,11 @@
                             $('#sravxls'+key).val(data);
                         });
                         json['sravbd'].forEach((data,key) => {
-                            $('#sravbd'+key).val(data);
-                            $('#sravbd'+key)[0].sumo.reload();
+                            if($('#sravbd'+key).length>0)
+                            {
+                                $('#sravbd' + key).val(data);
+                                $('#sravbd' + key)[0].sumo.reload();
+                            }
                         });
 
 
