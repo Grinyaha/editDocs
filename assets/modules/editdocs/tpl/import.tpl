@@ -199,7 +199,7 @@
                     data: 'cfg_file=import/' + cfg,
                     success: function (result) {
                         var json = JSON.parse(result);
-                        console.log(json);
+                        //console.log(json);
                         calert('[+lang.config_loaded+]!');
                         //ID родителя
                         $('#parent').val(json['parimp']);
@@ -213,16 +213,30 @@
                         $('#checktv')[0].sumo.reload();
 
                         //Поле соответствия из XLS-таблицы
-                        json['sravxls'].forEach((data,key) => {
-                            $('#sravxls'+key).val(data);
-                        });
-                        json['sravbd'].forEach((data,key) => {
-                            if($('#sravbd'+key).length>0)
-                            {
-                                $('#sravbd' + key).val(data);
-                                $('#sravbd' + key)[0].sumo.reload();
-                            }
-                        });
+                        //с версии 2.3.3
+                        if(json['srav_final']) {
+                            Object.entries(json['srav_final']).forEach(([key, value]) => {
+
+                                $('.srtd input[value="'+key+'"]').parents('.srtd').siblings('td').find('select').val(value);
+                                $('.srtd input[value="'+key+'"]').parents('.srtd').siblings('td').find('select')[0].sumo.reload();
+                                //$('#sravbd' + key).val(data);
+                                //$('#sravbd' + key)[0].sumo.reload();
+                            });
+                        }
+                        //старые версии
+                        else {
+                            /*json['sravxls'].forEach((data,key) => {
+                                $('#sravxls'+key).val(data);
+                            });*/
+                            json['sravbd'].forEach((data,key) => {
+                                if($('#sravbd'+key).length>0)
+                                {
+                                    $('#sravbd' + key).val(data);
+                                    $('#sravbd' + key)[0].sumo.reload();
+                                }
+                            });
+                        }
+
 
 
                         //Поле/TV для замены данных
@@ -458,7 +472,7 @@
                     <div class="uk-margin-bottom uk-width-medium">
 
                         <a href="javascript:void(0)" uk-toggle>[+lang.srav_field+]</a>
-                        <div uk-dropdown="mode: click"><table id="srav_list"></table></div>
+                        <div uk-dropdown="mode: click; pos: bottom-left"><table id="srav_list"></table></div>
 
 
                     </div>

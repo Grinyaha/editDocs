@@ -1080,7 +1080,7 @@ class editDocs
                 $result[$key] = $value;
             }
         }
-        
+
         return $result;
     }
 
@@ -1204,11 +1204,9 @@ class editDocs
 
     public function saveConfig($params)
     {
-
+        $params['srav_final'] = array_combine($params['sravxls'], $params['sravbd']);
         $data = "<?php //" . $params['save_config'] . " \r\n  return " . var_export($params, true) . " ?>";
         $newname = $this->modx->stripAlias($params['save_config']);
-        //$newname = htmlspecialchars($newname);
-        //$newname = preg_replace($pattern, $replacement, $newname);
         file_put_contents(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $params['folder'] . "/" . $newname . ".php", $data);
 
         return json_encode($params, JSON_UNESCAPED_UNICODE);
