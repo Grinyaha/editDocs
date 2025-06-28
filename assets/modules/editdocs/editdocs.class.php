@@ -552,6 +552,12 @@ class editDocs
                     $this->doc->create($create);
                     $new = $this->doc->save($this->params['event_plugins'], false); //SAVE!!!
 
+                    //prepare in >= 2.3.4
+                    $edt['id'] = $new;
+                    if ($this->issetPrepare) {
+                        $this->makePrepare($edt, 'upd', 'after', 1, $ii - 1);
+                    }
+
                     //защита от дублей с одинаковыми названиями в загружаемой таблице
                     /*$inbase2 = 0;
                     if (count($this->addArr)>0) {
@@ -630,6 +636,11 @@ class editDocs
                     //EDIT
                     $edit = $this->doc->edit($inbase)->fromArray($create)->save($this->params['event_plugins'], false);
 
+                    //prepare in >= 2.3.4
+                    $edt['id'] = $edit;
+                    if ($this->issetPrepare) {
+                        $this->makePrepare($edt, 'upd', 'after', 1, $ii - 1);
+                    }
 
                     //если вкл.мультикатегории
                     if (array_key_exists('category', $create) && isset($_POST['multi'])) {
