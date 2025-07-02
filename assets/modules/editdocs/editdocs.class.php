@@ -3,7 +3,7 @@
 
 class editDocs
 {
-    public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $currArr2, $addArr, $lang, $issetPrepare, $uni, $dn;
+    public $modx, $params, $doc, $step, $start_line, $snipPrepare, $check, $currArr, $addArr, $lang, $issetPrepare, $uni, $dn;
 
     //public $params;
     public function __construct($modx)
@@ -26,7 +26,6 @@ class editDocs
 
         $this->check = $this->checkTableMC();
         $this->currArr = []; //массив с которым сравниваемся
-        $this->currArr2 = []; //для разделов подразделов
         $this->addArr = []; //массив для новых добавляемых документов
 
         //language
@@ -491,7 +490,6 @@ class editDocs
             $inbase = 0;
 
 
-
             if (isset($val[$uniq])) {
                 $check[2] = $val[$uniq];
 
@@ -812,17 +810,6 @@ class editDocs
 
     protected function allArr($check, $name, $theader)
     {
-        //для категории/разделы, проверяем нужно ли делать запрос на предмет всего массива документов
-        $theader = strip_tags($theader);
-        if (strpos($theader, 'ed_category1') !== false) {
-            $que = $this->modx->db->query("SELECT pagetitle,id,parent FROM " . $this->modx->getFullTableName('site_content'));
-            while ($ro = $this->modx->db->getRow($que)) {
-                //собираем массив со всеми значениями поля по которому сравниваемся
-                $this->currArr2[$ro['pagetitle']]['id'] = $ro['id'];
-                $this->currArr2[$ro['pagetitle']]['parent'] = $ro['parent'];
-            }
-        }
-
 
         if ($check[0] == 'tv') {
 
@@ -1258,11 +1245,8 @@ class editDocs
         foreach ($datas as $kkk => $vvv) {
             if (strpos($kkk, 'ed_category') !== false) $l++;
         }
-        if ($l == 0) return $datas;
+        if ($l == 0 || $test) return $datas;  //если тестовый режим то ничего не делаем!
 
-        //$this->modx->logEvent(1,1,'<pre>'.print_r($datas, true).'</pre>','Заголовок лога 3');
-
-        if ($test) return $datas; //если тестовый режим то ничего не делаем!
 
         if (is_array($datas)) {
             $i = 0;
@@ -1280,55 +1264,48 @@ class editDocs
             }
 
             //перебираем все категории и вычисляем конечный parent нужного раздела
-
             for ($x = 1; $x <= $i; $x++) {
-                //ниже пиздец там цикл, я там сам ничего не понял, но главное работает
                 //первая итерация
                 if ($x == 1) {
                     //если существует 1-й уровень в каталоге
-                    if (isset($this->currArr2[$data['ed_category' . $x]]['id'])) {
-                        $id = $this->currArr2[$data['ed_category' . $x]]['id'];
-                        $prnt = $id;
+                    $query = $this->modx->db->select("id", $this->modx->getFullTableName('site_content'), "pagetitle='" . $data['ed_category1'] . "' AND parent=" . $_POST['parimp']);
+                    $id_ctg1 = $this->modx->db->getValue($query);
+
+
+                    if ($id_ctg1 > 0) {
+                        $prnt = $id_ctg1;
                     } else {
                         //если нет то создаем его
                         $this->doc->create(array(
-                            'pagetitle' => $data['ed_category' . $x],
+                            'pagetitle' => $data['ed_category1'],
                             'template' => $tpl[$x],
                             'parent' => $_POST['parimp']
                         ));
                         $id = $this->doc->save($this->params['event_plugins'], false);
 
                         $prnt = $id;
-                        $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
-                        $this->currArr2[$data['ed_category' . $x]]['parent'] = $_POST['parimp'];
                     }
                     //последующие итерации ed_category
                 } else {
-                    if (isset($this->currArr2[$data['ed_category' . $x]]['id']) && $this->currArr2[$data['ed_category' . $x]]['parent'] == $prnt) {
 
-                        if ($this->currArr2[$data['ed_category' . $x]]['parent'] == $id) {
-                            if ($data['ed_category' . $x] != "") {
-                                $id = $this->currArr2[$data['ed_category' . $x]]['id'];
-                            } else {
-                                $id = $this->currArr2[$data['ed_category' . $x]]['parent'];
-                            }
-                            $prnt = $id;
-                        }
-                    } else {
+                    if (isset($prnt) && $prnt > 0 && $data['ed_category' . $x] != "") {
+                        //evo()->logEvent(1,1,"<pre>".print_r($prnt, true)."</pre>",'FOR EVO 3 !!!');
+                        $query = $this->modx->db->select("id", $this->modx->getFullTableName('site_content'), "pagetitle='" . $data['ed_category' . $x] . "' AND parent=" . $prnt);
+                        $id_ctg = $this->modx->db->getValue($query);
 
-                        if ($data['ed_category' . $x] != "") {
+                        if ($id_ctg > 0) {
+                            $prnt = $id_ctg;
+                        } else {
+
                             $this->doc->create(array(
                                 'pagetitle' => $data['ed_category' . $x],
                                 'template' => $tpl[$x],
                                 'parent' => $prnt
                             ));
                             $id = $this->doc->save($this->params['event_plugins'], false);
-
-                            $this->currArr2[$data['ed_category' . $x]]['id'] = $id;
-                            $this->currArr2[$data['ed_category' . $x]]['parent'] = $prnt;
                             $prnt = $id;
-                        } else $prnt = $id;
 
+                        }
                     }
                 }
 
