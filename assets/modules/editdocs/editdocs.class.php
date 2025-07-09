@@ -1202,7 +1202,9 @@ class editDocs
 
     public function saveConfig($params)
     {
-        $params['srav_final'] = array_combine($params['sravxls'], $params['sravbd']);
+        if(isset($params['sravxls']) && $params['sravbd']) $params['srav_final'] = array_combine($params['sravxls'], $params['sravbd']);
+        //else $params['srav_final'] = "";
+
         $data = "<?php //" . $params['save_config'] . " \r\n  return " . var_export($params, true) . " ?>";
         $newname = $this->modx->stripAlias($params['save_config']);
         file_put_contents(MODX_BASE_PATH . "assets/modules/editdocs/config/" . $params['folder'] . "/" . $newname . ".php", $data);
