@@ -472,7 +472,7 @@
                     <div class="uk-margin-bottom uk-width-medium">
 
                         <a href="javascript:void(0)" uk-toggle>[+lang.srav_field+]</a>
-                        <div uk-dropdown="mode: click; pos: bottom-left"><table id="srav_list"></table></div>
+                        <div uk-dropdown="mode: click; pos: bottom-left; shift: false; flip: false"><table id="srav_list" class="srav_list"></table></div>
 
 
                     </div>

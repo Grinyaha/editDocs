@@ -174,5 +174,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     border: none !important;
 }
 
+.srav_list {
+    min-width:370px;
+}
 
 
