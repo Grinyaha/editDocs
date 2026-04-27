@@ -355,6 +355,10 @@
                         if (json['export_mc'] == "1") $('#export_mc').prop('checked', true);
                         else $('#export_mc').prop('checked', false);
 
+                        //xls
+                        if (json['need_xls'] == "1") $('#need_xls').prop('checked', true);
+                        else $('#need_xls').prop('checked', false);
+
                         //Фильтрация по TV (DocLister)
                         $('#filters').val(json['filters']);
 
