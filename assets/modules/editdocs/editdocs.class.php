@@ -847,7 +847,7 @@ class editDocs
 
     public function export()
     {
-
+        if (!empty($_POST['dm'])) $dm = $this->modx->db->escape($_POST['dm']); else $dm = ';'; //разделитель
         $depth = $this->modx->db->escape($_POST['depth']);
         $parent = $this->modx->db->escape($_POST['stparent']);
         $filename = MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export.csv';
@@ -859,8 +859,8 @@ class editDocs
 
         if (!empty($_POST['fieldz'])) {
 
-            if (!empty($_POST['filters'])) $filters = $_POST['filters']; else $filters = '';
-            if (!empty($_POST['addwhere'])) $addwhere = $_POST['addwhere']; else $addwhere = '';
+            if (!empty($_POST['filters'])) $filters = $this->modx->db->escape($_POST['filters']); else $filters = '';
+            if (!empty($_POST['addwhere'])) $addwhere = $this->modx->db->escape($_POST['addwhere']); else $addwhere = '';
 
             if (!isset($_SESSION['export_total'])) {
 
@@ -895,35 +895,27 @@ class editDocs
             $file_temp = fopen($filename_temp, 'a+');
 
             $fields = $this->modx->db->escape($_POST['fieldz']);
-            //$fields_custom = explode(';', $this->modx->db->escape($_POST['fieldz_custom']));
-            //$fields = array_merge($fields, $fields_custom);
 
             array_unshift($fields, 'id');
+
 
             $url = '';
             $tvlist = '';
             $ph = '';
-            $head = '';
+            //$head = '';
             $header = [];
 
             foreach ($fields as $key => $val) {
-                //if($val=='url') $url = '[+url+];';
-                $tvlist .= $val . ',';
-                $head .= $val . ';';
+                //$head .= $val . ';';
                 if (!empty($val)) $header[] = $val;
-
             }
-            $tvlist = substr($tvlist, 0, strlen($tvlist) - 1);
-
-            $head = substr($head, 0, strlen($head) - 1) . "\r\n";
+            $tvlist = implode(',', $fields);
+            //$head = implode($dm, $fields). "\r\n";
 
             if (!empty($_POST['export_mc'])) $header[] = 'category'; //Добавляем в заголовок category от MultiCategories
 
-            if (!empty($_POST['dm'])) $dm = $_POST['dm'];
-            else $dm = ';'; //разделитель
 
 
-            $xx = implode(',', $header);
             $DL = $this->modx->runSnippet('DocLister', array(
                 'api' => 1,
                 'idType' => 'parents',
@@ -969,15 +961,14 @@ class editDocs
                     if ($i > 0 && $ky != "category" && $ky != "e_pagetitle") $mass[] = $ky;
                 }
             }
-            $header = array_merge($header, $mass);
 
+            $header = array_merge($header, $mass);
 
             //$this->modx->logEvent(1, 1, '<pre>' . print_r($DL, true) . '</pre>', 'Заголовок лога 1');
 
-
             if ($_SESSION['export_start'] == 0) { //header только в начале ставим
                 fputcsv($file, $header, $dm);
-                fputcsv($file_temp, $header, $dm);
+                fputcsv($file_temp, $header, $dm); //отдельный файл для конвертации в XLS
             }
 
             foreach ($DL as $string) {
@@ -990,27 +981,28 @@ class editDocs
                         $import_tmp[] = $string[$v];
                     }
                 }
-                //$this->modx->logEvent(1,1,print_r($header, true),'header');
                 fputcsv($file, $import, $dm);
-                fputcsv($file_temp, $import_tmp, $dm);
+                fputcsv($file_temp, $import_tmp, $dm); //отдельный файл для конвертации в XLS
                 $_SESSION['export_start']++;
             }
             fclose($file);
             fclose($file_temp);
 
 
-            $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total'];
+            $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total']. '|' . $_POST['need_xls'] ;
             if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
                 unset($_SESSION['export_start']);
                 unset($_SESSION['export_total']);
 
                 ///convert to XLS
-                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-                $reader->setDelimiter(';');
+                if($_POST['need_xls']==1) {
+                    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                    $reader->setDelimiter(';');
 
-                $csvFile = $reader->load($filename_temp);
-                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($csvFile, "Xlsx");
-                $writer->save(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export.xlsx');
+                    $csvFile = $reader->load($filename_temp);
+                    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($csvFile, "Xlsx");
+                    $writer->save(MODX_BASE_PATH . 'assets/modules/editdocs/uploads/export.xlsx');
+                }
             }
             //if (file_exists($filename)) return $out;
             return $out;
@@ -1033,11 +1025,11 @@ class editDocs
 
     public function massMove()
     {
-        $res = $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET parent = " . $_POST['parent2'] . " WHERE  parent = " . $_POST['parent1'] . "");
+        $res = $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET parent = " . $this->modx->db->escape($_POST['parent2']) . " WHERE  parent = " . $this->modx->db->escape($_POST['parent1']) . "");
 
         if ($res) {
-            $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 1 WHERE  id = " . $_POST['parent2'] . "");
-            $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 0 WHERE  id = " . $_POST['parent1'] . "");
+            $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 1 WHERE  id = " . $this->modx->db->escape($_POST['parent2']) . "");
+            $this->modx->db->query("UPDATE " . $this->modx->getFullTableName('site_content') . " SET isfolder = 0 WHERE  id = " . $this->modx->db->escape($_POST['parent1']) . "");
             $out = '<div class="alert alert-success">' . $this->lang['ok_move'] . '</b></div>';
         } else $out = '<div class="alert alert-danger">' . $this->lang['error_tree'] . '</div>';
 
@@ -1057,7 +1049,7 @@ class editDocs
     {
         if (empty($_POST['prep_snip']) || $_POST['prep_snip'] == 'none') $this->issetPrepare = false;
         else {
-            $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $_POST['prep_snip'] . "' AND disabled = 0 LIMIT 0,1") ? $this->modx->db->escape($_POST['prep_snip']) : false;
+            $this->issetPrepare = $this->modx->db->getValue("SELECT id FROM " . $this->modx->getFullTableName("site_snippets") . " WHERE `name`='" . $this->modx->db->escape($_POST['prep_snip']) . "' AND disabled = 0 LIMIT 0,1") ? $this->modx->db->escape($_POST['prep_snip']) : false;
         }
         return $this;
     }

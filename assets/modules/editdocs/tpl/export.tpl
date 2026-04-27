@@ -71,15 +71,23 @@
                                style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.kodirovka+]
                     </label>
+                    <br>
                     <label>
                         <input type="checkbox" name="neopub" id="neopub" value="1"
                                style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.unpubl+]
                     </label>
+                    <br>
                     <label>
                         <input type="checkbox" name="export_mc" id="export_mc" value="1"
                                style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
                         [+lang.export_mc+]
+                    </label>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="need_xls" id="need_xls" value="1"
+                               style="width: 1.5rem !important; height: 1.5rem !important; vertical-align: -0.45em !important"/>
+                        [+lang.need_xls+]
                     </label>
                     <br>
 
@@ -177,7 +185,12 @@
     <br/><br/>
     <div class="uk-text-center">
         <div id="result_progress"></div>
-        <div id="result"></div>
+        <div>
+            <p>
+                <span id="result"></span>
+                <span id="result2"></span>
+            </p>
+        </div>
     </div>
 
 
@@ -225,8 +238,9 @@
                     url: "[+base_url+]assets/modules/editdocs/ajax.php",
                     data: data,
                     success: function (result) {
-                        console.log(result);
+
                         resp = result.split("|");
+                        //console.log(resp);
                         if (resp[1] == 0) {
                             $('#result').html(resp[0]);
                             return;
@@ -238,7 +252,12 @@
                         } else {
                             $("#result_progress").html("<b>[+lang.expord+] " + resp[0] + " [+lang.of+] " + resp[1] + ". [+lang.gotovo+]</b>");
                             //document.location.href="/assets/modules/editdocs/uploads/export.csv";
-                            $('#result').html('<p><br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>[+lang.download+] .CSV</a> &nbsp; <a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>[+lang.download+] Excel (.xlsx)</a></p>');
+                            $('#result').html('<br><a href="/assets/modules/editdocs/uploads/export.csv" class="btn btn-success" download>[+lang.download+] .CSV</a> &nbsp; ');
+                            //xls file
+                            if(resp[2]==1) {
+                                $('#result2').html('<a href="/assets/modules/editdocs/uploads/export.xlsx" class="btn btn-success" download>[+lang.download+] Excel (.xlsx)</a>');
+                            }
+                            else $('#result2').html('');
                         }
                     },
                     error:function(xhr,ajaxOptions,thrownError){
