@@ -989,13 +989,13 @@ class editDocs
             fclose($file_temp);
 
 
-            $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total']. '|'.(isset($_POST['need_xls']) && $_POST['need_xls'] == 1 ? '|1' : '');
+            $out = $_SESSION['export_start'] . '|' . $_SESSION['export_total']. '|' . $_POST['need_xls'] ;
             if ($_SESSION['export_start'] >= $_SESSION['export_total']) {
                 unset($_SESSION['export_start']);
                 unset($_SESSION['export_total']);
 
                 ///convert to XLS
-                if(isset($_POST['need_xls']) && $_POST['need_xls'] == 1) {
+                if($_POST['need_xls']==1) {
                     $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
                     $reader->setDelimiter(';');
 
